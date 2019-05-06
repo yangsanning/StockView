@@ -13,12 +13,19 @@
 
 ### 1. 基本用法
 
+#### 1.1 布局中添加
 ```android
  <ysn.com.stock.view.FenShiView
         android:id="@+id/main_activity_fen_shi_view1"
         android:layout_width="match_parent"
         android:layout_height="230dp" />
 ```
+
+#### 1.2 设置数据
+```android
+  fenShiView.setData(fenShi);
+```
+
 
 ### 2. 配置属性(Attributes)
 
