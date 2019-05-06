@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="stock_text_title">#333333</color>
+
+    <!--rgb(42,189,110)-->
+    <color name="stock_green">#2ABD6E</color>
+
+    <!--rgb(235,66,66)-->
+    <color name="stock_red">#EB4242</color>
+
+    <!--rgb(64,154,214)-->
+    <color name="stock_price_line">#409AD6</color>
+
+    <!--rgb(242,113,0)-->
+    <color name="stock_ave_price_line">#F27100</color>
+
+    <!--rgb(204,204,204)-->
+    <color name="stock_line">#CCCCCC</color>
+    <color name="stock_dotted_column_line">#CCCCCC</color>
+
+    <!--rgb(102,102,102)-->
+    <color name="stock_dotted_row_line">#666666</color>
+
+    <color name="stock_slip_line">#000000</color>
+
+    <color name="stock_area_fq">#FFFFFF</color>
+
+    <!--rgb(102,102,102)-->
+    <color name="stock_lin5">#666666</color>
+
+    <!--rgb(64,154,214)-->
+    <color name="stock_lin10">#409AD6</color>
+
+    <!--rgb(242,113,0)-->
+    <color name="stock_lin20">#F27100</color>
+
+    <!--rgb(235,66,66)-->
+    <color name="stock_lin30">#EB4242</color>
+</resources>

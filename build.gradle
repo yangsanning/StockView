@@ -4,11 +4,12 @@ buildscript {
     repositories {
         google()
         jcenter()
-        
+
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.0'
-        
+        classpath 'com.android.tools.build:gradle:3.3.2'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -18,7 +19,17 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
+    }
+
+    ext {
+        COMPILE_SDK_VERSION = 27
+        MIN_SDK_VERSION = 19
+        TARGET_SDK_VERSION = 27
+        //未经测试，不要随意升级支持库的版本
+        SUPPORT_LIBRARY_VERSION = '27.1.1'
+
+        VERSION_CODE = 10000
+        VERSION_NAME = "1.0.0"
     }
 }
 
