@@ -162,6 +162,10 @@ public class FenShiView extends StockView {
     protected void childDraw(Canvas canvas) {
         super.childDraw(canvas);
 
+        if (stockPriceList.isEmpty()) {
+            return;
+        }
+
         // 绘制坐标峰值
         drawXYText(canvas);
 
