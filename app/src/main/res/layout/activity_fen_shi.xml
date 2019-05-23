@@ -3,13 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:orientation="vertical"
     android:padding="20dp"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/main_activity_fen_shi"
+    <ysn.com.stock.view.FenShiView
+        android:id="@+id/fen_shi_activity_view1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="普通分时图" />
+        android:layout_height="230dp" />
+
+    <ysn.com.stock.view.FenShiView
+        android:id="@+id/fen_shi_activity_view2"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:layout_marginTop="50dp" />
 </LinearLayout>

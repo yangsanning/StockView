@@ -1,44 +1,37 @@
 package ysn.com.stockview;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
-import java.util.ArrayList;
+import ysn.com.stockview.page.FenShiActivity;
 
-import ysn.com.stockview.bean.Time;
-import ysn.com.stockview.utils.JsonUtils;
-import ysn.com.stock.bean.FenShi;
-import ysn.com.stock.bean.FenShiData;
-import ysn.com.stock.view.FenShiView;
-
-public class MainActivity extends AppCompatActivity {
+/**
+ * @Author yangsanning
+ * @ClassName MainActivity
+ * @Description 一句话概括作用
+ * @Date 2019/5/4
+ * @History 2019/5/4 author: description:
+ */
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FenShiView fenShiView1 = findViewById(R.id.main_activity_fen_shi_view1);
-        fenShiView1.setData(timeToFenShi(JsonUtils.getData((this), ("json/fen_shi1.json"))));
-
-        FenShiView fenShiView2 = findViewById(R.id.main_activity_fen_shi_view2);
-        fenShiView2.setData(timeToFenShi(JsonUtils.getData((this), ("json/fen_shi2.json"))));
+        findViewById(R.id.main_activity_fen_shi).setOnClickListener(this);
     }
 
-    private FenShi timeToFenShi(Time time) {
-        FenShi fenShi = new FenShi();
-        if (time == null) {
-            return null;
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.main_activity_fen_shi:
+                startActivity(new Intent((this), FenShiActivity.class));
+                break;
+            default:
+                break;
         }
-        fenShi.setCode(time.getCode());
-        fenShi.setLastClose(time.getSettlement());
-
-        ArrayList<FenShiData> fenShiDataList = new ArrayList<>();
-        for (Time.DataBean dataBean : time.getData()) {
-            fenShiDataList.add(new FenShiData(dataBean.getDateTime(), dataBean.getTrade(),
-                    dataBean.getAvgPrice(), dataBean.getVolume()));
-        }
-        fenShi.setData(fenShiDataList);
-        return fenShi;
     }
 }
