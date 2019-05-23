@@ -1,13 +1,12 @@
-package ysn.com.fenshiview;
+package ysn.com.stockview;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import ysn.com.fenshiview.bean.Time;
-import ysn.com.fenshiview.utils.JsonUtils;
+import ysn.com.stockview.bean.Time;
+import ysn.com.stockview.utils.JsonUtils;
 import ysn.com.stock.bean.FenShi;
 import ysn.com.stock.bean.FenShiData;
 import ysn.com.stock.view.FenShiView;

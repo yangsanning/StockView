@@ -1,4 +1,4 @@
-package ysn.com.fenshiview.utils;
+package ysn.com.stockview.utils;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
 
-import ysn.com.fenshiview.bean.Time;
+import ysn.com.stockview.bean.Time;
 
 /**
  * @Author yangsanning

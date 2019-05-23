@@ -1,4 +1,4 @@
-package ysn.com.fenshiview.bean;
+package ysn.com.stockview.bean;
 
 import com.google.gson.annotations.SerializedName;
 

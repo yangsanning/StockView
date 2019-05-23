@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion COMPILE_SDK_VERSION
     defaultConfig {
-        applicationId "ysn.com.fenshiview"
+        applicationId "ysn.com.stockview"
         minSdkVersion MIN_SDK_VERSION
         targetSdkVersion TARGET_SDK_VERSION
 

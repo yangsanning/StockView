@@ -1,4 +1,4 @@
-package ysn.com.fenshiview;
+package ysn.com.stockview;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
