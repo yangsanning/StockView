@@ -20,6 +20,15 @@ public class FenShi {
     private float lastClose;
     private List<FenShiData> data;
 
+    public FenShi() {
+    }
+
+    public FenShi(String code, float lastClose, List<FenShiData> data) {
+        this.code = code;
+        this.lastClose = lastClose;
+        this.data = data;
+    }
+
     public String getCode() {
         return code;
     }

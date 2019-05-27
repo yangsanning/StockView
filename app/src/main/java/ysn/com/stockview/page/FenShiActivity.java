@@ -9,7 +9,7 @@ import ysn.com.stock.bean.FenShi;
 import ysn.com.stock.bean.FenShiData;
 import ysn.com.stock.view.FenShiView;
 import ysn.com.stockview.R;
-import ysn.com.stockview.bean.Time;
+import ysn.com.stockview.bean.FenShiTime;
 import ysn.com.stockview.utils.JsonUtils;
 
 /**
@@ -26,25 +26,25 @@ public class FenShiActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fen_shi);
 
-        setTitle("普通分时图");
+        setTitle(R.string.text_fen_shi);
 
         FenShiView fenShiView1 = findViewById(R.id.fen_shi_activity_view1);
-        fenShiView1.setData(timeToFenShi(JsonUtils.getData((this), ("json/fen_shi1.json"))));
+        fenShiView1.setData(timeToFenShi(JsonUtils.getData((this), ("json/fen_shi1.json"), FenShiTime.class)));
 
         FenShiView fenShiView2 = findViewById(R.id.fen_shi_activity_view2);
-        fenShiView2.setData(timeToFenShi(JsonUtils.getData((this), ("json/fen_shi2.json"))));
+        fenShiView2.setData(timeToFenShi(JsonUtils.getData((this), ("json/fen_shi2.json"), FenShiTime.class)));
     }
 
-    private FenShi timeToFenShi(Time time) {
-        FenShi fenShi = new FenShi();
+    private FenShi timeToFenShi(FenShiTime time) {
         if (time == null) {
             return null;
         }
+        FenShi fenShi = new FenShi();
         fenShi.setCode(time.getCode());
         fenShi.setLastClose(time.getSettlement());
 
         ArrayList<FenShiData> fenShiDataList = new ArrayList<>();
-        for (Time.DataBean dataBean : time.getData()) {
+        for (FenShiTime.DataBean dataBean : time.getData()) {
             fenShiDataList.add(new FenShiData(dataBean.getDateTime(), dataBean.getTrade(),
                     dataBean.getAvgPrice(), dataBean.getVolume()));
         }

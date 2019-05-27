@@ -3,19 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:orientation="vertical"
     android:padding="20dp"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/main_activity_fen_shi"
+    <ysn.com.stock.view.CapitalView
+        android:id="@+id/capital_activity_view1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/text_fen_shi" />
+        android:layout_height="190dp" />
 
-    <Button
-        android:id="@+id/main_activity_capital"
+    <ysn.com.stock.view.CapitalView
+        android:id="@+id/capital_activity_view2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/text_capital" />
+        android:layout_height="190dp"
+        android:layout_marginTop="50dp" />
 </LinearLayout>

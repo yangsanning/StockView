@@ -21,7 +21,7 @@ import ysn.com.stock.bean.FenShiData;
 /**
  * @Author yangsanning
  * @ClassName FenShiView
- * @Description 一句话概括作用
+ * @Description 普通分时图
  * @Date 2019/5/4
  * @History 2019/5/4 author: description:
  */
@@ -141,8 +141,8 @@ public class FenShiView extends StockView {
      * 绘制时间坐标
      */
     @Override
-    protected void drawTimeText(Canvas canvas) {
-        super.drawTimeText(canvas);
+    protected void onTimeTextDraw(Canvas canvas) {
+        super.onTimeTextDraw(canvas);
         xYTextPaint.setColor(getColor(R.color.stock_text_title));
 
         // 绘制开始区域时间值
@@ -159,8 +159,8 @@ public class FenShiView extends StockView {
     }
 
     @Override
-    protected void childDraw(Canvas canvas) {
-        super.childDraw(canvas);
+    protected void onChildDraw(Canvas canvas) {
+        super.onChildDraw(canvas);
 
         if (stockPriceList.isEmpty()) {
             return;
@@ -246,38 +246,28 @@ public class FenShiView extends StockView {
     }
 
     /**
-     * 获取价格线的x轴坐标
-     *
-     * @param position 当前position
-     * @return 价格线的x轴坐标
-     */
-    private float getX(int position) {
-        return getColumnX(((viewWidth - tableMargin * 2) / (float) totalCount), position);
-    }
-
-    /**
      * 获取价格线的y轴坐标
      *
      * @param price 当前价格
      * @return 价格线的y轴坐标
      */
     private float getY(float price) {
-        return ((getTopTableMaxY()) * (price - minStockPrice)) / (maxStockPrice - minStockPrice);
+        return getY(price, minStockPrice, maxStockPrice);
     }
 
-    public void setData(FenShi time) {
-        if (time != null) {
+    public void setData(FenShi fenShi) {
+        if (fenShi != null) {
             stockPriceList.clear();
             stockAvePriceList.clear();
             timeList.clear();
-            List<FenShiData> dataBeanList = time.getData();
+            List<FenShiData> dataBeanList = fenShi.getData();
             for (int i = 0; i < dataBeanList.size(); i++) {
                 addStockPrice(dataBeanList.get(i).getTrade(), i);
                 stockAvePriceList.add(dataBeanList.get(i).getAvgPrice());
                 timeList.add(dataBeanList.get(i).getDateTime().substring(8, 10)
                         + ":" + dataBeanList.get(i).getDateTime().substring(10));
             }
-            lastClose = time.getLastClose();
+            lastClose = fenShi.getLastClose();
             initData();
         }
         invalidate();

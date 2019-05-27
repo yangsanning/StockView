@@ -1,0 +1,1694 @@
+{
+  "code": "300188",
+  "date": "2019-05-24",
+  "stockType": 1,
+  "data": [
+    {
+      "time": "2019-05-24 09:30",
+      "price": "16",
+      "financeInFlow": "0",
+      "mainInFlow": "0",
+      "retailInFlow": "0"
+    },
+    {
+      "time": "2019-05-24 09:31",
+      "price": "16.2",
+      "financeInFlow": "7979461",
+      "mainInFlow": "5849554",
+      "retailInFlow": "2129907"
+    },
+    {
+      "time": "2019-05-24 09:32",
+      "price": "16.22",
+      "financeInFlow": "8592400",
+      "mainInFlow": "5849554",
+      "retailInFlow": "2742846"
+    },
+    {
+      "time": "2019-05-24 09:33",
+      "price": "16.31",
+      "financeInFlow": "7925528",
+      "mainInFlow": "5849554",
+      "retailInFlow": "2075974"
+    },
+    {
+      "time": "2019-05-24 09:34",
+      "price": "16.22",
+      "financeInFlow": "5677012",
+      "mainInFlow": "4930370",
+      "retailInFlow": "746642"
+    },
+    {
+      "time": "2019-05-24 09:35",
+      "price": "16.24",
+      "financeInFlow": "6058401",
+      "mainInFlow": "3987988",
+      "retailInFlow": "2070413"
+    },
+    {
+      "time": "2019-05-24 09:36",
+      "price": "16.3",
+      "financeInFlow": "7563307",
+      "mainInFlow": "4841244",
+      "retailInFlow": "2722063"
+    },
+    {
+      "time": "2019-05-24 09:37",
+      "price": "16.4",
+      "financeInFlow": "5075359",
+      "mainInFlow": "2216965",
+      "retailInFlow": "2858394"
+    },
+    {
+      "time": "2019-05-24 09:38",
+      "price": "16.37",
+      "financeInFlow": "6581795",
+      "mainInFlow": "3017145",
+      "retailInFlow": "3564650"
+    },
+    {
+      "time": "2019-05-24 09:39",
+      "price": "16.37",
+      "financeInFlow": "8447123",
+      "mainInFlow": "5183168",
+      "retailInFlow": "3263955"
+    },
+    {
+      "time": "2019-05-24 09:40",
+      "price": "16.33",
+      "financeInFlow": "8143655",
+      "mainInFlow": "5183168",
+      "retailInFlow": "2960487"
+    },
+    {
+      "time": "2019-05-24 09:41",
+      "price": "16.29",
+      "financeInFlow": "8431068",
+      "mainInFlow": "5183168",
+      "retailInFlow": "3247900"
+    },
+    {
+      "time": "2019-05-24 09:42",
+      "price": "16.31",
+      "financeInFlow": "7932444",
+      "mainInFlow": "5183168",
+      "retailInFlow": "2749276"
+    },
+    {
+      "time": "2019-05-24 09:43",
+      "price": "16.3",
+      "financeInFlow": "8599721",
+      "mainInFlow": "5183168",
+      "retailInFlow": "3416553"
+    },
+    {
+      "time": "2019-05-24 09:44",
+      "price": "16.28",
+      "financeInFlow": "8324924",
+      "mainInFlow": "5183168",
+      "retailInFlow": "3141756"
+    },
+    {
+      "time": "2019-05-24 09:45",
+      "price": "16.25",
+      "financeInFlow": "8300453",
+      "mainInFlow": "5183168",
+      "retailInFlow": "3117285"
+    },
+    {
+      "time": "2019-05-24 09:46",
+      "price": "16.3",
+      "financeInFlow": "8664037",
+      "mainInFlow": "5183168",
+      "retailInFlow": "3480869"
+    },
+    {
+      "time": "2019-05-24 09:47",
+      "price": "16.24",
+      "financeInFlow": "7727629",
+      "mainInFlow": "5183168",
+      "retailInFlow": "2544461"
+    },
+    {
+      "time": "2019-05-24 09:48",
+      "price": "16.15",
+      "financeInFlow": "6389795",
+      "mainInFlow": "5183168",
+      "retailInFlow": "1206627"
+    },
+    {
+      "time": "2019-05-24 09:49",
+      "price": "16.19",
+      "financeInFlow": "6859294",
+      "mainInFlow": "5183168",
+      "retailInFlow": "1676126"
+    },
+    {
+      "time": "2019-05-24 09:50",
+      "price": "16.3",
+      "financeInFlow": "7112934",
+      "mainInFlow": "5183168",
+      "retailInFlow": "1929766"
+    },
+    {
+      "time": "2019-05-24 09:51",
+      "price": "16.27",
+      "financeInFlow": "7845022",
+      "mainInFlow": "5183168",
+      "retailInFlow": "2661854"
+    },
+    {
+      "time": "2019-05-24 09:52",
+      "price": "16.26",
+      "financeInFlow": "7994792",
+      "mainInFlow": "5183168",
+      "retailInFlow": "2811624"
+    },
+    {
+      "time": "2019-05-24 09:53",
+      "price": "16.32",
+      "financeInFlow": "8438140",
+      "mainInFlow": "5183168",
+      "retailInFlow": "3254972"
+    },
+    {
+      "time": "2019-05-24 09:54",
+      "price": "16.4",
+      "financeInFlow": "10630235",
+      "mainInFlow": "7229176",
+      "retailInFlow": "3401059"
+    },
+    {
+      "time": "2019-05-24 09:55",
+      "price": "16.37",
+      "financeInFlow": "10792944",
+      "mainInFlow": "7229176",
+      "retailInFlow": "3563768"
+    },
+    {
+      "time": "2019-05-24 09:56",
+      "price": "16.39",
+      "financeInFlow": "12450821",
+      "mainInFlow": "7229176",
+      "retailInFlow": "5221645"
+    },
+    {
+      "time": "2019-05-24 09:57",
+      "price": "16.42",
+      "financeInFlow": "12974436",
+      "mainInFlow": "7229176",
+      "retailInFlow": "5745260"
+    },
+    {
+      "time": "2019-05-24 09:58",
+      "price": "16.5",
+      "financeInFlow": "16619775",
+      "mainInFlow": "11038316",
+      "retailInFlow": "5581459"
+    },
+    {
+      "time": "2019-05-24 09:59",
+      "price": "16.47",
+      "financeInFlow": "16547506",
+      "mainInFlow": "11038316",
+      "retailInFlow": "5509190"
+    },
+    {
+      "time": "2019-05-24 10:00",
+      "price": "16.45",
+      "financeInFlow": "16597137",
+      "mainInFlow": "11038316",
+      "retailInFlow": "5558821"
+    },
+    {
+      "time": "2019-05-24 10:01",
+      "price": "16.46",
+      "financeInFlow": "16860619",
+      "mainInFlow": "11038316",
+      "retailInFlow": "5822303"
+    },
+    {
+      "time": "2019-05-24 10:02",
+      "price": "16.42",
+      "financeInFlow": "19599746",
+      "mainInFlow": "12949125",
+      "retailInFlow": "6650621"
+    },
+    {
+      "time": "2019-05-24 10:03",
+      "price": "16.4",
+      "financeInFlow": "19107627",
+      "mainInFlow": "12949125",
+      "retailInFlow": "6158502"
+    },
+    {
+      "time": "2019-05-24 10:04",
+      "price": "16.36",
+      "financeInFlow": "18671583",
+      "mainInFlow": "12949125",
+      "retailInFlow": "5722458"
+    },
+    {
+      "time": "2019-05-24 10:05",
+      "price": "16.4",
+      "financeInFlow": "19100832",
+      "mainInFlow": "12949125",
+      "retailInFlow": "6151707"
+    },
+    {
+      "time": "2019-05-24 10:06",
+      "price": "16.41",
+      "financeInFlow": "19132184",
+      "mainInFlow": "12949125",
+      "retailInFlow": "6183059"
+    },
+    {
+      "time": "2019-05-24 10:07",
+      "price": "16.33",
+      "financeInFlow": "18802520",
+      "mainInFlow": "12949125",
+      "retailInFlow": "5853395"
+    },
+    {
+      "time": "2019-05-24 10:08",
+      "price": "16.37",
+      "financeInFlow": "18919106",
+      "mainInFlow": "12949125",
+      "retailInFlow": "5969981"
+    },
+    {
+      "time": "2019-05-24 10:09",
+      "price": "16.37",
+      "financeInFlow": "19015737",
+      "mainInFlow": "12949125",
+      "retailInFlow": "6066612"
+    },
+    {
+      "time": "2019-05-24 10:10",
+      "price": "16.35",
+      "financeInFlow": "19182739",
+      "mainInFlow": "12949125",
+      "retailInFlow": "6233614"
+    },
+    {
+      "time": "2019-05-24 10:11",
+      "price": "16.34",
+      "financeInFlow": "19081512",
+      "mainInFlow": "12949125",
+      "retailInFlow": "6132387"
+    },
+    {
+      "time": "2019-05-24 10:12",
+      "price": "16.35",
+      "financeInFlow": "19969149",
+      "mainInFlow": "12949125",
+      "retailInFlow": "7020024"
+    },
+    {
+      "time": "2019-05-24 10:13",
+      "price": "16.43",
+      "financeInFlow": "20230239",
+      "mainInFlow": "12949125",
+      "retailInFlow": "7281114"
+    },
+    {
+      "time": "2019-05-24 10:14",
+      "price": "16.57",
+      "financeInFlow": "25717754",
+      "mainInFlow": "18173939",
+      "retailInFlow": "7543815"
+    },
+    {
+      "time": "2019-05-24 10:15",
+      "price": "16.63",
+      "financeInFlow": "26429940",
+      "mainInFlow": "20634579",
+      "retailInFlow": "5795361"
+    },
+    {
+      "time": "2019-05-24 10:16",
+      "price": "16.7",
+      "financeInFlow": "28386511",
+      "mainInFlow": "22259489",
+      "retailInFlow": "6127022"
+    },
+    {
+      "time": "2019-05-24 10:17",
+      "price": "16.71",
+      "financeInFlow": "28791590",
+      "mainInFlow": "21043729",
+      "retailInFlow": "7747861"
+    },
+    {
+      "time": "2019-05-24 10:18",
+      "price": "16.66",
+      "financeInFlow": "28735473",
+      "mainInFlow": "21043729",
+      "retailInFlow": "7691744"
+    },
+    {
+      "time": "2019-05-24 10:19",
+      "price": "16.78",
+      "financeInFlow": "32969414",
+      "mainInFlow": "22692343",
+      "retailInFlow": "10277071"
+    },
+    {
+      "time": "2019-05-24 10:20",
+      "price": "16.65",
+      "financeInFlow": "32557789",
+      "mainInFlow": "22692343",
+      "retailInFlow": "9865446"
+    },
+    {
+      "time": "2019-05-24 10:21",
+      "price": "16.65",
+      "financeInFlow": "32241750",
+      "mainInFlow": "22692343",
+      "retailInFlow": "9549407"
+    },
+    {
+      "time": "2019-05-24 10:22",
+      "price": "16.64",
+      "financeInFlow": "32273396",
+      "mainInFlow": "22692343",
+      "retailInFlow": "9581053"
+    },
+    {
+      "time": "2019-05-24 10:23",
+      "price": "16.7",
+      "financeInFlow": "32805601",
+      "mainInFlow": "22692343",
+      "retailInFlow": "10113258"
+    },
+    {
+      "time": "2019-05-24 10:24",
+      "price": "16.74",
+      "financeInFlow": "34032267",
+      "mainInFlow": "22692343",
+      "retailInFlow": "11339924"
+    },
+    {
+      "time": "2019-05-24 10:25",
+      "price": "16.75",
+      "financeInFlow": "32877999",
+      "mainInFlow": "22692343",
+      "retailInFlow": "10185656"
+    },
+    {
+      "time": "2019-05-24 10:26",
+      "price": "16.78",
+      "financeInFlow": "33576086",
+      "mainInFlow": "22692343",
+      "retailInFlow": "10883743"
+    },
+    {
+      "time": "2019-05-24 10:27",
+      "price": "16.77",
+      "financeInFlow": "34866010",
+      "mainInFlow": "22692343",
+      "retailInFlow": "12173667"
+    },
+    {
+      "time": "2019-05-24 10:28",
+      "price": "16.77",
+      "financeInFlow": "34662252",
+      "mainInFlow": "22692343",
+      "retailInFlow": "11969909"
+    },
+    {
+      "time": "2019-05-24 10:29",
+      "price": "16.77",
+      "financeInFlow": "33692698",
+      "mainInFlow": "21771093",
+      "retailInFlow": "11921605"
+    },
+    {
+      "time": "2019-05-24 10:30",
+      "price": "16.78",
+      "financeInFlow": "34068742",
+      "mainInFlow": "21771093",
+      "retailInFlow": "12297649"
+    },
+    {
+      "time": "2019-05-24 10:31",
+      "price": "17",
+      "financeInFlow": "43284404",
+      "mainInFlow": "30228629",
+      "retailInFlow": "13055775"
+    },
+    {
+      "time": "2019-05-24 10:32",
+      "price": "16.95",
+      "financeInFlow": "42588866",
+      "mainInFlow": "30597153",
+      "retailInFlow": "11991713"
+    },
+    {
+      "time": "2019-05-24 10:33",
+      "price": "16.88",
+      "financeInFlow": "43214129",
+      "mainInFlow": "30597153",
+      "retailInFlow": "12616976"
+    },
+    {
+      "time": "2019-05-24 10:34",
+      "price": "16.86",
+      "financeInFlow": "42954361",
+      "mainInFlow": "30597153",
+      "retailInFlow": "12357208"
+    },
+    {
+      "time": "2019-05-24 10:35",
+      "price": "16.82",
+      "financeInFlow": "42602385",
+      "mainInFlow": "30597153",
+      "retailInFlow": "12005232"
+    },
+    {
+      "time": "2019-05-24 10:36",
+      "price": "16.84",
+      "financeInFlow": "42638825",
+      "mainInFlow": "30597153",
+      "retailInFlow": "12041672"
+    },
+    {
+      "time": "2019-05-24 10:37",
+      "price": "16.77",
+      "financeInFlow": "42215574",
+      "mainInFlow": "30597153",
+      "retailInFlow": "11618421"
+    },
+    {
+      "time": "2019-05-24 10:38",
+      "price": "16.79",
+      "financeInFlow": "42510138",
+      "mainInFlow": "30597153",
+      "retailInFlow": "11912985"
+    },
+    {
+      "time": "2019-05-24 10:39",
+      "price": "16.74",
+      "financeInFlow": "42060803",
+      "mainInFlow": "30597153",
+      "retailInFlow": "11463650"
+    },
+    {
+      "time": "2019-05-24 10:40",
+      "price": "16.71",
+      "financeInFlow": "42783781",
+      "mainInFlow": "30597153",
+      "retailInFlow": "12186628"
+    },
+    {
+      "time": "2019-05-24 10:41",
+      "price": "16.79",
+      "financeInFlow": "43908142",
+      "mainInFlow": "30597153",
+      "retailInFlow": "13310989"
+    },
+    {
+      "time": "2019-05-24 10:42",
+      "price": "16.81",
+      "financeInFlow": "44121592",
+      "mainInFlow": "30597153",
+      "retailInFlow": "13524439"
+    },
+    {
+      "time": "2019-05-24 10:43",
+      "price": "16.79",
+      "financeInFlow": "43915077",
+      "mainInFlow": "30597153",
+      "retailInFlow": "13317924"
+    },
+    {
+      "time": "2019-05-24 10:44",
+      "price": "16.78",
+      "financeInFlow": "43794191",
+      "mainInFlow": "30597153",
+      "retailInFlow": "13197038"
+    },
+    {
+      "time": "2019-05-24 10:45",
+      "price": "16.76",
+      "financeInFlow": "43698694",
+      "mainInFlow": "30597153",
+      "retailInFlow": "13101541"
+    },
+    {
+      "time": "2019-05-24 10:46",
+      "price": "16.72",
+      "financeInFlow": "43427557",
+      "mainInFlow": "30597153",
+      "retailInFlow": "12830404"
+    },
+    {
+      "time": "2019-05-24 10:47",
+      "price": "16.69",
+      "financeInFlow": "43076930",
+      "mainInFlow": "30597153",
+      "retailInFlow": "12479777"
+    },
+    {
+      "time": "2019-05-24 10:48",
+      "price": "16.7",
+      "financeInFlow": "43132321",
+      "mainInFlow": "30597153",
+      "retailInFlow": "12535168"
+    },
+    {
+      "time": "2019-05-24 10:49",
+      "price": "16.72",
+      "financeInFlow": "43356199",
+      "mainInFlow": "30597153",
+      "retailInFlow": "12759046"
+    },
+    {
+      "time": "2019-05-24 10:50",
+      "price": "16.72",
+      "financeInFlow": "43292696",
+      "mainInFlow": "30597153",
+      "retailInFlow": "12695543"
+    },
+    {
+      "time": "2019-05-24 10:51",
+      "price": "16.69",
+      "financeInFlow": "43394790",
+      "mainInFlow": "30597153",
+      "retailInFlow": "12797637"
+    },
+    {
+      "time": "2019-05-24 10:52",
+      "price": "16.69",
+      "financeInFlow": "43301341",
+      "mainInFlow": "30597153",
+      "retailInFlow": "12704188"
+    },
+    {
+      "time": "2019-05-24 10:53",
+      "price": "16.68",
+      "financeInFlow": "43439971",
+      "mainInFlow": "30597153",
+      "retailInFlow": "12842818"
+    },
+    {
+      "time": "2019-05-24 10:54",
+      "price": "16.69",
+      "financeInFlow": "43441697",
+      "mainInFlow": "30597153",
+      "retailInFlow": "12844544"
+    },
+    {
+      "time": "2019-05-24 10:55",
+      "price": "16.76",
+      "financeInFlow": "43667618",
+      "mainInFlow": "30597153",
+      "retailInFlow": "13070465"
+    },
+    {
+      "time": "2019-05-24 10:56",
+      "price": "16.83",
+      "financeInFlow": "44454429",
+      "mainInFlow": "30597153",
+      "retailInFlow": "13857276"
+    },
+    {
+      "time": "2019-05-24 10:57",
+      "price": "16.87",
+      "financeInFlow": "44498264",
+      "mainInFlow": "30597153",
+      "retailInFlow": "13901111"
+    },
+    {
+      "time": "2019-05-24 10:58",
+      "price": "16.84",
+      "financeInFlow": "45041594",
+      "mainInFlow": "30597153",
+      "retailInFlow": "14444441"
+    },
+    {
+      "time": "2019-05-24 10:59",
+      "price": "16.8",
+      "financeInFlow": "44892112",
+      "mainInFlow": "30597153",
+      "retailInFlow": "14294959"
+    },
+    {
+      "time": "2019-05-24 11:00",
+      "price": "16.79",
+      "financeInFlow": "44957635",
+      "mainInFlow": "30597153",
+      "retailInFlow": "14360482"
+    },
+    {
+      "time": "2019-05-24 11:01",
+      "price": "16.82",
+      "financeInFlow": "45448167",
+      "mainInFlow": "30597153",
+      "retailInFlow": "14851014"
+    },
+    {
+      "time": "2019-05-24 11:02",
+      "price": "16.83",
+      "financeInFlow": "45630126",
+      "mainInFlow": "30597153",
+      "retailInFlow": "15032973"
+    },
+    {
+      "time": "2019-05-24 11:03",
+      "price": "16.8",
+      "financeInFlow": "45813474",
+      "mainInFlow": "30597153",
+      "retailInFlow": "15216321"
+    },
+    {
+      "time": "2019-05-24 11:04",
+      "price": "16.81",
+      "financeInFlow": "45811882",
+      "mainInFlow": "30597153",
+      "retailInFlow": "15214729"
+    },
+    {
+      "time": "2019-05-24 11:05",
+      "price": "16.8",
+      "financeInFlow": "45699333",
+      "mainInFlow": "30597153",
+      "retailInFlow": "15102180"
+    },
+    {
+      "time": "2019-05-24 11:06",
+      "price": "16.71",
+      "financeInFlow": "45580503",
+      "mainInFlow": "30597153",
+      "retailInFlow": "14983350"
+    },
+    {
+      "time": "2019-05-24 11:07",
+      "price": "16.64",
+      "financeInFlow": "44746194",
+      "mainInFlow": "30597153",
+      "retailInFlow": "14149041"
+    },
+    {
+      "time": "2019-05-24 11:08",
+      "price": "16.69",
+      "financeInFlow": "44623098",
+      "mainInFlow": "30597153",
+      "retailInFlow": "14025945"
+    },
+    {
+      "time": "2019-05-24 11:09",
+      "price": "16.69",
+      "financeInFlow": "44619760",
+      "mainInFlow": "30597153",
+      "retailInFlow": "14022607"
+    },
+    {
+      "time": "2019-05-24 11:10",
+      "price": "16.67",
+      "financeInFlow": "44651685",
+      "mainInFlow": "30597153",
+      "retailInFlow": "14054532"
+    },
+    {
+      "time": "2019-05-24 11:11",
+      "price": "16.65",
+      "financeInFlow": "44628421",
+      "mainInFlow": "30597153",
+      "retailInFlow": "14031268"
+    },
+    {
+      "time": "2019-05-24 11:12",
+      "price": "16.63",
+      "financeInFlow": "44611796",
+      "mainInFlow": "30597153",
+      "retailInFlow": "14014643"
+    },
+    {
+      "time": "2019-05-24 11:13",
+      "price": "16.65",
+      "financeInFlow": "44662258",
+      "mainInFlow": "30597153",
+      "retailInFlow": "14065105"
+    },
+    {
+      "time": "2019-05-24 11:14",
+      "price": "16.62",
+      "financeInFlow": "44519244",
+      "mainInFlow": "30597153",
+      "retailInFlow": "13922091"
+    },
+    {
+      "time": "2019-05-24 11:15",
+      "price": "16.62",
+      "financeInFlow": "44192328",
+      "mainInFlow": "30597153",
+      "retailInFlow": "13595175"
+    },
+    {
+      "time": "2019-05-24 11:16",
+      "price": "16.62",
+      "financeInFlow": "44095954",
+      "mainInFlow": "30597153",
+      "retailInFlow": "13498801"
+    },
+    {
+      "time": "2019-05-24 11:17",
+      "price": "16.57",
+      "financeInFlow": "43580033",
+      "mainInFlow": "30597153",
+      "retailInFlow": "12982880"
+    },
+    {
+      "time": "2019-05-24 11:18",
+      "price": "16.58",
+      "financeInFlow": "43598304",
+      "mainInFlow": "30597153",
+      "retailInFlow": "13001151"
+    },
+    {
+      "time": "2019-05-24 11:19",
+      "price": "16.59",
+      "financeInFlow": "43667952",
+      "mainInFlow": "30597153",
+      "retailInFlow": "13070799"
+    },
+    {
+      "time": "2019-05-24 11:20",
+      "price": "16.63",
+      "financeInFlow": "44028142",
+      "mainInFlow": "30597153",
+      "retailInFlow": "13430989"
+    },
+    {
+      "time": "2019-05-24 11:21",
+      "price": "16.78",
+      "financeInFlow": "44541703",
+      "mainInFlow": "30597153",
+      "retailInFlow": "13944550"
+    },
+    {
+      "time": "2019-05-24 11:22",
+      "price": "16.68",
+      "financeInFlow": "44518438",
+      "mainInFlow": "30597153",
+      "retailInFlow": "13921285"
+    },
+    {
+      "time": "2019-05-24 11:23",
+      "price": "16.63",
+      "financeInFlow": "44198769",
+      "mainInFlow": "30597153",
+      "retailInFlow": "13601616"
+    },
+    {
+      "time": "2019-05-24 11:24",
+      "price": "16.6",
+      "financeInFlow": "44051047",
+      "mainInFlow": "30597153",
+      "retailInFlow": "13453894"
+    },
+    {
+      "time": "2019-05-24 11:25",
+      "price": "16.57",
+      "financeInFlow": "43965056",
+      "mainInFlow": "30597153",
+      "retailInFlow": "13367903"
+    },
+    {
+      "time": "2019-05-24 11:26",
+      "price": "16.53",
+      "financeInFlow": "43750137",
+      "mainInFlow": "30597153",
+      "retailInFlow": "13152984"
+    },
+    {
+      "time": "2019-05-24 11:27",
+      "price": "16.5",
+      "financeInFlow": "42247312",
+      "mainInFlow": "29412453",
+      "retailInFlow": "12834859"
+    },
+    {
+      "time": "2019-05-24 11:28",
+      "price": "16.53",
+      "financeInFlow": "42364896",
+      "mainInFlow": "29412453",
+      "retailInFlow": "12952443"
+    },
+    {
+      "time": "2019-05-24 11:29",
+      "price": "16.56",
+      "financeInFlow": "42308873",
+      "mainInFlow": "29412453",
+      "retailInFlow": "12896420"
+    },
+    {
+      "time": "2019-05-24 11:30",
+      "price": "16.55",
+      "financeInFlow": "42372107",
+      "mainInFlow": "29412453",
+      "retailInFlow": "12959654"
+    },
+    {
+      "time": "2019-05-24 13:01",
+      "price": "16.55",
+      "financeInFlow": "42357443",
+      "mainInFlow": "29412453",
+      "retailInFlow": "12944990"
+    },
+    {
+      "time": "2019-05-24 13:02",
+      "price": "16.58",
+      "financeInFlow": "42543035",
+      "mainInFlow": "29412453",
+      "retailInFlow": "13130582"
+    },
+    {
+      "time": "2019-05-24 13:03",
+      "price": "16.56",
+      "financeInFlow": "42122683",
+      "mainInFlow": "29412453",
+      "retailInFlow": "12710230"
+    },
+    {
+      "time": "2019-05-24 13:04",
+      "price": "16.58",
+      "financeInFlow": "42180887",
+      "mainInFlow": "29412453",
+      "retailInFlow": "12768434"
+    },
+    {
+      "time": "2019-05-24 13:05",
+      "price": "16.63",
+      "financeInFlow": "42202830",
+      "mainInFlow": "29412453",
+      "retailInFlow": "12790377"
+    },
+    {
+      "time": "2019-05-24 13:06",
+      "price": "16.56",
+      "financeInFlow": "41992551",
+      "mainInFlow": "29412453",
+      "retailInFlow": "12580098"
+    },
+    {
+      "time": "2019-05-24 13:07",
+      "price": "16.53",
+      "financeInFlow": "41863595",
+      "mainInFlow": "29412453",
+      "retailInFlow": "12451142"
+    },
+    {
+      "time": "2019-05-24 13:08",
+      "price": "16.53",
+      "financeInFlow": "41719965",
+      "mainInFlow": "29412453",
+      "retailInFlow": "12307512"
+    },
+    {
+      "time": "2019-05-24 13:09",
+      "price": "16.52",
+      "financeInFlow": "41650028",
+      "mainInFlow": "29412453",
+      "retailInFlow": "12237575"
+    },
+    {
+      "time": "2019-05-24 13:10",
+      "price": "16.55",
+      "financeInFlow": "41638612",
+      "mainInFlow": "29412453",
+      "retailInFlow": "12226159"
+    },
+    {
+      "time": "2019-05-24 13:11",
+      "price": "16.5",
+      "financeInFlow": "41505058",
+      "mainInFlow": "29412453",
+      "retailInFlow": "12092605"
+    },
+    {
+      "time": "2019-05-24 13:12",
+      "price": "16.49",
+      "financeInFlow": "41371521",
+      "mainInFlow": "29412453",
+      "retailInFlow": "11959068"
+    },
+    {
+      "time": "2019-05-24 13:13",
+      "price": "16.51",
+      "financeInFlow": "41629304",
+      "mainInFlow": "29412453",
+      "retailInFlow": "12216851"
+    },
+    {
+      "time": "2019-05-24 13:14",
+      "price": "16.55",
+      "financeInFlow": "41588190",
+      "mainInFlow": "29412453",
+      "retailInFlow": "12175737"
+    },
+    {
+      "time": "2019-05-24 13:15",
+      "price": "16.52",
+      "financeInFlow": "41558477",
+      "mainInFlow": "29412453",
+      "retailInFlow": "12146024"
+    },
+    {
+      "time": "2019-05-24 13:16",
+      "price": "16.52",
+      "financeInFlow": "41418125",
+      "mainInFlow": "29412453",
+      "retailInFlow": "12005672"
+    },
+    {
+      "time": "2019-05-24 13:17",
+      "price": "16.48",
+      "financeInFlow": "40959351",
+      "mainInFlow": "29412453",
+      "retailInFlow": "11546898"
+    },
+    {
+      "time": "2019-05-24 13:18",
+      "price": "16.49",
+      "financeInFlow": "40784622",
+      "mainInFlow": "29412453",
+      "retailInFlow": "11372169"
+    },
+    {
+      "time": "2019-05-24 13:19",
+      "price": "16.45",
+      "financeInFlow": "39930142",
+      "mainInFlow": "29412453",
+      "retailInFlow": "10517689"
+    },
+    {
+      "time": "2019-05-24 13:20",
+      "price": "16.45",
+      "financeInFlow": "39760898",
+      "mainInFlow": "29412453",
+      "retailInFlow": "10348445"
+    },
+    {
+      "time": "2019-05-24 13:21",
+      "price": "16.45",
+      "financeInFlow": "39619634",
+      "mainInFlow": "29412453",
+      "retailInFlow": "10207181"
+    },
+    {
+      "time": "2019-05-24 13:22",
+      "price": "16.48",
+      "financeInFlow": "39782770",
+      "mainInFlow": "29412453",
+      "retailInFlow": "10370317"
+    },
+    {
+      "time": "2019-05-24 13:23",
+      "price": "16.55",
+      "financeInFlow": "40045439",
+      "mainInFlow": "29412453",
+      "retailInFlow": "10632986"
+    },
+    {
+      "time": "2019-05-24 13:24",
+      "price": "16.56",
+      "financeInFlow": "39964426",
+      "mainInFlow": "29412453",
+      "retailInFlow": "10551973"
+    },
+    {
+      "time": "2019-05-24 13:25",
+      "price": "16.57",
+      "financeInFlow": "39890010",
+      "mainInFlow": "29412453",
+      "retailInFlow": "10477557"
+    },
+    {
+      "time": "2019-05-24 13:26",
+      "price": "16.6",
+      "financeInFlow": "40195571",
+      "mainInFlow": "29412453",
+      "retailInFlow": "10783118"
+    },
+    {
+      "time": "2019-05-24 13:27",
+      "price": "16.61",
+      "financeInFlow": "40463093",
+      "mainInFlow": "29412453",
+      "retailInFlow": "11050640"
+    },
+    {
+      "time": "2019-05-24 13:28",
+      "price": "16.6",
+      "financeInFlow": "40547837",
+      "mainInFlow": "29412453",
+      "retailInFlow": "11135384"
+    },
+    {
+      "time": "2019-05-24 13:29",
+      "price": "16.59",
+      "financeInFlow": "40476539",
+      "mainInFlow": "29412453",
+      "retailInFlow": "11064086"
+    },
+    {
+      "time": "2019-05-24 13:30",
+      "price": "16.62",
+      "financeInFlow": "40685941",
+      "mainInFlow": "29412453",
+      "retailInFlow": "11273488"
+    },
+    {
+      "time": "2019-05-24 13:31",
+      "price": "16.72",
+      "financeInFlow": "41329986",
+      "mainInFlow": "29412453",
+      "retailInFlow": "11917533"
+    },
+    {
+      "time": "2019-05-24 13:32",
+      "price": "16.65",
+      "financeInFlow": "41169862",
+      "mainInFlow": "29412453",
+      "retailInFlow": "11757409"
+    },
+    {
+      "time": "2019-05-24 13:33",
+      "price": "16.65",
+      "financeInFlow": "41163700",
+      "mainInFlow": "29412453",
+      "retailInFlow": "11751247"
+    },
+    {
+      "time": "2019-05-24 13:34",
+      "price": "16.63",
+      "financeInFlow": "41072115",
+      "mainInFlow": "29412453",
+      "retailInFlow": "11659662"
+    },
+    {
+      "time": "2019-05-24 13:35",
+      "price": "16.63",
+      "financeInFlow": "41177018",
+      "mainInFlow": "29412453",
+      "retailInFlow": "11764565"
+    },
+    {
+      "time": "2019-05-24 13:36",
+      "price": "16.61",
+      "financeInFlow": "41097449",
+      "mainInFlow": "29412453",
+      "retailInFlow": "11684996"
+    },
+    {
+      "time": "2019-05-24 13:37",
+      "price": "16.6",
+      "financeInFlow": "41084244",
+      "mainInFlow": "29412453",
+      "retailInFlow": "11671791"
+    },
+    {
+      "time": "2019-05-24 13:38",
+      "price": "16.57",
+      "financeInFlow": "41077876",
+      "mainInFlow": "29412453",
+      "retailInFlow": "11665423"
+    },
+    {
+      "time": "2019-05-24 13:39",
+      "price": "16.56",
+      "financeInFlow": "40918892",
+      "mainInFlow": "29412453",
+      "retailInFlow": "11506439"
+    },
+    {
+      "time": "2019-05-24 13:40",
+      "price": "16.56",
+      "financeInFlow": "40842784",
+      "mainInFlow": "29412453",
+      "retailInFlow": "11430331"
+    },
+    {
+      "time": "2019-05-24 13:41",
+      "price": "16.6",
+      "financeInFlow": "40779921",
+      "mainInFlow": "29412453",
+      "retailInFlow": "11367468"
+    },
+    {
+      "time": "2019-05-24 13:42",
+      "price": "16.52",
+      "financeInFlow": "40687302",
+      "mainInFlow": "29412453",
+      "retailInFlow": "11274849"
+    },
+    {
+      "time": "2019-05-24 13:43",
+      "price": "16.54",
+      "financeInFlow": "40684013",
+      "mainInFlow": "29412453",
+      "retailInFlow": "11271560"
+    },
+    {
+      "time": "2019-05-24 13:44",
+      "price": "16.49",
+      "financeInFlow": "40469644",
+      "mainInFlow": "29412453",
+      "retailInFlow": "11057191"
+    },
+    {
+      "time": "2019-05-24 13:45",
+      "price": "16.5",
+      "financeInFlow": "40250573",
+      "mainInFlow": "29412453",
+      "retailInFlow": "10838120"
+    },
+    {
+      "time": "2019-05-24 13:46",
+      "price": "16.5",
+      "financeInFlow": "39953835",
+      "mainInFlow": "29412453",
+      "retailInFlow": "10541382"
+    },
+    {
+      "time": "2019-05-24 13:47",
+      "price": "16.52",
+      "financeInFlow": "39998411",
+      "mainInFlow": "29412453",
+      "retailInFlow": "10585958"
+    },
+    {
+      "time": "2019-05-24 13:48",
+      "price": "16.54",
+      "financeInFlow": "40091119",
+      "mainInFlow": "29412453",
+      "retailInFlow": "10678666"
+    },
+    {
+      "time": "2019-05-24 13:49",
+      "price": "16.56",
+      "financeInFlow": "40008364",
+      "mainInFlow": "29412453",
+      "retailInFlow": "10595911"
+    },
+    {
+      "time": "2019-05-24 13:50",
+      "price": "16.57",
+      "financeInFlow": "39968679",
+      "mainInFlow": "29412453",
+      "retailInFlow": "10556226"
+    },
+    {
+      "time": "2019-05-24 13:51",
+      "price": "16.57",
+      "financeInFlow": "39892457",
+      "mainInFlow": "29412453",
+      "retailInFlow": "10480004"
+    },
+    {
+      "time": "2019-05-24 13:52",
+      "price": "16.52",
+      "financeInFlow": "39658883",
+      "mainInFlow": "29412453",
+      "retailInFlow": "10246430"
+    },
+    {
+      "time": "2019-05-24 13:53",
+      "price": "16.53",
+      "financeInFlow": "39323383",
+      "mainInFlow": "29412453",
+      "retailInFlow": "9910930"
+    },
+    {
+      "time": "2019-05-24 13:54",
+      "price": "16.55",
+      "financeInFlow": "39454238",
+      "mainInFlow": "29412453",
+      "retailInFlow": "10041785"
+    },
+    {
+      "time": "2019-05-24 13:55",
+      "price": "16.53",
+      "financeInFlow": "39148187",
+      "mainInFlow": "29412453",
+      "retailInFlow": "9735734"
+    },
+    {
+      "time": "2019-05-24 13:56",
+      "price": "16.5",
+      "financeInFlow": "38226715",
+      "mainInFlow": "29412453",
+      "retailInFlow": "8814262"
+    },
+    {
+      "time": "2019-05-24 13:57",
+      "price": "16.49",
+      "financeInFlow": "37903444",
+      "mainInFlow": "29412453",
+      "retailInFlow": "8490991"
+    },
+    {
+      "time": "2019-05-24 13:58",
+      "price": "16.49",
+      "financeInFlow": "37908475",
+      "mainInFlow": "29412453",
+      "retailInFlow": "8496022"
+    },
+    {
+      "time": "2019-05-24 13:59",
+      "price": "16.5",
+      "financeInFlow": "38083411",
+      "mainInFlow": "29412453",
+      "retailInFlow": "8670958"
+    },
+    {
+      "time": "2019-05-24 14:00",
+      "price": "16.48",
+      "financeInFlow": "37874127",
+      "mainInFlow": "29412453",
+      "retailInFlow": "8461674"
+    },
+    {
+      "time": "2019-05-24 14:01",
+      "price": "16.49",
+      "financeInFlow": "37210553",
+      "mainInFlow": "29412453",
+      "retailInFlow": "7798100"
+    },
+    {
+      "time": "2019-05-24 14:02",
+      "price": "16.52",
+      "financeInFlow": "37418838",
+      "mainInFlow": "29412453",
+      "retailInFlow": "8006385"
+    },
+    {
+      "time": "2019-05-24 14:03",
+      "price": "16.51",
+      "financeInFlow": "37412334",
+      "mainInFlow": "29412453",
+      "retailInFlow": "7999881"
+    },
+    {
+      "time": "2019-05-24 14:04",
+      "price": "16.5",
+      "financeInFlow": "37146869",
+      "mainInFlow": "29412453",
+      "retailInFlow": "7734416"
+    },
+    {
+      "time": "2019-05-24 14:05",
+      "price": "16.53",
+      "financeInFlow": "37062766",
+      "mainInFlow": "29412453",
+      "retailInFlow": "7650313"
+    },
+    {
+      "time": "2019-05-24 14:06",
+      "price": "16.49",
+      "financeInFlow": "36691719",
+      "mainInFlow": "29412453",
+      "retailInFlow": "7279266"
+    },
+    {
+      "time": "2019-05-24 14:07",
+      "price": "16.44",
+      "financeInFlow": "36287211",
+      "mainInFlow": "29412453",
+      "retailInFlow": "6874758"
+    },
+    {
+      "time": "2019-05-24 14:08",
+      "price": "16.45",
+      "financeInFlow": "36311953",
+      "mainInFlow": "29412453",
+      "retailInFlow": "6899500"
+    },
+    {
+      "time": "2019-05-24 14:09",
+      "price": "16.43",
+      "financeInFlow": "36261015",
+      "mainInFlow": "29412453",
+      "retailInFlow": "6848562"
+    },
+    {
+      "time": "2019-05-24 14:10",
+      "price": "16.44",
+      "financeInFlow": "36170641",
+      "mainInFlow": "29412453",
+      "retailInFlow": "6758188"
+    },
+    {
+      "time": "2019-05-24 14:11",
+      "price": "16.48",
+      "financeInFlow": "36376702",
+      "mainInFlow": "29412453",
+      "retailInFlow": "6964249"
+    },
+    {
+      "time": "2019-05-24 14:12",
+      "price": "16.48",
+      "financeInFlow": "36269738",
+      "mainInFlow": "29412453",
+      "retailInFlow": "6857285"
+    },
+    {
+      "time": "2019-05-24 14:13",
+      "price": "16.45",
+      "financeInFlow": "36220497",
+      "mainInFlow": "29412453",
+      "retailInFlow": "6808044"
+    },
+    {
+      "time": "2019-05-24 14:14",
+      "price": "16.46",
+      "financeInFlow": "36123632",
+      "mainInFlow": "29412453",
+      "retailInFlow": "6711179"
+    },
+    {
+      "time": "2019-05-24 14:15",
+      "price": "16.47",
+      "financeInFlow": "36146807",
+      "mainInFlow": "29412453",
+      "retailInFlow": "6734354"
+    },
+    {
+      "time": "2019-05-24 14:16",
+      "price": "16.49",
+      "financeInFlow": "36054741",
+      "mainInFlow": "29412453",
+      "retailInFlow": "6642288"
+    },
+    {
+      "time": "2019-05-24 14:17",
+      "price": "16.52",
+      "financeInFlow": "36322379",
+      "mainInFlow": "29412453",
+      "retailInFlow": "6909926"
+    },
+    {
+      "time": "2019-05-24 14:18",
+      "price": "16.54",
+      "financeInFlow": "36388742",
+      "mainInFlow": "29412453",
+      "retailInFlow": "6976289"
+    },
+    {
+      "time": "2019-05-24 14:19",
+      "price": "16.59",
+      "financeInFlow": "36752247",
+      "mainInFlow": "29412453",
+      "retailInFlow": "7339794"
+    },
+    {
+      "time": "2019-05-24 14:20",
+      "price": "16.64",
+      "financeInFlow": "37089791",
+      "mainInFlow": "29412453",
+      "retailInFlow": "7677338"
+    },
+    {
+      "time": "2019-05-24 14:21",
+      "price": "16.61",
+      "financeInFlow": "36768681",
+      "mainInFlow": "29412453",
+      "retailInFlow": "7356228"
+    },
+    {
+      "time": "2019-05-24 14:22",
+      "price": "16.58",
+      "financeInFlow": "36767035",
+      "mainInFlow": "29412453",
+      "retailInFlow": "7354582"
+    },
+    {
+      "time": "2019-05-24 14:23",
+      "price": "16.56",
+      "financeInFlow": "36823490",
+      "mainInFlow": "29412453",
+      "retailInFlow": "7411037"
+    },
+    {
+      "time": "2019-05-24 14:24",
+      "price": "16.57",
+      "financeInFlow": "37028958",
+      "mainInFlow": "29412453",
+      "retailInFlow": "7616505"
+    },
+    {
+      "time": "2019-05-24 14:25",
+      "price": "16.58",
+      "financeInFlow": "37141776",
+      "mainInFlow": "29412453",
+      "retailInFlow": "7729323"
+    },
+    {
+      "time": "2019-05-24 14:26",
+      "price": "16.66",
+      "financeInFlow": "38313262",
+      "mainInFlow": "29412453",
+      "retailInFlow": "8900809"
+    },
+    {
+      "time": "2019-05-24 14:27",
+      "price": "16.65",
+      "financeInFlow": "38432012",
+      "mainInFlow": "29412453",
+      "retailInFlow": "9019559"
+    },
+    {
+      "time": "2019-05-24 14:28",
+      "price": "16.68",
+      "financeInFlow": "38865747",
+      "mainInFlow": "29412453",
+      "retailInFlow": "9453294"
+    },
+    {
+      "time": "2019-05-24 14:29",
+      "price": "16.67",
+      "financeInFlow": "38877695",
+      "mainInFlow": "29412453",
+      "retailInFlow": "9465242"
+    },
+    {
+      "time": "2019-05-24 14:30",
+      "price": "16.67",
+      "financeInFlow": "38876178",
+      "mainInFlow": "29412453",
+      "retailInFlow": "9463725"
+    },
+    {
+      "time": "2019-05-24 14:31",
+      "price": "16.6",
+      "financeInFlow": "38781619",
+      "mainInFlow": "29412453",
+      "retailInFlow": "9369166"
+    },
+    {
+      "time": "2019-05-24 14:32",
+      "price": "16.58",
+      "financeInFlow": "38614753",
+      "mainInFlow": "29412453",
+      "retailInFlow": "9202300"
+    },
+    {
+      "time": "2019-05-24 14:33",
+      "price": "16.5",
+      "financeInFlow": "38619919",
+      "mainInFlow": "29412453",
+      "retailInFlow": "9207466"
+    },
+    {
+      "time": "2019-05-24 14:34",
+      "price": "16.49",
+      "financeInFlow": "38171566",
+      "mainInFlow": "29412453",
+      "retailInFlow": "8759113"
+    },
+    {
+      "time": "2019-05-24 14:35",
+      "price": "16.49",
+      "financeInFlow": "37981949",
+      "mainInFlow": "29412453",
+      "retailInFlow": "8569496"
+    },
+    {
+      "time": "2019-05-24 14:36",
+      "price": "16.53",
+      "financeInFlow": "37904708",
+      "mainInFlow": "29412453",
+      "retailInFlow": "8492255"
+    },
+    {
+      "time": "2019-05-24 14:37",
+      "price": "16.53",
+      "financeInFlow": "37886744",
+      "mainInFlow": "29412453",
+      "retailInFlow": "8474291"
+    },
+    {
+      "time": "2019-05-24 14:38",
+      "price": "16.54",
+      "financeInFlow": "37801353",
+      "mainInFlow": "29412453",
+      "retailInFlow": "8388900"
+    },
+    {
+      "time": "2019-05-24 14:39",
+      "price": "16.52",
+      "financeInFlow": "37666116",
+      "mainInFlow": "29412453",
+      "retailInFlow": "8253663"
+    },
+    {
+      "time": "2019-05-24 14:40",
+      "price": "16.5",
+      "financeInFlow": "37598466",
+      "mainInFlow": "29412453",
+      "retailInFlow": "8186013"
+    },
+    {
+      "time": "2019-05-24 14:41",
+      "price": "16.51",
+      "financeInFlow": "37662941",
+      "mainInFlow": "29412453",
+      "retailInFlow": "8250488"
+    },
+    {
+      "time": "2019-05-24 14:42",
+      "price": "16.5",
+      "financeInFlow": "37910853",
+      "mainInFlow": "29412453",
+      "retailInFlow": "8498400"
+    },
+    {
+      "time": "2019-05-24 14:43",
+      "price": "16.51",
+      "financeInFlow": "38168752",
+      "mainInFlow": "29412453",
+      "retailInFlow": "8756299"
+    },
+    {
+      "time": "2019-05-24 14:44",
+      "price": "16.55",
+      "financeInFlow": "38272975",
+      "mainInFlow": "29412453",
+      "retailInFlow": "8860522"
+    },
+    {
+      "time": "2019-05-24 14:45",
+      "price": "16.51",
+      "financeInFlow": "38041684",
+      "mainInFlow": "29412453",
+      "retailInFlow": "8629231"
+    },
+    {
+      "time": "2019-05-24 14:46",
+      "price": "16.53",
+      "financeInFlow": "38174041",
+      "mainInFlow": "29412453",
+      "retailInFlow": "8761588"
+    },
+    {
+      "time": "2019-05-24 14:47",
+      "price": "16.52",
+      "financeInFlow": "37703818",
+      "mainInFlow": "29412453",
+      "retailInFlow": "8291365"
+    },
+    {
+      "time": "2019-05-24 14:48",
+      "price": "16.52",
+      "financeInFlow": "37550252",
+      "mainInFlow": "29412453",
+      "retailInFlow": "8137799"
+    },
+    {
+      "time": "2019-05-24 14:49",
+      "price": "16.54",
+      "financeInFlow": "37856125",
+      "mainInFlow": "29412453",
+      "retailInFlow": "8443672"
+    },
+    {
+      "time": "2019-05-24 14:50",
+      "price": "16.54",
+      "financeInFlow": "38448469",
+      "mainInFlow": "29412453",
+      "retailInFlow": "9036016"
+    },
+    {
+      "time": "2019-05-24 14:51",
+      "price": "16.5",
+      "financeInFlow": "37502328",
+      "mainInFlow": "29412453",
+      "retailInFlow": "8089875"
+    },
+    {
+      "time": "2019-05-24 14:52",
+      "price": "16.53",
+      "financeInFlow": "37425152",
+      "mainInFlow": "29412453",
+      "retailInFlow": "8012699"
+    },
+    {
+      "time": "2019-05-24 14:53",
+      "price": "16.54",
+      "financeInFlow": "37390670",
+      "mainInFlow": "29412453",
+      "retailInFlow": "7978217"
+    },
+    {
+      "time": "2019-05-24 14:54",
+      "price": "16.52",
+      "financeInFlow": "37329790",
+      "mainInFlow": "29412453",
+      "retailInFlow": "7917337"
+    },
+    {
+      "time": "2019-05-24 14:55",
+      "price": "16.55",
+      "financeInFlow": "37249132",
+      "mainInFlow": "29412453",
+      "retailInFlow": "7836679"
+    },
+    {
+      "time": "2019-05-24 14:56",
+      "price": "16.53",
+      "financeInFlow": "37495771",
+      "mainInFlow": "29412453",
+      "retailInFlow": "8083318"
+    },
+    {
+      "time": "2019-05-24 14:57",
+      "price": "16.53",
+      "financeInFlow": "37312439",
+      "mainInFlow": "29412453",
+      "retailInFlow": "7899986"
+    },
+    {
+      "time": "2019-05-24 14:58",
+      "price": "16.54",
+      "financeInFlow": "37360506",
+      "mainInFlow": "29412453",
+      "retailInFlow": "7948053"
+    },
+    {
+      "time": "2019-05-24 14:59",
+      "price": "16.54",
+      "financeInFlow": "37360506",
+      "mainInFlow": "29412453",
+      "retailInFlow": "7948053"
+    },
+    {
+      "time": "2019-05-24 15:00",
+      "price": "16.52",
+      "financeInFlow": "34801558",
+      "mainInFlow": "26853505",
+      "retailInFlow": "7948053"
+    }
+  ]
+}

@@ -27,12 +27,19 @@ import ysn.com.stock.R;
  */
 public class StockView extends View {
 
+    private static final int COUNT_DEFAULT = 240;
+
     /**
      * 默认虚线效果
      */
     private static final PathEffect DEFAULT_DASH_EFFECT = new DashPathEffect(new float[]{2, 2, 2, 2}, 1);
 
     protected Context context;
+
+    /**
+     * totalCount: 总点数
+     */
+    private int totalCount = COUNT_DEFAULT;
 
     /**
      * columnCount: 列数+1
@@ -124,25 +131,33 @@ public class StockView extends View {
         canvas.save();
         canvas.translate(0, topTableHeight);
 
-        // 绘制边框
-        drawBorders(canvas);
-        // 绘制竖线
-        drawColumnLine(canvas);
-        // 绘制横线
-        drawRowLine(canvas);
-        // 绘制时间坐标
-        drawTimeText(canvas);
+        // 基础绘制
+        onBaseDraw(canvas);
 
         //开放给子类自由绘制
-        childDraw(canvas);
+        onChildDraw(canvas);
 
         canvas.restore();
     }
 
     /**
+     * 基础绘制
+     */
+    protected void onBaseDraw(Canvas canvas) {
+        // 绘制边框
+        onBordersDraw(canvas);
+        // 绘制竖线
+        onColumnLineDraw(canvas);
+        // 绘制横线
+        onRowLineDraw(canvas);
+        // 绘制时间坐标
+        onTimeTextDraw(canvas);
+    }
+
+    /**
      * 绘制边框
      */
-    protected void drawBorders(Canvas canvas) {
+    protected void onBordersDraw(Canvas canvas) {
         // 上表边框
         linePath.moveTo(tableMargin, getTopTableMinY());
         linePath.lineTo(tableMargin, getTopTableMaxY());
@@ -153,10 +168,16 @@ public class StockView extends View {
         linePath.reset();
     }
 
+    /**
+     * 获取上表格最大Y
+     */
     protected float getTopTableMaxY() {
         return (tableMargin - topTableHeight);
     }
 
+    /**
+     * 获取上表格最小Y
+     */
     protected float getTopTableMinY() {
         return -tableMargin;
     }
@@ -164,17 +185,21 @@ public class StockView extends View {
     /**
      * 绘制竖线
      */
-    protected void drawColumnLine(Canvas canvas) {
+    protected void onColumnLineDraw(Canvas canvas) {
         // 绘制上表竖线
         dottedLinePaint.setColor(getColor(R.color.stock_dotted_column_line));
-        float xSpace = (viewWidth - 2 * tableMargin) / columnCount;
-        for (int i = 1; i < columnCount; i++) {
+        float xSpace = (viewWidth - 2 * tableMargin) / getColumnCount();
+        for (int i = 1; i < getColumnCount(); i++) {
             linePath.reset();
             float x = getColumnX(xSpace, i);
             linePath.moveTo(x, getTopTableMinY());
             linePath.lineTo(x, getTopTableMaxY());
             canvas.drawPath(linePath, dottedLinePaint);
         }
+    }
+
+    protected int getColumnCount() {
+        return columnCount;
     }
 
     /**
@@ -191,18 +216,22 @@ public class StockView extends View {
     /**
      * 绘制横线
      */
-    protected void drawRowLine(Canvas canvas) {
+    protected void onRowLineDraw(Canvas canvas) {
         // 绘制上表横线
-        float rowSpacing = topTableHeight / topRowCount;
-        for (int i = 1; i < topRowCount; i++) {
+        float rowSpacing = topTableHeight / getTopRowCount();
+        for (int i = 1; i < getTopRowCount(); i++) {
             linePath.reset();
             float y = getRowY(rowSpacing, i);
             linePath.moveTo(tableMargin, y);
             linePath.lineTo((viewWidth - tableMargin), y);
-            dottedLinePaint.setColor(getColor(i != topRowCount / 2 ?
+            dottedLinePaint.setColor(getColor(i != getTopRowCount() / 2 ?
                     R.color.stock_dotted_column_line : R.color.stock_dotted_row_line));
             canvas.drawPath(linePath, dottedLinePaint);
         }
+    }
+
+    protected int getTopRowCount() {
+        return topRowCount;
     }
 
     /**
@@ -219,7 +248,7 @@ public class StockView extends View {
     /**
      * 绘制时间坐标
      */
-    protected void drawTimeText(Canvas canvas) {
+    protected void onTimeTextDraw(Canvas canvas) {
     }
 
     /**
@@ -241,9 +270,29 @@ public class StockView extends View {
     }
 
     /**
+     * 获取x轴坐标
+     *
+     * @param position 当前position
+     * @return x轴坐标
+     */
+    protected float getX(int position) {
+        return getColumnX(((viewWidth - tableMargin * 2) / (float) totalCount), position);
+    }
+
+    /**
+     * 获取y轴坐标
+     *
+     * @param value 当前值
+     * @return y轴坐标
+     */
+    protected float getY(float value, float minValue, float maxValue) {
+        return ((getTopTableMaxY()) * (value - minValue)) / (maxValue - minValue);
+    }
+
+    /**
      * 开放给子类自由绘制
      */
-    protected void childDraw(Canvas canvas) {
+    protected void onChildDraw(Canvas canvas) {
     }
 
     protected int getColor(@ColorRes int colorRes) {

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="capital_bg">#f5f5f5</color>
+
+    <color name="capital_text">#999999</color>
+
+    <color name="capital_column_line">#d5d5d5</color>
+    <color name="capital_row_line">#e5e5e5</color>
+
+    <color name="capital_price">#308ef2</color>
+    <color name="capital_finance_in_flow">#333333</color>
+    <color name="capital_main_in_flow">#eb4242</color>
+    <color name="capital_retail_in_flow">#f27100</color>
+</resources>

@@ -20,6 +20,9 @@ public class FenShiData {
     private float avgPrice;
     private float volume;
 
+    public FenShiData() {
+    }
+
     public FenShiData(String dateTime, float trade, float avgPrice, float volume) {
         this.dateTime = dateTime;
         this.trade = trade;

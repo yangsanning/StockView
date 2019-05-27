@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import ysn.com.stockview.page.CapitalActivity;
 import ysn.com.stockview.page.FenShiActivity;
 
 /**
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         findViewById(R.id.main_activity_fen_shi).setOnClickListener(this);
+        findViewById(R.id.main_activity_capital).setOnClickListener(this);
     }
 
     @Override
@@ -29,6 +31,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.main_activity_fen_shi:
                 startActivity(new Intent((this), FenShiActivity.class));
+                break;
+            case R.id.main_activity_capital:
+                startActivity(new Intent((this), CapitalActivity.class));
                 break;
             default:
                 break;

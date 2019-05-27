@@ -6,12 +6,12 @@ import java.util.List;
 
 /**
  * @Author yangsanning
- * @ClassName Time
+ * @ClassName FenShiTime
  * @Description 一句话概括作用
  * @Date 2018/8/15
  * @History 2018/8/15 author: description:
  */
-public class Time {
+public class FenShiTime {
 
     /**
      * date : 20180814

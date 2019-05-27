@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
 
-import ysn.com.stockview.bean.Time;
-
 /**
  * @Author yangsanning
  * @ClassName JsonUtils
@@ -25,14 +23,14 @@ public class JsonUtils {
      *
      * @return json data
      */
-    public static Time getData(Context context, String fileName) {
+    public static <T> T getData(Context context, String fileName, Class<T> classOfT) {
         if (TextUtils.isEmpty(fileName)) {
             return null;
         }
         InputStream inputStream = null;
         try {
             inputStream = context.getAssets().open(fileName);
-            return new Gson().fromJson(convertStreamToString(inputStream), Time.class);
+            return new Gson().fromJson(convertStreamToString(inputStream), classOfT);
         } catch (Exception e) {
             e.printStackTrace();
         }
