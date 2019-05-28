@@ -120,7 +120,7 @@ public class StockView extends View {
         viewWidth = w;
         viewHeight = h;
 
-        timeTableHeight = viewHeight * 0.055f;
+        timeTableHeight = viewHeight * 0.06f;
         topTableHeight = viewHeight - timeTableHeight;
 
         xYTextPaint.setTextSize(timeTableHeight * 0.8f);

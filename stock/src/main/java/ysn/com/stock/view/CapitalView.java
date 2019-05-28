@@ -24,14 +24,8 @@ import ysn.com.stock.bean.CapitalData;
  */
 public class CapitalView extends StockView {
 
-    private static final int COUNT_DEFAULT = 240;
     private static final String[] TIME_TEXT = new String[]{"09:30", "11:30/13:00", "15:00"};
     private static final float DEFAULT_PRICE_STROKE_WIDTH = 2.5f;
-
-    /**
-     * totalCount: 总点数
-     */
-    private int totalCount = COUNT_DEFAULT;
 
     private Paint areaPaint;
     private Path financeInFlowPath;
@@ -200,8 +194,54 @@ public class CapitalView extends StockView {
             return;
         }
 
+        // 绘制坐标值
+        drawCoordinate(canvas);
+
         // 绘制曲线
         drawLine(canvas);
+    }
+
+    /**
+     * 绘制坐标值
+     */
+    private void drawCoordinate(Canvas canvas) {
+        ArrayList<Float> priceCoordinateList = capital.getPriceCoordinate();
+        ArrayList<Float> inFlowCoordinateList = capital.getInFlowCoordinate();
+        if (priceCoordinateList == null || inFlowCoordinateList == null) {
+            return;
+        }
+
+        float textMargin = getXYTextMargin();
+        float rowSpacing = topTableHeight / getTopRowCount();
+        for (int i = 0; i < (getTopRowCount() + 1); i++) {
+            float defaultY = getRowY(rowSpacing, i);
+            int position = (i - 1) < priceCoordinateList.size() ?
+                    (priceCoordinateList.size() - i - 1) : priceCoordinateList.size();
+
+            // 价格坐标
+            String text = String.valueOf(priceCoordinateList.get(position));
+            xYTextPaint.getTextBounds(text, (0), text.length(), textRect);
+            canvas.drawText(text, textMargin,
+                    getCoordinateY(position, priceCoordinateList.size(), defaultY, textMargin), xYTextPaint);
+
+            // inFlow坐标
+            text = String.valueOf(inFlowCoordinateList.get(position));
+            xYTextPaint.getTextBounds(text, (0), text.length(), textRect);
+            canvas.drawText(text, (viewWidth - (textRect.right - textRect.left) - textMargin),
+                    getCoordinateY(position, inFlowCoordinateList.size(), defaultY, textMargin), xYTextPaint);
+        }
+    }
+
+    private float getCoordinateY(int position, int size, float defaultY, float textMargin) {
+        float coordinateY;
+        if (position == 0) {
+            coordinateY = -textMargin;
+        } else if (position == (size - 1)) {
+            coordinateY = defaultY + textRect.height() + textMargin;
+        } else {
+            coordinateY = defaultY + textRect.height() / 2f;
+        }
+        return coordinateY;
     }
 
     /**

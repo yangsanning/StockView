@@ -45,14 +45,39 @@ public class CapitalActivity extends AppCompatActivity {
         for (CapitalTime.DataBean dataBean : capitalTime.getData()) {
             CapitalData data = new CapitalData(
                     NumberUtils.getNumberDecimalTwo(dataBean.getPrice()),
-                    NumberUtils.getNumberDecimalTwo(dataBean.getFinanceInFlow()),
-                    NumberUtils.getNumberDecimalTwo(dataBean.getMainInFlow()),
-                    NumberUtils.getNumberDecimalTwo(dataBean.getRetailInFlow()));
+                    NumberUtils.getNumberDecimalTwo((dataBean.getFinanceInFlow() / 10000f)),
+                    NumberUtils.getNumberDecimalTwo((dataBean.getMainInFlow() / 10000f)),
+                    NumberUtils.getNumberDecimalTwo((dataBean.getRetailInFlow() / 10000f)));
             capitalDataList.add(data);
-            capital.findInFlowExtremum(data.getFinanceInFlow(), data.getMainInFlow(), data.getRetailInFlow());
-            capital.findPriceExtremum(dataBean.getPrice());
+            capital.findPriceExtremum(dataBean.getPrice())
+                    .checkInFlowExtremum(data.getFinanceInFlow(), data.getMainInFlow(), data.getRetailInFlow());
         }
-        capital.setData(capitalDataList);
+        ArrayList<Float> priceCoordinate = new ArrayList<>();
+        priceCoordinate.add(getPriceCoordinate(capital, (0)));
+        priceCoordinate.add(getPriceCoordinate(capital, (1 / 4f)));
+        priceCoordinate.add(getPriceCoordinate(capital, (2 / 4f)));
+        priceCoordinate.add(getPriceCoordinate(capital, (3 / 4f)));
+        priceCoordinate.add(getPriceCoordinate(capital, (1)));
+
+        ArrayList<Float> inFlowCoordinate = new ArrayList<>();
+        inFlowCoordinate.add(getInfoFlowCoordinate(capital, (0)));
+        inFlowCoordinate.add(getInfoFlowCoordinate(capital, (1 / 4f)));
+        inFlowCoordinate.add(getInfoFlowCoordinate(capital, (2 / 4f)));
+        inFlowCoordinate.add(getInfoFlowCoordinate(capital, (3 / 4f)));
+        inFlowCoordinate.add(getInfoFlowCoordinate(capital, (1)));
+        capital.setPriceCoordinate(priceCoordinate)
+                .setInFlowCoordinate(inFlowCoordinate)
+                .setData(capitalDataList);
         return capital;
+    }
+
+    private Float getPriceCoordinate(Capital capital, float ratio) {
+        return NumberUtils.getNumberDecimalThree(
+                (capital.getMixPrice() + (capital.getMaxPrice() - capital.getMixPrice()) * ratio));
+    }
+
+    private Float getInfoFlowCoordinate(Capital capital, float ratio) {
+        return NumberUtils.getNumberDecimalTwo(
+                (capital.getMixInFlow() + (capital.getMaxInFlow() - capital.getMixInFlow()) * ratio));
     }
 }

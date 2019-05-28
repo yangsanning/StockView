@@ -11,11 +11,13 @@ import java.util.ArrayList;
  */
 public class Capital {
 
+    private ArrayList<CapitalData> data;
     private float maxInFlow = Integer.MIN_VALUE;
     private float mixInFlow = Integer.MAX_VALUE;
     private float maxPrice = Integer.MIN_VALUE;
     private float mixPrice = Integer.MAX_VALUE;
-    private ArrayList<CapitalData> data;
+    private ArrayList<Float> priceCoordinate;
+    private ArrayList<Float> inFlowCoordinate;
 
     public Capital() {
     }
@@ -23,6 +25,14 @@ public class Capital {
     public Capital(float maxInFlow, float mixInFlow, ArrayList<CapitalData> data) {
         this.maxInFlow = maxInFlow;
         this.mixInFlow = mixInFlow;
+        this.data = data;
+    }
+
+    public ArrayList<CapitalData> getData() {
+        return data;
+    }
+
+    public void setData(ArrayList<CapitalData> data) {
         this.data = data;
     }
 
@@ -58,15 +68,25 @@ public class Capital {
         this.mixPrice = mixPrice;
     }
 
-    public ArrayList<CapitalData> getData() {
-        return data;
+    public ArrayList<Float> getPriceCoordinate() {
+        return priceCoordinate;
     }
 
-    public void setData(ArrayList<CapitalData> data) {
-        this.data = data;
+    public Capital setPriceCoordinate(ArrayList<Float> priceCoordinate) {
+        this.priceCoordinate = priceCoordinate;
+        return this;
     }
 
-    public void findInFlowExtremum(float financeInFlow, float mainInFlow, float retailInFlow) {
+    public ArrayList<Float> getInFlowCoordinate() {
+        return inFlowCoordinate;
+    }
+
+    public Capital setInFlowCoordinate(ArrayList<Float> inFlowCoordinate) {
+        this.inFlowCoordinate = inFlowCoordinate;
+        return this;
+    }
+
+    public void checkInFlowExtremum(float financeInFlow, float mainInFlow, float retailInFlow) {
         if (financeInFlow > mainInFlow) {
             if (financeInFlow > retailInFlow) {
                 checkMaxInFlow(financeInFlow);
@@ -92,8 +112,9 @@ public class Capital {
         this.mixInFlow = Math.min(this.mixInFlow, value);
     }
 
-    public void findPriceExtremum(float price) {
+    public Capital findPriceExtremum(float price) {
         this.maxPrice = Math.max(this.maxPrice, price);
         this.mixPrice = Math.min(this.mixPrice, price);
+        return this;
     }
 }
