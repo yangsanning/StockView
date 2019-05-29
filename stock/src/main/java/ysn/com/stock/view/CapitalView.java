@@ -1,6 +1,7 @@
 package ysn.com.stock.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import ysn.com.stock.R;
 import ysn.com.stock.bean.Capital;
 import ysn.com.stock.bean.CapitalData;
+import ysn.com.stock.utils.NumberUtils;
 
 /**
  * @Author yangsanning
@@ -26,6 +28,9 @@ public class CapitalView extends StockView {
 
     private static final String[] TIME_TEXT = new String[]{"09:30", "11:30/13:00", "15:00"};
     private static final float DEFAULT_PRICE_STROKE_WIDTH = 2.5f;
+    private static final int DEFAULT_IN_FLOW_UNIT = 10000;
+    private static final int DEFAULT_PRICE_DIGITS = 3;
+    private static final int DEFAULT_IN_FLOW_DIGITS = 2;
 
     private Paint areaPaint;
     private Path financeInFlowPath;
@@ -39,6 +44,15 @@ public class CapitalView extends StockView {
 
     private Path pricePath;
     private Paint pricePaint;
+
+    /**
+     * inFlowUnit: inFlow单位
+     * priceDigits: 价格保留的位数
+     * inFlowScale: inFlow保留的位数
+     */
+    private int inFlowUnit;
+    private int priceDigits;
+    private int inFlowDigits;
 
     private Capital capital;
     private ArrayList<CapitalData> data;
@@ -61,8 +75,18 @@ public class CapitalView extends StockView {
     }
 
     @Override
-    protected void init(AttributeSet attrs) {
-        super.init(attrs);
+    protected void initAttr(AttributeSet attrs) {
+        super.initAttr(attrs);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CapitalView);
+        inFlowUnit = typedArray.getInteger(R.styleable.CapitalView_cv_in_flow_unit, DEFAULT_IN_FLOW_UNIT);
+        inFlowDigits = typedArray.getInteger(R.styleable.CapitalView_cv_in_flow_digits, DEFAULT_IN_FLOW_DIGITS);
+        priceDigits = typedArray.getInteger(R.styleable.CapitalView_cv_price_digits, DEFAULT_PRICE_DIGITS);
+        typedArray.recycle();
+    }
+
+    @Override
+    protected void initPaint() {
+        super.initPaint();
 
         areaPaint = new Paint();
         areaPaint.setAntiAlias(true);
@@ -219,13 +243,13 @@ public class CapitalView extends StockView {
                     (priceCoordinateList.size() - i - 1) : priceCoordinateList.size();
 
             // 价格坐标
-            String text = String.valueOf(priceCoordinateList.get(position));
+            String text = NumberUtils.numberFormat(priceCoordinateList.get(position), priceDigits);
             xYTextPaint.getTextBounds(text, (0), text.length(), textRect);
             canvas.drawText(text, textMargin,
                     getCoordinateY(position, priceCoordinateList.size(), defaultY, textMargin), xYTextPaint);
 
             // inFlow坐标
-            text = String.valueOf(inFlowCoordinateList.get(position));
+            text = NumberUtils.numberFormat((inFlowCoordinateList.get(position) / inFlowUnit), inFlowDigits);
             xYTextPaint.getTextBounds(text, (0), text.length(), textRect);
             canvas.drawText(text, (viewWidth - (textRect.right - textRect.left) - textMargin),
                     getCoordinateY(position, inFlowCoordinateList.size(), defaultY, textMargin), xYTextPaint);

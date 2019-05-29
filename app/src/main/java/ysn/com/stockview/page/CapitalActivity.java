@@ -11,7 +11,6 @@ import ysn.com.stock.view.CapitalView;
 import ysn.com.stockview.R;
 import ysn.com.stockview.bean.CapitalTime;
 import ysn.com.stockview.utils.JsonUtils;
-import ysn.com.stockview.utils.NumberUtils;
 
 /**
  * @Author yangsanning
@@ -29,11 +28,10 @@ public class CapitalActivity extends AppCompatActivity {
 
         setTitle(R.string.text_capital);
 
-        CapitalView capitalView1 = findViewById(R.id.capital_activity_view1);
-        capitalView1.setNewData(convert(JsonUtils.getData((this), ("json/capital1.json"), CapitalTime.class)));
+        Capital newData = convert(JsonUtils.getData((this), ("json/capital1.json"), CapitalTime.class));
 
-        CapitalView capitalView2 = findViewById(R.id.capital_activity_view2);
-        capitalView2.setNewData(convert(JsonUtils.getData((this), ("json/capital2.json"), CapitalTime.class)));
+        ((CapitalView) findViewById(R.id.capital_activity_view1)).setNewData(newData);
+        ((CapitalView) findViewById(R.id.capital_activity_view2)).setNewData(newData);
     }
 
     private Capital convert(CapitalTime capitalTime) {
@@ -43,11 +41,8 @@ public class CapitalActivity extends AppCompatActivity {
         Capital capital = new Capital();
         ArrayList<CapitalData> capitalDataList = new ArrayList<>();
         for (CapitalTime.DataBean dataBean : capitalTime.getData()) {
-            CapitalData data = new CapitalData(
-                    NumberUtils.getNumberDecimalTwo(dataBean.getPrice()),
-                    NumberUtils.getNumberDecimalTwo((dataBean.getFinanceInFlow() / 10000f)),
-                    NumberUtils.getNumberDecimalTwo((dataBean.getMainInFlow() / 10000f)),
-                    NumberUtils.getNumberDecimalTwo((dataBean.getRetailInFlow() / 10000f)));
+            CapitalData data = new CapitalData(dataBean.getPrice(), dataBean.getFinanceInFlow(),
+                    dataBean.getMainInFlow(), dataBean.getRetailInFlow());
             capitalDataList.add(data);
             capital.findPriceExtremum(dataBean.getPrice())
                     .checkInFlowExtremum(data.getFinanceInFlow(), data.getMainInFlow(), data.getRetailInFlow());
@@ -65,19 +60,15 @@ public class CapitalActivity extends AppCompatActivity {
         inFlowCoordinate.add(getInfoFlowCoordinate(capital, (2 / 4f)));
         inFlowCoordinate.add(getInfoFlowCoordinate(capital, (3 / 4f)));
         inFlowCoordinate.add(getInfoFlowCoordinate(capital, (1)));
-        capital.setPriceCoordinate(priceCoordinate)
-                .setInFlowCoordinate(inFlowCoordinate)
-                .setData(capitalDataList);
+        capital.setPriceCoordinate(priceCoordinate).setInFlowCoordinate(inFlowCoordinate).setData(capitalDataList);
         return capital;
     }
 
     private Float getPriceCoordinate(Capital capital, float ratio) {
-        return NumberUtils.getNumberDecimalThree(
-                (capital.getMixPrice() + (capital.getMaxPrice() - capital.getMixPrice()) * ratio));
+        return capital.getMixPrice() + (capital.getMaxPrice() - capital.getMixPrice()) * ratio;
     }
 
     private Float getInfoFlowCoordinate(Capital capital, float ratio) {
-        return NumberUtils.getNumberDecimalTwo(
-                (capital.getMixInFlow() + (capital.getMaxInFlow() - capital.getMixInFlow()) * ratio));
+        return capital.getMixInFlow() + (capital.getMaxInFlow() - capital.getMixInFlow()) * ratio;
     }
 }

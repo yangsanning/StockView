@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:cv="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
@@ -17,5 +18,8 @@
         android:id="@+id/capital_activity_view2"
         android:layout_width="match_parent"
         android:layout_height="190dp"
+        cv:cv_in_flow_digits="1"
+        cv:cv_in_flow_unit="1000"
+        cv:cv_price_digits="1"
         android:layout_marginTop="50dp" />
 </LinearLayout>

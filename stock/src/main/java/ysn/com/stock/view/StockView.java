@@ -94,6 +94,15 @@ public class StockView extends View {
     }
 
     protected void init(AttributeSet attrs) {
+        initAttr(attrs);
+        initPaint();
+    }
+
+    protected void initAttr(AttributeSet attrs) {
+
+    }
+
+    protected void initPaint() {
         linePaint = new Paint();
         linePaint.setColor(getColor(R.color.stock_line));
         linePaint.setStrokeWidth(1f);

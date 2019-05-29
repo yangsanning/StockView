@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CapitalView">
+        <attr name="cv_in_flow_unit" format="integer" />
+        <attr name="cv_in_flow_digits" format="integer"/>
+        <attr name="cv_price_digits" format="integer"/>
+    </declare-styleable>
+
+</resources>

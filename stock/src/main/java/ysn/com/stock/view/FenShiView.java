@@ -100,8 +100,8 @@ public class FenShiView extends StockView {
     }
 
     @Override
-    protected void init(AttributeSet attrs) {
-        super.init(attrs);
+    protected void initPaint() {
+        super.initPaint();
         pricePath = new Path();
         pricePaint = new Paint();
         pricePaint.setColor(getColor(R.color.stock_price_line));
