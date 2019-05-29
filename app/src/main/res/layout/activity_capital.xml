@@ -24,4 +24,24 @@
         cv:cv_left_title="@string/capital_left_title"
         cv:cv_right_title="今日资金净流入(千元)"
         android:layout_marginTop="50dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <CheckBox
+            android:id="@+id/capital_activity_check_box1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="主力净流入"
+            android:textColor="@color/capital_main_in_flow" />
+
+        <CheckBox
+            android:id="@+id/capital_activity_check_box2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:text="散户净流入"
+            android:textColor="@color/capital_retail_in_flow" />
+    </LinearLayout>
 </LinearLayout>

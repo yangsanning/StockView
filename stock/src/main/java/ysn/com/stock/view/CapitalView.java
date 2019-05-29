@@ -51,13 +51,18 @@ public class CapitalView extends StockView {
     /**
      * inFlowUnit: inFlow单位
      * priceDigits: 价格保留的位数
-     * inFlowScale: inFlow保留的位数
+     * inFlowDigits: inFlow保留的位数
+     * leftTitle: 左上角标题(用于标注左边价格坐标)
+     * rightTitle: 右上角标题(用于标注右边inFlow坐标)
      */
     private int inFlowUnit;
     private int priceDigits;
     private int inFlowDigits;
     private String leftTitle;
     private String rightTitle;
+
+    private boolean isDrawMainInFlow;
+    private boolean isDrawRetailInFlow;
 
     private Capital capital;
     private ArrayList<CapitalData> data;
@@ -246,7 +251,7 @@ public class CapitalView extends StockView {
         // 绘制坐标值
         drawCoordinate(canvas);
 
-        // 绘制曲线
+        // 绘制趋势线
         drawLine(canvas);
     }
 
@@ -310,9 +315,26 @@ public class CapitalView extends StockView {
     }
 
     /**
-     * 绘制曲线
+     * 绘制趋势线
      */
     private void drawLine(Canvas canvas) {
+        if (isDrawMainInFlow) {
+            if (isDrawRetailInFlow) {
+                drawAllLine(canvas);
+            } else {
+                drawMainInflowLine(canvas);
+            }
+        } else if (isDrawRetailInFlow) {
+            drawRetailInFlowLine(canvas);
+        } else {
+            drawBaseLine(canvas);
+        }
+    }
+
+    /**
+     * 绘制趋势线
+     */
+    private void drawAllLine(Canvas canvas) {
         financeInFlowPath.moveTo(tableMargin, getInFlowY(data.get(0).getFinanceInFlow()));
         mainInFlowPath.moveTo(tableMargin, getInFlowY(data.get(0).getMainInFlow()));
         retailInFlowPath.moveTo(tableMargin, getInFlowY(data.get(0).getRetailInFlow()));
@@ -331,6 +353,65 @@ public class CapitalView extends StockView {
         financeInFlowPath.reset();
         mainInFlowPath.reset();
         retailInFlowPath.reset();
+        pricePath.reset();
+    }
+
+    /**
+     * 不绘制 RetailInFlow
+     */
+    private void drawMainInflowLine(Canvas canvas) {
+        financeInFlowPath.moveTo(tableMargin, getInFlowY(data.get(0).getFinanceInFlow()));
+        mainInFlowPath.moveTo(tableMargin, getInFlowY(data.get(0).getMainInFlow()));
+        pricePath.moveTo(tableMargin, getPriceY(data.get(0).getPrice()));
+        for (int i = 1; i < data.size(); i++) {
+            financeInFlowPath.lineTo(getX(i), getInFlowY(data.get(i).getFinanceInFlow()));
+            mainInFlowPath.lineTo(getX(i), getInFlowY(data.get(i).getMainInFlow()));
+            pricePath.lineTo(getX(i), getPriceY(data.get(i).getPrice()));
+        }
+        canvas.drawPath(financeInFlowPath, financeInFlowPaint);
+        canvas.drawPath(mainInFlowPath, mainInFlowPaint);
+        canvas.drawPath(pricePath, pricePaint);
+
+        financeInFlowPath.reset();
+        mainInFlowPath.reset();
+        pricePath.reset();
+    }
+
+    /**
+     * 不绘制 MainInFlow
+     */
+    private void drawRetailInFlowLine(Canvas canvas) {
+        financeInFlowPath.moveTo(tableMargin, getInFlowY(data.get(0).getFinanceInFlow()));
+        retailInFlowPath.moveTo(tableMargin, getInFlowY(data.get(0).getRetailInFlow()));
+        pricePath.moveTo(tableMargin, getPriceY(data.get(0).getPrice()));
+        for (int i = 1; i < data.size(); i++) {
+            financeInFlowPath.lineTo(getX(i), getInFlowY(data.get(i).getFinanceInFlow()));
+            retailInFlowPath.lineTo(getX(i), getInFlowY(data.get(i).getRetailInFlow()));
+            pricePath.lineTo(getX(i), getPriceY(data.get(i).getPrice()));
+        }
+        canvas.drawPath(financeInFlowPath, financeInFlowPaint);
+        canvas.drawPath(retailInFlowPath, retailInFlowPaint);
+        canvas.drawPath(pricePath, pricePaint);
+
+        financeInFlowPath.reset();
+        retailInFlowPath.reset();
+        pricePath.reset();
+    }
+
+    /**
+     * 绘制基础趋势线
+     */
+    private void drawBaseLine(Canvas canvas) {
+        financeInFlowPath.moveTo(tableMargin, getInFlowY(data.get(0).getFinanceInFlow()));
+        pricePath.moveTo(tableMargin, getPriceY(data.get(0).getPrice()));
+        for (int i = 1; i < data.size(); i++) {
+            financeInFlowPath.lineTo(getX(i), getInFlowY(data.get(i).getFinanceInFlow()));
+            pricePath.lineTo(getX(i), getPriceY(data.get(i).getPrice()));
+        }
+        canvas.drawPath(financeInFlowPath, financeInFlowPaint);
+        canvas.drawPath(pricePath, pricePaint);
+
+        financeInFlowPath.reset();
         pricePath.reset();
     }
 
@@ -362,5 +443,24 @@ public class CapitalView extends StockView {
     public void setNewData(Capital capital) {
         this.capital = capital;
         this.data = capital.getData();
+        postInvalidate();
+    }
+
+    /**
+     * @param isDrawMainInFlow 是否绘制 MainInFlow
+     */
+    public CapitalView setDrawMainInFlow(boolean isDrawMainInFlow) {
+        this.isDrawMainInFlow = isDrawMainInFlow;
+        postInvalidate();
+        return this;
+    }
+
+    /**
+     * @param isDrawRetailInFlow 是否绘制 RetailInFlow
+     */
+    public CapitalView setDrawRetailInFlow(boolean isDrawRetailInFlow) {
+        this.isDrawRetailInFlow = isDrawRetailInFlow;
+        postInvalidate();
+        return this;
     }
 }

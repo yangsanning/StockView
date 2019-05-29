@@ -2,6 +2,8 @@ package ysn.com.stockview.page;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import java.util.ArrayList;
 
@@ -19,7 +21,9 @@ import ysn.com.stockview.utils.JsonUtils;
  * @Date 2019/5/23
  * @History 2019/5/23 author: description:
  */
-public class CapitalActivity extends AppCompatActivity {
+public class CapitalActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
+
+    private CapitalView capitalView2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +34,19 @@ public class CapitalActivity extends AppCompatActivity {
 
         Capital newData = convert(JsonUtils.getData((this), ("json/capital1.json"), CapitalTime.class));
 
-        ((CapitalView) findViewById(R.id.capital_activity_view1)).setNewData(newData);
-        ((CapitalView) findViewById(R.id.capital_activity_view2)).setNewData(newData);
+        CapitalView capitalView1 = findViewById(R.id.capital_activity_view1);
+        capitalView1.setDrawMainInFlow(true)
+                .setDrawRetailInFlow(true)
+                .setNewData(newData);
+
+        capitalView2 = findViewById(R.id.capital_activity_view2);
+        capitalView2.setNewData(newData);
+
+        CheckBox checkBox1 = findViewById(R.id.capital_activity_check_box1);
+        checkBox1.setOnCheckedChangeListener(this);
+
+        CheckBox checkBox2 = findViewById(R.id.capital_activity_check_box2);
+        checkBox2.setOnCheckedChangeListener(this);
     }
 
     private Capital convert(CapitalTime capitalTime) {
@@ -70,5 +85,19 @@ public class CapitalActivity extends AppCompatActivity {
 
     private Float getInfoFlowCoordinate(Capital capital, float ratio) {
         return capital.getMixInFlow() + (capital.getMaxInFlow() - capital.getMixInFlow()) * ratio;
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()) {
+            case R.id.capital_activity_check_box1:
+                capitalView2.setDrawMainInFlow(isChecked);
+                break;
+            case R.id.capital_activity_check_box2:
+                capitalView2.setDrawRetailInFlow(isChecked);
+                break;
+            default:
+                break;
+        }
     }
 }
