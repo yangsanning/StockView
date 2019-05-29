@@ -56,35 +56,17 @@ public class CapitalActivity extends AppCompatActivity implements CompoundButton
         Capital capital = new Capital();
         ArrayList<CapitalData> capitalDataList = new ArrayList<>();
         for (CapitalTime.DataBean dataBean : capitalTime.getData()) {
-            CapitalData data = new CapitalData(dataBean.getPrice(), dataBean.getFinanceInFlow(),
-                    dataBean.getMainInFlow(), dataBean.getRetailInFlow());
+            CapitalData data = new CapitalData(
+                    dataBean.getPrice(),
+                    dataBean.getFinanceInFlow(),
+                    dataBean.getMainInFlow(),
+                    dataBean.getRetailInFlow());
             capitalDataList.add(data);
             capital.findPriceExtremum(dataBean.getPrice())
                     .checkInFlowExtremum(data.getFinanceInFlow(), data.getMainInFlow(), data.getRetailInFlow());
         }
-        ArrayList<Float> priceCoordinate = new ArrayList<>();
-        priceCoordinate.add(getPriceCoordinate(capital, (0)));
-        priceCoordinate.add(getPriceCoordinate(capital, (1 / 4f)));
-        priceCoordinate.add(getPriceCoordinate(capital, (2 / 4f)));
-        priceCoordinate.add(getPriceCoordinate(capital, (3 / 4f)));
-        priceCoordinate.add(getPriceCoordinate(capital, (1)));
-
-        ArrayList<Float> inFlowCoordinate = new ArrayList<>();
-        inFlowCoordinate.add(getInfoFlowCoordinate(capital, (0)));
-        inFlowCoordinate.add(getInfoFlowCoordinate(capital, (1 / 4f)));
-        inFlowCoordinate.add(getInfoFlowCoordinate(capital, (2 / 4f)));
-        inFlowCoordinate.add(getInfoFlowCoordinate(capital, (3 / 4f)));
-        inFlowCoordinate.add(getInfoFlowCoordinate(capital, (1)));
-        capital.setPriceCoordinate(priceCoordinate).setInFlowCoordinate(inFlowCoordinate).setData(capitalDataList);
+        capital.setData(capitalDataList);
         return capital;
-    }
-
-    private Float getPriceCoordinate(Capital capital, float ratio) {
-        return capital.getMixPrice() + (capital.getMaxPrice() - capital.getMixPrice()) * ratio;
-    }
-
-    private Float getInfoFlowCoordinate(Capital capital, float ratio) {
-        return capital.getMixInFlow() + (capital.getMaxInFlow() - capital.getMixInFlow()) * ratio;
     }
 
     @Override

@@ -16,8 +16,6 @@ public class Capital {
     private float mixInFlow = Integer.MAX_VALUE;
     private float maxPrice = Integer.MIN_VALUE;
     private float mixPrice = Integer.MAX_VALUE;
-    private ArrayList<Float> priceCoordinate;
-    private ArrayList<Float> inFlowCoordinate;
 
     public Capital() {
     }
@@ -66,24 +64,6 @@ public class Capital {
 
     public void setMixPrice(float mixPrice) {
         this.mixPrice = mixPrice;
-    }
-
-    public ArrayList<Float> getPriceCoordinate() {
-        return priceCoordinate;
-    }
-
-    public Capital setPriceCoordinate(ArrayList<Float> priceCoordinate) {
-        this.priceCoordinate = priceCoordinate;
-        return this;
-    }
-
-    public ArrayList<Float> getInFlowCoordinate() {
-        return inFlowCoordinate;
-    }
-
-    public Capital setInFlowCoordinate(ArrayList<Float> inFlowCoordinate) {
-        this.inFlowCoordinate = inFlowCoordinate;
-        return this;
     }
 
     public void checkInFlowExtremum(float financeInFlow, float mainInFlow, float retailInFlow) {

@@ -275,38 +275,46 @@ public class CapitalView extends StockView {
      * 绘制坐标值
      */
     private void drawCoordinate(Canvas canvas) {
-        ArrayList<Float> priceCoordinateList = capital.getPriceCoordinate();
-        ArrayList<Float> inFlowCoordinateList = capital.getInFlowCoordinate();
-        if (priceCoordinateList == null || inFlowCoordinateList == null) {
-            return;
-        }
-
         textPaint.setTextSize(xYTextSize);
+
         float rowSpacing = getRowSpacing();
-        for (int i = 0; i < (getTopRowCount() + 1); i++) {
-            float defaultY = getRowY(rowSpacing, i);
-            int position = (i - 1) < priceCoordinateList.size() ?
-                    (priceCoordinateList.size() - i - 1) : priceCoordinateList.size();
+        int topRowCount = getTopRowCount();
+        for (int i = 0; i < (topRowCount + 1); i++) {
+            float defaultY = getRowY(rowSpacing, topRowCount - i);
 
             // 价格坐标
-            String text = NumberUtils.numberFormat(priceCoordinateList.get(position), priceDigits);
+            String text = NumberUtils.numberFormat(getPriceCoordinate(((float) i / topRowCount)), priceDigits);
             textPaint.getTextBounds(text, (0), text.length(), textRect);
-            canvas.drawText(text, getTextMargin(),
-                    getCoordinateY(position, priceCoordinateList.size(), defaultY, getTextMargin()), textPaint);
+            float textMargin = getTextMargin();
+            canvas.drawText(text, textMargin,
+                    getCoordinateY(i, topRowCount, defaultY, textMargin), textPaint);
 
             // inFlow坐标
-            text = NumberUtils.numberFormat((inFlowCoordinateList.get(position) / inFlowUnit), inFlowDigits);
+            text = NumberUtils.numberFormat(getInfoFlowCoordinate(((float) i / topRowCount)), inFlowDigits);
             textPaint.getTextBounds(text, (0), text.length(), textRect);
-            canvas.drawText(text, (viewWidth - (textRect.right - textRect.left) - getTextMargin()),
-                    getCoordinateY(position, inFlowCoordinateList.size(), defaultY, getTextMargin()), textPaint);
+            textMargin = getTextMargin();
+            canvas.drawText(text, (viewWidth - textRect.width() - textMargin),
+                    getCoordinateY(i, topRowCount, defaultY, textMargin), textPaint);
         }
     }
 
-    private float getCoordinateY(int position, int size, float defaultY, float textMargin) {
+    private Float getPriceCoordinate(float ratio) {
+        return getCoordinateValue(capital.getMaxPrice(), capital.getMixPrice(), ratio);
+    }
+
+    private Float getInfoFlowCoordinate(float ratio) {
+        return getCoordinateValue(capital.getMaxInFlow(), capital.getMixInFlow(), ratio) / inFlowUnit;
+    }
+
+    private Float getCoordinateValue(float maxValue, float mixValue, float ratio) {
+        return mixValue + (maxValue - mixValue) * ratio;
+    }
+
+    private float getCoordinateY(int position, int topRowCount, float defaultY, float textMargin) {
         float coordinateY;
         if (position == 0) {
             coordinateY = -textMargin;
-        } else if (position == (size - 1)) {
+        } else if (position == topRowCount) {
             coordinateY = defaultY + textRect.height() + textMargin;
         } else {
             coordinateY = defaultY + textRect.height() / 2f;

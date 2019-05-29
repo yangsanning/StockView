@@ -18,9 +18,9 @@
         android:id="@+id/capital_activity_view2"
         android:layout_width="match_parent"
         android:layout_height="210dp"
-        cv:cv_in_flow_digits="1"
+        cv:cv_in_flow_digits="3"
         cv:cv_in_flow_unit="1000"
-        cv:cv_price_digits="1"
+        cv:cv_price_digits="2"
         cv:cv_left_title="@string/capital_left_title"
         cv:cv_right_title="今日资金净流入(千元)"
         android:layout_marginTop="50dp" />
