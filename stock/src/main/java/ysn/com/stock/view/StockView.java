@@ -57,10 +57,12 @@ public class StockView extends View {
 
     protected int viewWidth, viewHeight;
 
+    protected float titleTableHeight;
     protected float timeTableHeight;
     protected float topTableWidth, topTableHeight;
 
-    protected Paint xYTextPaint;
+    protected float xYTextSize, titleTextSize;
+    protected Paint textPaint;
     protected Rect textRect = new Rect();
     protected DecimalFormat decimalFormat;
 
@@ -115,10 +117,10 @@ public class StockView extends View {
 
         linePath = new Path();
 
-        xYTextPaint = new Paint();
-        xYTextPaint.setAntiAlias(true);
-        xYTextPaint.setStyle(Paint.Style.STROKE);
-        xYTextPaint.setTextAlign(Paint.Align.LEFT);
+        textPaint = new Paint();
+        textPaint.setAntiAlias(true);
+        textPaint.setStyle(Paint.Style.STROKE);
+        textPaint.setTextAlign(Paint.Align.LEFT);
 
         decimalFormat = new DecimalFormat("0.00");
     }
@@ -132,7 +134,8 @@ public class StockView extends View {
         timeTableHeight = viewHeight * 0.06f;
         topTableHeight = viewHeight - timeTableHeight;
 
-        xYTextPaint.setTextSize(timeTableHeight * 0.8f);
+        xYTextSize = timeTableHeight * 0.8f;
+        textPaint.setTextSize(xYTextSize);
     }
 
     @Override
@@ -181,7 +184,7 @@ public class StockView extends View {
      * 获取上表格最大Y
      */
     protected float getTopTableMaxY() {
-        return (tableMargin - topTableHeight);
+        return (tableMargin + titleTableHeight - topTableHeight);
     }
 
     /**
@@ -227,7 +230,7 @@ public class StockView extends View {
      */
     protected void onRowLineDraw(Canvas canvas) {
         // 绘制上表横线
-        float rowSpacing = topTableHeight / getTopRowCount();
+        float rowSpacing = getRowSpacing();
         for (int i = 1; i < getTopRowCount(); i++) {
             linePath.reset();
             float y = getRowY(rowSpacing, i);
@@ -237,6 +240,10 @@ public class StockView extends View {
                     R.color.stock_dotted_column_line : R.color.stock_dotted_row_line));
             canvas.drawPath(linePath, dottedLinePaint);
         }
+    }
+
+    protected float getRowSpacing() {
+        return (topTableHeight - timeTableHeight) / getTopRowCount();
     }
 
     protected int getTopRowCount() {
@@ -266,7 +273,7 @@ public class StockView extends View {
      * @return 时间文字的Y坐标
      */
     protected float getTimeTextY() {
-        return getXYTextMargin() + textRect.height();
+        return getTextMargin() + textRect.height();
     }
 
     /**
@@ -274,7 +281,7 @@ public class StockView extends View {
      *
      * @return 文本距离XY轴的Margin
      */
-    protected float getXYTextMargin() {
+    protected float getTextMargin() {
         return (timeTableHeight - textRect.height()) / 2f;
     }
 

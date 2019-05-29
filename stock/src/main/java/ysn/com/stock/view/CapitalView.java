@@ -8,6 +8,7 @@ import android.graphics.Path;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 
 import java.util.ArrayList;
@@ -31,6 +32,8 @@ public class CapitalView extends StockView {
     private static final int DEFAULT_IN_FLOW_UNIT = 10000;
     private static final int DEFAULT_PRICE_DIGITS = 3;
     private static final int DEFAULT_IN_FLOW_DIGITS = 2;
+    private static final String DEFAULT_LEFT_TITLE = "股价(元)";
+    private static final String DEFAULT_RIGHT_TITLE = "今日资金净流入(万元)";
 
     private Paint areaPaint;
     private Path financeInFlowPath;
@@ -53,6 +56,8 @@ public class CapitalView extends StockView {
     private int inFlowUnit;
     private int priceDigits;
     private int inFlowDigits;
+    private String leftTitle;
+    private String rightTitle;
 
     private Capital capital;
     private ArrayList<CapitalData> data;
@@ -81,7 +86,16 @@ public class CapitalView extends StockView {
         inFlowUnit = typedArray.getInteger(R.styleable.CapitalView_cv_in_flow_unit, DEFAULT_IN_FLOW_UNIT);
         inFlowDigits = typedArray.getInteger(R.styleable.CapitalView_cv_in_flow_digits, DEFAULT_IN_FLOW_DIGITS);
         priceDigits = typedArray.getInteger(R.styleable.CapitalView_cv_price_digits, DEFAULT_PRICE_DIGITS);
+        leftTitle = typedArray.getString(R.styleable.CapitalView_cv_left_title);
+        rightTitle = typedArray.getString(R.styleable.CapitalView_cv_right_title);
         typedArray.recycle();
+
+        if (TextUtils.isEmpty(leftTitle)) {
+            leftTitle = DEFAULT_LEFT_TITLE;
+        }
+        if (TextUtils.isEmpty(rightTitle)) {
+            rightTitle = DEFAULT_RIGHT_TITLE;
+        }
     }
 
     @Override
@@ -120,6 +134,13 @@ public class CapitalView extends StockView {
         pricePaint.setAntiAlias(true);
         pricePaint.setStyle(Paint.Style.STROKE);
         pricePaint.setStrokeWidth(DEFAULT_PRICE_STROKE_WIDTH);
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        titleTableHeight = viewHeight * 0.108f;
+        titleTextSize = titleTableHeight * 0.534f;
     }
 
     @Override
@@ -178,9 +199,8 @@ public class CapitalView extends StockView {
      */
     @Override
     protected void onRowLineDraw(Canvas canvas) {
-        // 绘制上表横线
         linePaint.setColor(getColor(R.color.capital_row_line));
-        float rowSpacing = topTableHeight / getTopRowCount();
+        float rowSpacing = getRowSpacing();
         for (int i = 1; i < getTopRowCount(); i++) {
             linePath.reset();
             float y = getRowY(rowSpacing, i);
@@ -196,24 +216,29 @@ public class CapitalView extends StockView {
     @Override
     protected void onTimeTextDraw(Canvas canvas) {
         super.onTimeTextDraw(canvas);
-        xYTextPaint.setColor(getColor(R.color.capital_text));
+        textPaint.setColor(getColor(R.color.capital_text));
+        textPaint.setTextSize(xYTextSize);
 
         // 绘制开始区域时间值
-        xYTextPaint.getTextBounds(TIME_TEXT[0], (0), TIME_TEXT[0].length(), textRect);
-        canvas.drawText(TIME_TEXT[0], tableMargin, getTimeTextY(), xYTextPaint);
+        textPaint.getTextBounds(TIME_TEXT[0], (0), TIME_TEXT[0].length(), textRect);
+        canvas.drawText(TIME_TEXT[0], tableMargin, getTimeTextY(), textPaint);
 
         // 绘制中间区域时间值
-        xYTextPaint.getTextBounds(TIME_TEXT[1], (0), TIME_TEXT[1].length(), textRect);
-        canvas.drawText(TIME_TEXT[1], (((viewWidth - textRect.right) >> 1) - tableMargin), getTimeTextY(), xYTextPaint);
+        textPaint.getTextBounds(TIME_TEXT[1], (0), TIME_TEXT[1].length(), textRect);
+        canvas.drawText(TIME_TEXT[1], (((viewWidth - textRect.right) >> 1) - tableMargin), getTimeTextY(), textPaint);
 
         // 绘制结束区域时间值
-        xYTextPaint.getTextBounds(TIME_TEXT[2], (0), TIME_TEXT[2].length(), textRect);
-        canvas.drawText(TIME_TEXT[2], (viewWidth - textRect.right - tableMargin), getTimeTextY(), xYTextPaint);
+        textPaint.getTextBounds(TIME_TEXT[2], (0), TIME_TEXT[2].length(), textRect);
+        canvas.drawText(TIME_TEXT[2], (viewWidth - textRect.right - tableMargin), getTimeTextY(), textPaint);
     }
 
     @Override
     protected void onChildDraw(Canvas canvas) {
         super.onChildDraw(canvas);
+
+        // 绘制头部文本
+        drawTitleText(canvas);
+
         if (capital == null) {
             return;
         }
@@ -226,6 +251,22 @@ public class CapitalView extends StockView {
     }
 
     /**
+     * 绘制头部文本
+     *
+     * @param canvas
+     */
+    private void drawTitleText(Canvas canvas) {
+        textPaint.setTextSize(titleTextSize);
+
+        textPaint.getTextBounds(leftTitle, (0), leftTitle.length(), textRect);
+        float titleTextY = getTopTableMaxY() - textRect.height();
+        canvas.drawText(leftTitle, (0), titleTextY, textPaint);
+
+        textPaint.getTextBounds(rightTitle, (0), rightTitle.length(), textRect);
+        canvas.drawText(rightTitle, (viewWidth - textRect.width()), titleTextY, textPaint);
+    }
+
+    /**
      * 绘制坐标值
      */
     private void drawCoordinate(Canvas canvas) {
@@ -235,8 +276,8 @@ public class CapitalView extends StockView {
             return;
         }
 
-        float textMargin = getXYTextMargin();
-        float rowSpacing = topTableHeight / getTopRowCount();
+        textPaint.setTextSize(xYTextSize);
+        float rowSpacing = getRowSpacing();
         for (int i = 0; i < (getTopRowCount() + 1); i++) {
             float defaultY = getRowY(rowSpacing, i);
             int position = (i - 1) < priceCoordinateList.size() ?
@@ -244,15 +285,15 @@ public class CapitalView extends StockView {
 
             // 价格坐标
             String text = NumberUtils.numberFormat(priceCoordinateList.get(position), priceDigits);
-            xYTextPaint.getTextBounds(text, (0), text.length(), textRect);
-            canvas.drawText(text, textMargin,
-                    getCoordinateY(position, priceCoordinateList.size(), defaultY, textMargin), xYTextPaint);
+            textPaint.getTextBounds(text, (0), text.length(), textRect);
+            canvas.drawText(text, getTextMargin(),
+                    getCoordinateY(position, priceCoordinateList.size(), defaultY, getTextMargin()), textPaint);
 
             // inFlow坐标
             text = NumberUtils.numberFormat((inFlowCoordinateList.get(position) / inFlowUnit), inFlowDigits);
-            xYTextPaint.getTextBounds(text, (0), text.length(), textRect);
-            canvas.drawText(text, (viewWidth - (textRect.right - textRect.left) - textMargin),
-                    getCoordinateY(position, inFlowCoordinateList.size(), defaultY, textMargin), xYTextPaint);
+            textPaint.getTextBounds(text, (0), text.length(), textRect);
+            canvas.drawText(text, (viewWidth - (textRect.right - textRect.left) - getTextMargin()),
+                    getCoordinateY(position, inFlowCoordinateList.size(), defaultY, getTextMargin()), textPaint);
         }
     }
 

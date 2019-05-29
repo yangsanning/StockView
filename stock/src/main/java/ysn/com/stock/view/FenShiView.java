@@ -143,19 +143,19 @@ public class FenShiView extends StockView {
     @Override
     protected void onTimeTextDraw(Canvas canvas) {
         super.onTimeTextDraw(canvas);
-        xYTextPaint.setColor(getColor(R.color.stock_text_title));
+        textPaint.setColor(getColor(R.color.stock_text_title));
 
         // 绘制开始区域时间值
-        xYTextPaint.getTextBounds(TIME_TEXT[0], (0), TIME_TEXT[0].length(), textRect);
-        canvas.drawText(TIME_TEXT[0], tableMargin, getTimeTextY(), xYTextPaint);
+        textPaint.getTextBounds(TIME_TEXT[0], (0), TIME_TEXT[0].length(), textRect);
+        canvas.drawText(TIME_TEXT[0], tableMargin, getTimeTextY(), textPaint);
 
         // 绘制中间区域时间值
-        xYTextPaint.getTextBounds(TIME_TEXT[1], (0), TIME_TEXT[1].length(), textRect);
-        canvas.drawText(TIME_TEXT[1], (((viewWidth - textRect.right) >> 1) - tableMargin), getTimeTextY(), xYTextPaint);
+        textPaint.getTextBounds(TIME_TEXT[1], (0), TIME_TEXT[1].length(), textRect);
+        canvas.drawText(TIME_TEXT[1], (((viewWidth - textRect.right) >> 1) - tableMargin), getTimeTextY(), textPaint);
 
         // 绘制结束区域时间值
-        xYTextPaint.getTextBounds(TIME_TEXT[2], (0), TIME_TEXT[2].length(), textRect);
-        canvas.drawText(TIME_TEXT[2], (viewWidth - textRect.right - tableMargin), getTimeTextY(), xYTextPaint);
+        textPaint.getTextBounds(TIME_TEXT[2], (0), TIME_TEXT[2].length(), textRect);
+        canvas.drawText(TIME_TEXT[2], (viewWidth - textRect.right - tableMargin), getTimeTextY(), textPaint);
     }
 
     @Override
@@ -179,32 +179,32 @@ public class FenShiView extends StockView {
     private void drawXYText(Canvas canvas) {
         // 价格最大值
         String text = decimalFormat.format(maxStockPrice);
-        xYTextPaint.setColor(getColor(R.color.stock_red));
-        xYTextPaint.getTextBounds(text, (0), text.length(), textRect);
-        float textMargin = getXYTextMargin();
+        textPaint.setColor(getColor(R.color.stock_red));
+        textPaint.getTextBounds(text, (0), text.length(), textRect);
+        float textMargin = getTextMargin();
         float y = (getTopTableMaxY() + textRect.height() + textMargin);
-        canvas.drawText(text, textMargin, y, xYTextPaint);
+        canvas.drawText(text, textMargin, y, textPaint);
 
         // 增幅
         text = "+" + percent;
-        xYTextPaint.getTextBounds(text, 0, text.length(), textRect);
-        canvas.drawText(text, (viewWidth - textRect.width() - textMargin), y, xYTextPaint);
+        textPaint.getTextBounds(text, 0, text.length(), textRect);
+        canvas.drawText(text, (viewWidth - textRect.width() - textMargin), y, textPaint);
 
         // 价格最小值
-        xYTextPaint.setColor(getColor(R.color.stock_green));
+        textPaint.setColor(getColor(R.color.stock_green));
         y = getTopTableMinY() - textMargin;
-        canvas.drawText(decimalFormat.format(minStockPrice), textMargin, y, xYTextPaint);
+        canvas.drawText(decimalFormat.format(minStockPrice), textMargin, y, textPaint);
 
         // 减幅
         text = "-" + percent;
-        xYTextPaint.setColor(getColor(R.color.stock_green));
-        xYTextPaint.getTextBounds(text, 0, text.length(), textRect);
-        canvas.drawText(text, (viewWidth - textRect.width() - textMargin), y, xYTextPaint);
+        textPaint.setColor(getColor(R.color.stock_green));
+        textPaint.getTextBounds(text, 0, text.length(), textRect);
+        canvas.drawText(text, (viewWidth - textRect.width() - textMargin), y, textPaint);
 
         // 中间坐标
-        xYTextPaint.setColor(getColor(R.color.stock_text_title));
+        textPaint.setColor(getColor(R.color.stock_text_title));
         text = decimalFormat.format(lastClose);
-        canvas.drawText(text, textMargin, (-(topTableHeight - textRect.height()) / 2f), xYTextPaint);
+        canvas.drawText(text, textMargin, (-(topTableHeight - textRect.height()) / 2f), textPaint);
     }
 
     /**

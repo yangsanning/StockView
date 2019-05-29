@@ -4,6 +4,8 @@
         <attr name="cv_in_flow_unit" format="integer" />
         <attr name="cv_in_flow_digits" format="integer"/>
         <attr name="cv_price_digits" format="integer"/>
+        <attr name="cv_left_title" format="string" />
+        <attr name="cv_right_title" format="string" />
     </declare-styleable>
 
 </resources>
