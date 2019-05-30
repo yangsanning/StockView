@@ -9,9 +9,24 @@ package ysn.com.stock.bean;
  */
 public class CapitalData {
 
+    /**
+     * 价格
+     */
     private float price;
+
+    /**
+     * 总资金净流入
+     */
     private float financeInFlow;
+
+    /**
+     * 主力净流入
+     */
     private float mainInFlow;
+
+    /**
+     * 散户净流入
+     */
     private float retailInFlow;
 
     public CapitalData() {

@@ -6,6 +6,16 @@
         <attr name="cv_price_digits" format="integer"/>
         <attr name="cv_left_title" format="string" />
         <attr name="cv_right_title" format="string" />
+
+        <attr name="cv_price_color" format="color" />
+        <attr name="cv_finance_in_flow_color" format="color" />
+        <attr name="cv_main_in_flow_color" format="color" />
+        <attr name="cv_retail_in_flow_color" format="color" />
+
+        <attr name="cv_text_color" format="color" />
+        <attr name="cv_bg_color" format="color" />
+        <attr name="cv_column_line_color" format="color" />
+        <attr name="cv_row_line_color" format="color" />
     </declare-styleable>
 
 </resources>

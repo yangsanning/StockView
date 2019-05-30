@@ -12,9 +12,25 @@ import java.util.ArrayList;
 public class Capital {
 
     private ArrayList<CapitalData> data;
+
+    /**
+     * 最大净流入
+     */
     private float maxInFlow = Integer.MIN_VALUE;
+
+    /**
+     * 最小净流入
+     */
     private float mixInFlow = Integer.MAX_VALUE;
+
+    /**
+     * 最大价格
+     */
     private float maxPrice = Integer.MIN_VALUE;
+
+    /**
+     * 最小价格
+     */
     private float mixPrice = Integer.MAX_VALUE;
 
     public Capital() {

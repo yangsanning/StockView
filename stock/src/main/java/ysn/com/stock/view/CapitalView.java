@@ -49,9 +49,9 @@ public class CapitalView extends StockView {
     private Paint pricePaint;
 
     /**
-     * inFlowUnit: inFlow单位
+     * inFlowUnit: 净流入单位
      * priceDigits: 价格保留的位数
-     * inFlowDigits: inFlow保留的位数
+     * inFlowDigits: 净流入保留的位数
      * leftTitle: 左上角标题(用于标注左边价格坐标)
      * rightTitle: 右上角标题(用于标注右边inFlow坐标)
      */
@@ -60,6 +60,28 @@ public class CapitalView extends StockView {
     private int inFlowDigits;
     private String leftTitle;
     private String rightTitle;
+
+    /**
+     * priceColor: 价格曲线颜色
+     * financeInFlowColor: 总资金净流入曲线颜色
+     * mainInFlowColor: 主力净流入曲线颜色
+     * retailInFlowColor: 散户净流入曲线颜色
+     */
+    private int priceColor;
+    private int financeInFlowColor;
+    private int mainInFlowColor;
+    private int retailInFlowColor;
+
+    /**
+     * textColor: 文本颜色
+     * bgColor: 背景颜色
+     * columnLineColor: 竖线颜色
+     * rowLineColor: 横线颜色
+     */
+    private int textColor;
+    private int bgColor;
+    private int columnLineColor;
+    private int rowLineColor;
 
     private boolean isDrawMainInFlow;
     private boolean isDrawRetailInFlow;
@@ -93,6 +115,17 @@ public class CapitalView extends StockView {
         priceDigits = typedArray.getInteger(R.styleable.CapitalView_cv_price_digits, DEFAULT_PRICE_DIGITS);
         leftTitle = typedArray.getString(R.styleable.CapitalView_cv_left_title);
         rightTitle = typedArray.getString(R.styleable.CapitalView_cv_right_title);
+
+        priceColor = typedArray.getColor(R.styleable.CapitalView_cv_price_color, getColor(R.color.capital_price));
+        financeInFlowColor = typedArray.getColor(R.styleable.CapitalView_cv_finance_in_flow_color, getColor(R.color.capital_finance_in_flow));
+        mainInFlowColor = typedArray.getColor(R.styleable.CapitalView_cv_main_in_flow_color, getColor(R.color.capital_main_in_flow));
+        retailInFlowColor = typedArray.getColor(R.styleable.CapitalView_cv_retail_in_flow_color, getColor(R.color.capital_retail_in_flow));
+
+        textColor = typedArray.getColor(R.styleable.CapitalView_cv_text_color, getColor(R.color.capital_text));
+        bgColor = typedArray.getColor(R.styleable.CapitalView_cv_bg_color, getColor(R.color.capital_bg));
+        columnLineColor = typedArray.getColor(R.styleable.CapitalView_cv_column_line_color, getColor(R.color.capital_column_line));
+        rowLineColor = typedArray.getColor(R.styleable.CapitalView_cv_row_line_color, getColor(R.color.capital_row_line));
+
         typedArray.recycle();
 
         if (TextUtils.isEmpty(leftTitle)) {
@@ -109,33 +142,33 @@ public class CapitalView extends StockView {
 
         areaPaint = new Paint();
         areaPaint.setAntiAlias(true);
-        areaPaint.setColor(getColor(R.color.capital_bg));
+        areaPaint.setColor(bgColor);
         areaPaint.setStyle(Paint.Style.FILL);
 
         financeInFlowPath = new Path();
         financeInFlowPaint = new Paint();
-        financeInFlowPaint.setColor(getColor(R.color.capital_finance_in_flow));
+        financeInFlowPaint.setColor(financeInFlowColor);
         financeInFlowPaint.setAntiAlias(true);
         financeInFlowPaint.setStyle(Paint.Style.STROKE);
         financeInFlowPaint.setStrokeWidth(DEFAULT_PRICE_STROKE_WIDTH);
 
         mainInFlowPath = new Path();
         mainInFlowPaint = new Paint();
-        mainInFlowPaint.setColor(getColor(R.color.capital_main_in_flow));
+        mainInFlowPaint.setColor(mainInFlowColor);
         mainInFlowPaint.setAntiAlias(true);
         mainInFlowPaint.setStyle(Paint.Style.STROKE);
         mainInFlowPaint.setStrokeWidth(DEFAULT_PRICE_STROKE_WIDTH);
 
         retailInFlowPath = new Path();
         retailInFlowPaint = new Paint();
-        retailInFlowPaint.setColor(getColor(R.color.capital_retail_in_flow));
+        retailInFlowPaint.setColor(retailInFlowColor);
         retailInFlowPaint.setAntiAlias(true);
         retailInFlowPaint.setStyle(Paint.Style.STROKE);
         retailInFlowPaint.setStrokeWidth(DEFAULT_PRICE_STROKE_WIDTH);
 
         pricePath = new Path();
         pricePaint = new Paint();
-        pricePaint.setColor(getColor(R.color.capital_price));
+        pricePaint.setColor(priceColor);
         pricePaint.setAntiAlias(true);
         pricePaint.setStyle(Paint.Style.STROKE);
         pricePaint.setStrokeWidth(DEFAULT_PRICE_STROKE_WIDTH);
@@ -183,7 +216,7 @@ public class CapitalView extends StockView {
     @Override
     protected void onColumnLineDraw(Canvas canvas) {
         // 绘制上表竖线
-        dottedLinePaint.setColor(getColor(R.color.capital_column_line));
+        dottedLinePaint.setColor(columnLineColor);
         float xSpace = (viewWidth - 2 * tableMargin) / getColumnCount();
         for (int i = 1; i < getColumnCount(); i++) {
             linePath.reset();
@@ -204,7 +237,7 @@ public class CapitalView extends StockView {
      */
     @Override
     protected void onRowLineDraw(Canvas canvas) {
-        linePaint.setColor(getColor(R.color.capital_row_line));
+        linePaint.setColor(rowLineColor);
         float rowSpacing = getRowSpacing();
         for (int i = 1; i < getTopRowCount(); i++) {
             linePath.reset();
@@ -221,7 +254,7 @@ public class CapitalView extends StockView {
     @Override
     protected void onTimeTextDraw(Canvas canvas) {
         super.onTimeTextDraw(canvas);
-        textPaint.setColor(getColor(R.color.capital_text));
+        textPaint.setColor(textColor);
         textPaint.setTextSize(xYTextSize);
 
         // 绘制开始区域时间值
@@ -455,7 +488,7 @@ public class CapitalView extends StockView {
     }
 
     /**
-     * @param isDrawMainInFlow 是否绘制 MainInFlow
+     * @param isDrawMainInFlow 是否绘制主力净流入曲线
      */
     public CapitalView setDrawMainInFlow(boolean isDrawMainInFlow) {
         this.isDrawMainInFlow = isDrawMainInFlow;
@@ -464,11 +497,25 @@ public class CapitalView extends StockView {
     }
 
     /**
-     * @param isDrawRetailInFlow 是否绘制 RetailInFlow
+     * @return 当前是否绘制主力净流入曲线
+     */
+    public boolean isDrawMainInFlow() {
+        return isDrawMainInFlow;
+    }
+
+    /**
+     * @param isDrawRetailInFlow 是否绘制散户净流入曲线
      */
     public CapitalView setDrawRetailInFlow(boolean isDrawRetailInFlow) {
         this.isDrawRetailInFlow = isDrawRetailInFlow;
         postInvalidate();
         return this;
+    }
+
+    /**
+     * @return 当前是否绘制散户净流入曲线
+     */
+    public boolean isDrawRetailInFlow() {
+        return isDrawRetailInFlow;
     }
 }
