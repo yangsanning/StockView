@@ -314,4 +314,10 @@ public class StockView extends View {
     protected int getColor(@ColorRes int colorRes) {
         return context.getResources().getColor(colorRes);
     }
+
+    public void setTotalCount(int totalCount) {
+        if (totalCount != 0) {
+            this.totalCount = totalCount;
+        }
+    }
 }

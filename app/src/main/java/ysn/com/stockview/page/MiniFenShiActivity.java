@@ -38,7 +38,10 @@ public class MiniFenShiActivity extends AppCompatActivity {
         miniFenShiView3.setNewData(timeToFenShi(JsonUtils.getData((this), ("json/fen_shi4.json"), FenShiTime.class)));
 
         MiniFenShiView miniFenShiView4 = findViewById(R.id.mini_fen_shi_activity_view4);
-        miniFenShiView4.setNewData(timeToFenShi(JsonUtils.getData((this), ("json/fen_shi5.json"), FenShiTime.class)));
+        FenShiTime data = JsonUtils.getData((this), ("json/fen_shi5.json"), FenShiTime.class);
+        assert data != null;
+        miniFenShiView4.setTotalCount(data.getNodeNumber());
+        miniFenShiView4.setNewData(timeToFenShi(data));
     }
 
     private FenShi timeToFenShi(FenShiTime time) {
