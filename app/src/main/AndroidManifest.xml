@@ -19,6 +19,7 @@
 
         <activity android:name=".page.FenShiActivity" />
         <activity android:name=".page.CapitalActivity" />
+        <activity android:name=".page.MiniFenShiActivity" />
     </application>
 
 </manifest>

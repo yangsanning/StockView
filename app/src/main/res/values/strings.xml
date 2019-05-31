@@ -3,6 +3,7 @@
 
     <string name="text_fen_shi">普通分时图</string>
     <string name="text_capital">资金趋势图</string>
+    <string name="text_mini_fen_shi">迷你分时图</string>
 
     <string name="capital_left_title">股价(元)</string>
 </resources>

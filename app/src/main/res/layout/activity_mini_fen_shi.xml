@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        tools:context=".MainActivity">
+
+        <ysn.com.stock.view.MiniFenShiView
+            android:layout_width="350dp"
+            android:layout_height="170dp"
+            android:background="#f5f5f5" />
+
+        <ysn.com.stock.view.MiniFenShiView
+            android:id="@+id/mini_fen_shi_activity_view1"
+            android:layout_width="350dp"
+            android:layout_height="170dp"
+            android:layout_marginTop="10dp"
+            android:background="#f5f5f5" />
+
+        <ysn.com.stock.view.MiniFenShiView
+            android:id="@+id/mini_fen_shi_activity_view2"
+            android:layout_width="350dp"
+            android:layout_height="170dp"
+            android:layout_marginTop="10dp"
+            android:background="#f5f5f5" />
+
+        <ysn.com.stock.view.MiniFenShiView
+            android:id="@+id/mini_fen_shi_activity_view3"
+            android:layout_width="350dp"
+            android:layout_height="170dp"
+            android:layout_marginTop="10dp"
+            android:background="#f5f5f5" />
+
+        <ysn.com.stock.view.MiniFenShiView
+            android:id="@+id/mini_fen_shi_activity_view4"
+            android:layout_width="350dp"
+            android:layout_height="170dp"
+            android:layout_marginTop="10dp"
+            android:background="#f5f5f5" />
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

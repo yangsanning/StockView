@@ -110,6 +110,7 @@ public class CapitalView extends StockView {
     protected void initAttr(AttributeSet attrs) {
         super.initAttr(attrs);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CapitalView);
+
         inFlowUnit = typedArray.getInteger(R.styleable.CapitalView_cv_in_flow_unit, DEFAULT_IN_FLOW_UNIT);
         inFlowDigits = typedArray.getInteger(R.styleable.CapitalView_cv_in_flow_digits, DEFAULT_IN_FLOW_DIGITS);
         priceDigits = typedArray.getInteger(R.styleable.CapitalView_cv_price_digits, DEFAULT_PRICE_DIGITS);
@@ -484,7 +485,7 @@ public class CapitalView extends StockView {
     public void setNewData(Capital capital) {
         this.capital = capital;
         this.data = capital.getData();
-        postInvalidate();
+        invalidate();
     }
 
     /**
@@ -492,7 +493,7 @@ public class CapitalView extends StockView {
      */
     public CapitalView setDrawMainInFlow(boolean isDrawMainInFlow) {
         this.isDrawMainInFlow = isDrawMainInFlow;
-        postInvalidate();
+        invalidate();
         return this;
     }
 
@@ -508,7 +509,7 @@ public class CapitalView extends StockView {
      */
     public CapitalView setDrawRetailInFlow(boolean isDrawRetailInFlow) {
         this.isDrawRetailInFlow = isDrawRetailInFlow;
-        postInvalidate();
+        invalidate();
         return this;
     }
 

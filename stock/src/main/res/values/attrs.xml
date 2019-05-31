@@ -18,4 +18,14 @@
         <attr name="cv_row_line_color" format="color" />
     </declare-styleable>
 
+    <declare-styleable name="MiniFenShiView">
+        <attr name="mfsv_up" format="color" />
+        <attr name="mfsv_down" format="color" />
+        <attr name="mfsv_equal" format="color" />
+        <attr name="mfsv_gradient_bottom" format="color" />
+        <attr name="mfsv_stroke_width" format="dimension" />
+        <attr name="mfsv_alpha" format="integer" />
+        <attr name="mfsv_dotted_line_width" format="dimension" />
+        <attr name="mfsv_dotted_line_space" format="dimension" />
+    </declare-styleable>
 </resources>

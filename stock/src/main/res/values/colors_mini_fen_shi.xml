@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="mini_fen_shi_equal">#333333</color>
+
+    <!--rgb(42,189,110)-->
+    <color name="mini_fen_shi_down">#2ABD6E</color>
+
+    <!--rgb(235,66,66)-->
+    <color name="mini_fen_shi_up">#EB4242</color>
+
+    <color name="mini_fen_shi_gradient_bottom">#00000000</color>
+</resources>

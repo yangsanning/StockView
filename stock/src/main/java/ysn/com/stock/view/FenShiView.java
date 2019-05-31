@@ -27,14 +27,8 @@ import ysn.com.stock.bean.FenShiData;
  */
 public class FenShiView extends StockView {
 
-    private static final int COUNT_DEFAULT = 240;
     private static final String[] TIME_TEXT = new String[]{"09:30", "11:30/13:00", "15:00"};
     private static final float DEFAULT_PRICE_STROKE_WIDTH = 2.5f;
-
-    /**
-     * totalCount: 总点数
-     */
-    private int totalCount = COUNT_DEFAULT;
 
     /**
      * HEART_RADIUS: 心脏半径

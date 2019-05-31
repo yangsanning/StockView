@@ -1,0 +1,1701 @@
+{
+  "code": "002696",
+  "data": [
+    {
+      "realDateTime": "201905310930",
+      "trade": 7,
+      "avgPrice": 7,
+      "volume": 1224100,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905310931",
+      "trade": 6.87,
+      "avgPrice": 6.935,
+      "volume": 5555200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905310932",
+      "trade": 6.92,
+      "avgPrice": 6.93,
+      "volume": 1425560,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905310933",
+      "trade": 7.04,
+      "avgPrice": 6.958,
+      "volume": 708700,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905310934",
+      "trade": 7,
+      "avgPrice": 6.966,
+      "volume": 1223200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905310935",
+      "trade": 7.15,
+      "avgPrice": 6.997,
+      "volume": 738700,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905310936",
+      "trade": 7.23,
+      "avgPrice": 7.03,
+      "volume": 1450370,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905310937",
+      "trade": 7.23,
+      "avgPrice": 7.055,
+      "volume": 153800,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905310938",
+      "trade": 7.23,
+      "avgPrice": 7.074,
+      "volume": 52800,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905310939",
+      "trade": 7.23,
+      "avgPrice": 7.09,
+      "volume": 39700,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905310940",
+      "trade": 7.23,
+      "avgPrice": 7.103,
+      "volume": 75600,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905310941",
+      "trade": 7.23,
+      "avgPrice": 7.113,
+      "volume": 27600,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905310942",
+      "trade": 7.2,
+      "avgPrice": 7.12,
+      "volume": 2063700,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905310943",
+      "trade": 7.02,
+      "avgPrice": 7.113,
+      "volume": 905540,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905310944",
+      "trade": 7.08,
+      "avgPrice": 7.111,
+      "volume": 839801,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905310945",
+      "trade": 7.01,
+      "avgPrice": 7.104,
+      "volume": 997177,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905310946",
+      "trade": 7.01,
+      "avgPrice": 7.099,
+      "volume": 525100,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905310947",
+      "trade": 6.97,
+      "avgPrice": 7.092,
+      "volume": 701860,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905310948",
+      "trade": 6.9,
+      "avgPrice": 7.082,
+      "volume": 519700,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905310949",
+      "trade": 6.93,
+      "avgPrice": 7.074,
+      "volume": 487853,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905310950",
+      "trade": 6.98,
+      "avgPrice": 7.07,
+      "volume": 609949,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905310951",
+      "trade": 6.95,
+      "avgPrice": 7.064,
+      "volume": 436500,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905310952",
+      "trade": 6.98,
+      "avgPrice": 7.06,
+      "volume": 148723,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905310953",
+      "trade": 6.95,
+      "avgPrice": 7.056,
+      "volume": 484510,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905310954",
+      "trade": 6.94,
+      "avgPrice": 7.051,
+      "volume": 224710,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905310955",
+      "trade": 6.93,
+      "avgPrice": 7.047,
+      "volume": 279460,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905310956",
+      "trade": 6.95,
+      "avgPrice": 7.043,
+      "volume": 239000,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905310957",
+      "trade": 6.95,
+      "avgPrice": 7.04,
+      "volume": 125400,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905310958",
+      "trade": 6.92,
+      "avgPrice": 7.036,
+      "volume": 197141,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905310959",
+      "trade": 6.93,
+      "avgPrice": 7.032,
+      "volume": 168100,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311000",
+      "trade": 6.96,
+      "avgPrice": 7.03,
+      "volume": 155882,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311001",
+      "trade": 7.01,
+      "avgPrice": 7.029,
+      "volume": 187200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311002",
+      "trade": 7.06,
+      "avgPrice": 7.03,
+      "volume": 230310,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311003",
+      "trade": 7.08,
+      "avgPrice": 7.031,
+      "volume": 263800,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311004",
+      "trade": 7.08,
+      "avgPrice": 7.033,
+      "volume": 203200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311005",
+      "trade": 7,
+      "avgPrice": 7.032,
+      "volume": 216990,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311006",
+      "trade": 6.97,
+      "avgPrice": 7.03,
+      "volume": 125100,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311007",
+      "trade": 7,
+      "avgPrice": 7.029,
+      "volume": 70800,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311008",
+      "trade": 6.99,
+      "avgPrice": 7.028,
+      "volume": 61000,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311009",
+      "trade": 7,
+      "avgPrice": 7.028,
+      "volume": 73800,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311010",
+      "trade": 7.03,
+      "avgPrice": 7.028,
+      "volume": 59600,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311011",
+      "trade": 7.04,
+      "avgPrice": 7.028,
+      "volume": 133560,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311012",
+      "trade": 7,
+      "avgPrice": 7.027,
+      "volume": 120100,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311013",
+      "trade": 6.99,
+      "avgPrice": 7.027,
+      "volume": 102040,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311014",
+      "trade": 7,
+      "avgPrice": 7.026,
+      "volume": 63400,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311015",
+      "trade": 7,
+      "avgPrice": 7.025,
+      "volume": 45700,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311016",
+      "trade": 7,
+      "avgPrice": 7.025,
+      "volume": 81600,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311017",
+      "trade": 7.02,
+      "avgPrice": 7.025,
+      "volume": 56160,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311018",
+      "trade": 6.98,
+      "avgPrice": 7.024,
+      "volume": 151940,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311019",
+      "trade": 6.98,
+      "avgPrice": 7.023,
+      "volume": 64000,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311020",
+      "trade": 6.99,
+      "avgPrice": 7.022,
+      "volume": 80700,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311021",
+      "trade": 7.01,
+      "avgPrice": 7.022,
+      "volume": 70300,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311022",
+      "trade": 7.01,
+      "avgPrice": 7.022,
+      "volume": 64200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311023",
+      "trade": 7.02,
+      "avgPrice": 7.022,
+      "volume": 56800,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311024",
+      "trade": 7.03,
+      "avgPrice": 7.022,
+      "volume": 36100,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311025",
+      "trade": 7.04,
+      "avgPrice": 7.022,
+      "volume": 39200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311026",
+      "trade": 7.08,
+      "avgPrice": 7.023,
+      "volume": 77500,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311027",
+      "trade": 7.08,
+      "avgPrice": 7.024,
+      "volume": 52500,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311028",
+      "trade": 7.05,
+      "avgPrice": 7.025,
+      "volume": 74400,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311029",
+      "trade": 7.04,
+      "avgPrice": 7.025,
+      "volume": 132000,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311030",
+      "trade": 7.05,
+      "avgPrice": 7.025,
+      "volume": 29800,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311031",
+      "trade": 7.03,
+      "avgPrice": 7.025,
+      "volume": 69200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311032",
+      "trade": 6.99,
+      "avgPrice": 7.025,
+      "volume": 173800,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311033",
+      "trade": 6.98,
+      "avgPrice": 7.024,
+      "volume": 109700,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311034",
+      "trade": 7,
+      "avgPrice": 7.024,
+      "volume": 35000,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311035",
+      "trade": 7.01,
+      "avgPrice": 7.024,
+      "volume": 48500,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311036",
+      "trade": 7.02,
+      "avgPrice": 7.024,
+      "volume": 32500,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311037",
+      "trade": 7.02,
+      "avgPrice": 7.024,
+      "volume": 31900,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311038",
+      "trade": 7,
+      "avgPrice": 7.023,
+      "volume": 46200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311039",
+      "trade": 7,
+      "avgPrice": 7.023,
+      "volume": 49000,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311040",
+      "trade": 6.99,
+      "avgPrice": 7.022,
+      "volume": 50900,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311041",
+      "trade": 7,
+      "avgPrice": 7.022,
+      "volume": 50900,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311042",
+      "trade": 7.02,
+      "avgPrice": 7.022,
+      "volume": 20200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311043",
+      "trade": 7.01,
+      "avgPrice": 7.022,
+      "volume": 72800,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311044",
+      "trade": 7.02,
+      "avgPrice": 7.022,
+      "volume": 11600,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311045",
+      "trade": 7.01,
+      "avgPrice": 7.022,
+      "volume": 10700,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311046",
+      "trade": 7.02,
+      "avgPrice": 7.022,
+      "volume": 16221,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311047",
+      "trade": 7.01,
+      "avgPrice": 7.022,
+      "volume": 20900,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311048",
+      "trade": 7.02,
+      "avgPrice": 7.022,
+      "volume": 17700,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311049",
+      "trade": 7.02,
+      "avgPrice": 7.021,
+      "volume": 46000,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311050",
+      "trade": 7.02,
+      "avgPrice": 7.021,
+      "volume": 30800,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311051",
+      "trade": 7.03,
+      "avgPrice": 7.022,
+      "volume": 79600,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311052",
+      "trade": 7.03,
+      "avgPrice": 7.022,
+      "volume": 37900,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311053",
+      "trade": 7.04,
+      "avgPrice": 7.022,
+      "volume": 42500,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311054",
+      "trade": 7.07,
+      "avgPrice": 7.022,
+      "volume": 108050,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311055",
+      "trade": 7.07,
+      "avgPrice": 7.023,
+      "volume": 69900,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311056",
+      "trade": 7.08,
+      "avgPrice": 7.024,
+      "volume": 118400,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311057",
+      "trade": 7.08,
+      "avgPrice": 7.024,
+      "volume": 99300,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311058",
+      "trade": 7.09,
+      "avgPrice": 7.025,
+      "volume": 61900,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311059",
+      "trade": 7.09,
+      "avgPrice": 7.026,
+      "volume": 121443,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311100",
+      "trade": 7.11,
+      "avgPrice": 7.027,
+      "volume": 57800,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311101",
+      "trade": 7.1,
+      "avgPrice": 7.028,
+      "volume": 42800,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311102",
+      "trade": 7.07,
+      "avgPrice": 7.028,
+      "volume": 121857,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311103",
+      "trade": 7.03,
+      "avgPrice": 7.028,
+      "volume": 90150,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311104",
+      "trade": 7.03,
+      "avgPrice": 7.028,
+      "volume": 36050,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311105",
+      "trade": 7.05,
+      "avgPrice": 7.028,
+      "volume": 78800,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311106",
+      "trade": 7.04,
+      "avgPrice": 7.028,
+      "volume": 27400,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311107",
+      "trade": 7.04,
+      "avgPrice": 7.028,
+      "volume": 21200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311108",
+      "trade": 7.03,
+      "avgPrice": 7.028,
+      "volume": 14600,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311109",
+      "trade": 7.03,
+      "avgPrice": 7.028,
+      "volume": 49000,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311110",
+      "trade": 7.02,
+      "avgPrice": 7.028,
+      "volume": 50600,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311111",
+      "trade": 7,
+      "avgPrice": 7.028,
+      "volume": 222800,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311112",
+      "trade": 7,
+      "avgPrice": 7.028,
+      "volume": 49900,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311113",
+      "trade": 7.03,
+      "avgPrice": 7.028,
+      "volume": 79400,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311114",
+      "trade": 7.03,
+      "avgPrice": 7.028,
+      "volume": 42700,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311115",
+      "trade": 7.01,
+      "avgPrice": 7.028,
+      "volume": 28700,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311116",
+      "trade": 7.01,
+      "avgPrice": 7.028,
+      "volume": 65200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311117",
+      "trade": 7.01,
+      "avgPrice": 7.027,
+      "volume": 5800,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311118",
+      "trade": 7.01,
+      "avgPrice": 7.027,
+      "volume": 64900,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311119",
+      "trade": 7.02,
+      "avgPrice": 7.027,
+      "volume": 40300,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311120",
+      "trade": 7.02,
+      "avgPrice": 7.027,
+      "volume": 42700,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311121",
+      "trade": 7.01,
+      "avgPrice": 7.027,
+      "volume": 49000,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311122",
+      "trade": 7.03,
+      "avgPrice": 7.027,
+      "volume": 49466,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311123",
+      "trade": 7.03,
+      "avgPrice": 7.027,
+      "volume": 22200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311124",
+      "trade": 6.99,
+      "avgPrice": 7.027,
+      "volume": 220934,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311125",
+      "trade": 6.99,
+      "avgPrice": 7.026,
+      "volume": 30200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311126",
+      "trade": 6.99,
+      "avgPrice": 7.026,
+      "volume": 21600,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311127",
+      "trade": 6.99,
+      "avgPrice": 7.026,
+      "volume": 38200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311128",
+      "trade": 6.99,
+      "avgPrice": 7.025,
+      "volume": 11900,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311129",
+      "trade": 7,
+      "avgPrice": 7.025,
+      "volume": 72100,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311130",
+      "trade": 7,
+      "avgPrice": 7.025,
+      "volume": 0,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311300",
+      "trade": 7.07,
+      "avgPrice": 7.025,
+      "volume": 108566,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311301",
+      "trade": 7.05,
+      "avgPrice": 7.026,
+      "volume": 62500,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311302",
+      "trade": 7.06,
+      "avgPrice": 7.026,
+      "volume": 65200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311303",
+      "trade": 7.06,
+      "avgPrice": 7.026,
+      "volume": 44200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311304",
+      "trade": 7.06,
+      "avgPrice": 7.026,
+      "volume": 29900,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311305",
+      "trade": 7.06,
+      "avgPrice": 7.027,
+      "volume": 23100,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311306",
+      "trade": 7.06,
+      "avgPrice": 7.027,
+      "volume": 36800,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311307",
+      "trade": 7.05,
+      "avgPrice": 7.027,
+      "volume": 17100,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311308",
+      "trade": 7.04,
+      "avgPrice": 7.027,
+      "volume": 23200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311309",
+      "trade": 7.05,
+      "avgPrice": 7.027,
+      "volume": 37500,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311310",
+      "trade": 7.05,
+      "avgPrice": 7.028,
+      "volume": 7300,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311311",
+      "trade": 7.04,
+      "avgPrice": 7.028,
+      "volume": 36900,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311312",
+      "trade": 7.03,
+      "avgPrice": 7.028,
+      "volume": 28000,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311313",
+      "trade": 7.02,
+      "avgPrice": 7.028,
+      "volume": 68900,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311314",
+      "trade": 7.03,
+      "avgPrice": 7.028,
+      "volume": 28800,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311315",
+      "trade": 7.03,
+      "avgPrice": 7.028,
+      "volume": 10400,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311316",
+      "trade": 7.04,
+      "avgPrice": 7.028,
+      "volume": 33980,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311317",
+      "trade": 7.06,
+      "avgPrice": 7.028,
+      "volume": 140700,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311318",
+      "trade": 7.06,
+      "avgPrice": 7.028,
+      "volume": 39700,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311319",
+      "trade": 7.06,
+      "avgPrice": 7.028,
+      "volume": 106080,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311320",
+      "trade": 7.06,
+      "avgPrice": 7.029,
+      "volume": 52600,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311321",
+      "trade": 7.06,
+      "avgPrice": 7.029,
+      "volume": 57800,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311322",
+      "trade": 7.06,
+      "avgPrice": 7.029,
+      "volume": 17300,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311323",
+      "trade": 7.05,
+      "avgPrice": 7.029,
+      "volume": 15500,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311324",
+      "trade": 7.07,
+      "avgPrice": 7.03,
+      "volume": 17500,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311325",
+      "trade": 7.05,
+      "avgPrice": 7.03,
+      "volume": 17000,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311326",
+      "trade": 7.07,
+      "avgPrice": 7.03,
+      "volume": 20800,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311327",
+      "trade": 7.06,
+      "avgPrice": 7.03,
+      "volume": 44200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311328",
+      "trade": 7.06,
+      "avgPrice": 7.03,
+      "volume": 15300,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311329",
+      "trade": 7.07,
+      "avgPrice": 7.031,
+      "volume": 29800,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311330",
+      "trade": 7.1,
+      "avgPrice": 7.031,
+      "volume": 56200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311331",
+      "trade": 7.1,
+      "avgPrice": 7.032,
+      "volume": 35800,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311332",
+      "trade": 7.09,
+      "avgPrice": 7.032,
+      "volume": 34100,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311333",
+      "trade": 7.09,
+      "avgPrice": 7.032,
+      "volume": 93500,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311334",
+      "trade": 7.08,
+      "avgPrice": 7.033,
+      "volume": 14900,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311335",
+      "trade": 7.09,
+      "avgPrice": 7.033,
+      "volume": 38700,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311336",
+      "trade": 7.08,
+      "avgPrice": 7.033,
+      "volume": 30900,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311337",
+      "trade": 7.08,
+      "avgPrice": 7.034,
+      "volume": 15900,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311338",
+      "trade": 7.08,
+      "avgPrice": 7.034,
+      "volume": 35100,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311339",
+      "trade": 7.08,
+      "avgPrice": 7.034,
+      "volume": 22200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311340",
+      "trade": 7.09,
+      "avgPrice": 7.034,
+      "volume": 42900,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311341",
+      "trade": 7.09,
+      "avgPrice": 7.035,
+      "volume": 36900,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311342",
+      "trade": 7.1,
+      "avgPrice": 7.035,
+      "volume": 64200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311343",
+      "trade": 7.11,
+      "avgPrice": 7.036,
+      "volume": 69700,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311344",
+      "trade": 7.11,
+      "avgPrice": 7.036,
+      "volume": 22800,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311345",
+      "trade": 7.12,
+      "avgPrice": 7.037,
+      "volume": 54640,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311346",
+      "trade": 7.15,
+      "avgPrice": 7.037,
+      "volume": 69846,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311347",
+      "trade": 7.19,
+      "avgPrice": 7.038,
+      "volume": 239300,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311348",
+      "trade": 7.21,
+      "avgPrice": 7.039,
+      "volume": 211800,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311349",
+      "trade": 7.23,
+      "avgPrice": 7.04,
+      "volume": 374010,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311350",
+      "trade": 7.2,
+      "avgPrice": 7.041,
+      "volume": 253700,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311351",
+      "trade": 7.18,
+      "avgPrice": 7.042,
+      "volume": 122900,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311352",
+      "trade": 7.2,
+      "avgPrice": 7.043,
+      "volume": 266420,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311353",
+      "trade": 7.19,
+      "avgPrice": 7.044,
+      "volume": 62880,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311354",
+      "trade": 7.2,
+      "avgPrice": 7.045,
+      "volume": 82120,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311355",
+      "trade": 7.21,
+      "avgPrice": 7.046,
+      "volume": 97100,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311356",
+      "trade": 7.19,
+      "avgPrice": 7.046,
+      "volume": 74900,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311357",
+      "trade": 7.21,
+      "avgPrice": 7.047,
+      "volume": 87000,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311358",
+      "trade": 7.19,
+      "avgPrice": 7.048,
+      "volume": 102700,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311359",
+      "trade": 7.19,
+      "avgPrice": 7.049,
+      "volume": 110400,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311400",
+      "trade": 7.19,
+      "avgPrice": 7.05,
+      "volume": 36400,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311401",
+      "trade": 7.18,
+      "avgPrice": 7.05,
+      "volume": 15900,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311402",
+      "trade": 7.18,
+      "avgPrice": 7.051,
+      "volume": 34000,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311403",
+      "trade": 7.19,
+      "avgPrice": 7.052,
+      "volume": 44300,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311404",
+      "trade": 7.16,
+      "avgPrice": 7.052,
+      "volume": 48500,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311405",
+      "trade": 7.13,
+      "avgPrice": 7.053,
+      "volume": 157704,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311406",
+      "trade": 7.08,
+      "avgPrice": 7.053,
+      "volume": 58300,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311407",
+      "trade": 7.1,
+      "avgPrice": 7.053,
+      "volume": 29296,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311408",
+      "trade": 7.11,
+      "avgPrice": 7.054,
+      "volume": 36300,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311409",
+      "trade": 7.11,
+      "avgPrice": 7.054,
+      "volume": 29900,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311410",
+      "trade": 7.11,
+      "avgPrice": 7.054,
+      "volume": 50200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311411",
+      "trade": 7.12,
+      "avgPrice": 7.054,
+      "volume": 19900,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311412",
+      "trade": 7.11,
+      "avgPrice": 7.055,
+      "volume": 47100,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311413",
+      "trade": 7.1,
+      "avgPrice": 7.055,
+      "volume": 20200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311414",
+      "trade": 7.1,
+      "avgPrice": 7.055,
+      "volume": 87400,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311415",
+      "trade": 7.11,
+      "avgPrice": 7.055,
+      "volume": 30500,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311416",
+      "trade": 7.1,
+      "avgPrice": 7.056,
+      "volume": 42200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311417",
+      "trade": 7.09,
+      "avgPrice": 7.056,
+      "volume": 34200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311418",
+      "trade": 7.08,
+      "avgPrice": 7.056,
+      "volume": 34100,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311419",
+      "trade": 7.07,
+      "avgPrice": 7.056,
+      "volume": 83304,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311420",
+      "trade": 7.05,
+      "avgPrice": 7.056,
+      "volume": 44020,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311421",
+      "trade": 7.04,
+      "avgPrice": 7.056,
+      "volume": 74900,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311422",
+      "trade": 7.03,
+      "avgPrice": 7.056,
+      "volume": 123700,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311423",
+      "trade": 7.02,
+      "avgPrice": 7.056,
+      "volume": 65100,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311424",
+      "trade": 7.01,
+      "avgPrice": 7.055,
+      "volume": 129596,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311425",
+      "trade": 7.03,
+      "avgPrice": 7.055,
+      "volume": 27200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311426",
+      "trade": 7.04,
+      "avgPrice": 7.055,
+      "volume": 36200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311427",
+      "trade": 7.06,
+      "avgPrice": 7.055,
+      "volume": 53800,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311428",
+      "trade": 7.06,
+      "avgPrice": 7.055,
+      "volume": 19200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311429",
+      "trade": 7.07,
+      "avgPrice": 7.055,
+      "volume": 51400,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311430",
+      "trade": 7.06,
+      "avgPrice": 7.055,
+      "volume": 37400,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311431",
+      "trade": 7.05,
+      "avgPrice": 7.055,
+      "volume": 62800,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311432",
+      "trade": 7.04,
+      "avgPrice": 7.055,
+      "volume": 24400,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311433",
+      "trade": 7.05,
+      "avgPrice": 7.055,
+      "volume": 54800,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311434",
+      "trade": 7.05,
+      "avgPrice": 7.055,
+      "volume": 16200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311435",
+      "trade": 7.07,
+      "avgPrice": 7.055,
+      "volume": 27000,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311436",
+      "trade": 7.06,
+      "avgPrice": 7.055,
+      "volume": 33800,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311437",
+      "trade": 7.08,
+      "avgPrice": 7.055,
+      "volume": 57700,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311438",
+      "trade": 7.09,
+      "avgPrice": 7.056,
+      "volume": 68900,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311439",
+      "trade": 7.13,
+      "avgPrice": 7.056,
+      "volume": 47500,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311440",
+      "trade": 7.18,
+      "avgPrice": 7.056,
+      "volume": 75200,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311441",
+      "trade": 7.2,
+      "avgPrice": 7.057,
+      "volume": 144700,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311442",
+      "trade": 7.21,
+      "avgPrice": 7.058,
+      "volume": 136240,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311443",
+      "trade": 7.23,
+      "avgPrice": 7.059,
+      "volume": 376360,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311444",
+      "trade": 7.23,
+      "avgPrice": 7.059,
+      "volume": 793370,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311445",
+      "trade": 7.23,
+      "avgPrice": 7.06,
+      "volume": 110950,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311446",
+      "trade": 7.23,
+      "avgPrice": 7.061,
+      "volume": 47870,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311447",
+      "trade": 7.23,
+      "avgPrice": 7.062,
+      "volume": 208380,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311448",
+      "trade": 7.2,
+      "avgPrice": 7.062,
+      "volume": 290130,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311449",
+      "trade": 7.15,
+      "avgPrice": 7.063,
+      "volume": 95400,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311450",
+      "trade": 7.2,
+      "avgPrice": 7.063,
+      "volume": 134100,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311451",
+      "trade": 7.23,
+      "avgPrice": 7.064,
+      "volume": 246740,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311452",
+      "trade": 7.23,
+      "avgPrice": 7.065,
+      "volume": 46280,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311453",
+      "trade": 7.23,
+      "avgPrice": 7.065,
+      "volume": 44140,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311454",
+      "trade": 7.23,
+      "avgPrice": 7.066,
+      "volume": 34400,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311455",
+      "trade": 7.23,
+      "avgPrice": 7.067,
+      "volume": 23400,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311456",
+      "trade": 7.23,
+      "avgPrice": 7.067,
+      "volume": 54800,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311457",
+      "trade": 7.23,
+      "avgPrice": 7.068,
+      "volume": 2500,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311458",
+      "trade": 7.23,
+      "avgPrice": 7.069,
+      "volume": 0,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311459",
+      "trade": 7.23,
+      "avgPrice": 7.069,
+      "volume": 0,
+      "amount": 0
+    },
+    {
+      "realDateTime": "201905311500",
+      "trade": 7.23,
+      "avgPrice": 7.07,
+      "volume": 166700,
+      "amount": 0
+    }
+  ],
+  "date": "20190531",
+  "settlement": 6.57
+}

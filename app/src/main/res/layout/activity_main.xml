@@ -18,4 +18,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/text_capital" />
+
+    <Button
+        android:id="@+id/main_activity_mini_fen_shi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/text_mini_fen_shi" />
 </LinearLayout>

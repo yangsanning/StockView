@@ -7,6 +7,7 @@ import android.view.View;
 
 import ysn.com.stockview.page.CapitalActivity;
 import ysn.com.stockview.page.FenShiActivity;
+import ysn.com.stockview.page.MiniFenShiActivity;
 
 /**
  * @Author yangsanning
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         findViewById(R.id.main_activity_fen_shi).setOnClickListener(this);
         findViewById(R.id.main_activity_capital).setOnClickListener(this);
+        findViewById(R.id.main_activity_mini_fen_shi).setOnClickListener(this);
     }
 
     @Override
@@ -34,6 +36,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.main_activity_capital:
                 startActivity(new Intent((this), CapitalActivity.class));
+                break;
+            case R.id.main_activity_mini_fen_shi:
+                startActivity(new Intent((this), MiniFenShiActivity.class));
                 break;
             default:
                 break;
