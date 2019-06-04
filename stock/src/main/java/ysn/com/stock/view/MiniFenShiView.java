@@ -214,9 +214,16 @@ public class MiniFenShiView extends StockView {
         }
     }
 
+    private void initData() {
+        stockPriceList.clear();
+        lastClose = 0.0f;
+        maxStockPrice = Float.MIN_VALUE;
+        minStockPrice = Float.MAX_VALUE;
+    }
+
     public void setNewData(FenShi fenShi) {
+        initData();
         if (fenShi != null) {
-            stockPriceList.clear();
             for (FenShiData fenShiData : fenShi.getData()) {
                 float trade = fenShiData.getTrade();
                 stockPriceList.add(trade);
@@ -228,25 +235,57 @@ public class MiniFenShiView extends StockView {
             }
             lastClose = fenShi.getLastClose();
         }
-
         initCurrentColor();
         invalidate();
     }
 
     public void setNewData(ArrayList<Float> stockPriceList, Float lastClose) {
+        initData();
         this.stockPriceList = stockPriceList;
+        for (Float trade : stockPriceList) {
+            if (maxStockPrice < trade) {
+                maxStockPrice = trade;
+            } else if (minStockPrice > trade) {
+                minStockPrice = trade;
+            }
+        }
         this.lastClose = lastClose;
         initCurrentColor();
         invalidate();
+    }
+
+    public void setNewData(ArrayList<Float> stockPriceList, Float lastClose, Float maxStockPrice, Float minStockPrice) {
+        this.stockPriceList = stockPriceList;
+        this.lastClose = lastClose;
+        this.maxStockPrice = maxStockPrice;
+        this.minStockPrice = minStockPrice;
+        initCurrentColor();
+        invalidate();
+    }
+
+    public List<Float> getStockPriceList() {
+        return stockPriceList;
+    }
+
+    public float getLastClose() {
+        return lastClose;
+    }
+
+    public float getMaxStockPrice() {
+        return maxStockPrice;
+    }
+
+    public float getMinStockPrice() {
+        return minStockPrice;
+    }
+
+    public int getCurrentColor() {
+        return currentColor;
     }
 
     public void setPathEffect(PathEffect pathEffect) {
         this.pathEffect = pathEffect;
         dottedLinePaint.setPathEffect(pathEffect);
         invalidate();
-    }
-
-    public int getCurrentColor() {
-        return currentColor;
     }
 }
