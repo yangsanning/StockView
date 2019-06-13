@@ -1,52 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:fillViewport="true"
+    android:orientation="vertical"
     tools:context=".MainActivity">
+
+    <ysn.com.stockview.widget.view.FlipperRecyclerView
+        android:id="@+id/mini_fen_shi_activity_flipper_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#eeeeee" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#ffffff"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
         android:gravity="center"
-        android:orientation="vertical"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
-        tools:context=".MainActivity">
+        android:orientation="horizontal">
 
-        <ysn.com.stock.view.MiniFenShiView
-            android:layout_width="350dp"
-            android:layout_height="170dp"
-            android:background="#f5f5f5" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:orientation="vertical">
 
-        <ysn.com.stock.view.MiniFenShiView
-            android:id="@+id/mini_fen_shi_activity_view1"
-            android:layout_width="350dp"
-            android:layout_height="170dp"
-            android:layout_marginTop="10dp"
-            android:background="#f5f5f5" />
+            <ysn.com.stock.view.MiniFenShiView
+                android:id="@+id/mini_fen_shi_activity_view1"
+                android:layout_width="100dp"
+                android:layout_height="65dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp" />
 
-        <ysn.com.stock.view.MiniFenShiView
-            android:id="@+id/mini_fen_shi_activity_view2"
-            android:layout_width="350dp"
-            android:layout_height="170dp"
-            android:layout_marginTop="10dp"
-            android:background="#f5f5f5" />
+            <TextView
+                android:id="@+id/mini_fen_shi_activity_code1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </LinearLayout>
 
-        <ysn.com.stock.view.MiniFenShiView
-            android:id="@+id/mini_fen_shi_activity_view3"
-            android:layout_width="350dp"
-            android:layout_height="170dp"
-            android:layout_marginTop="10dp"
-            android:background="#f5f5f5" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:orientation="vertical">
 
-        <ysn.com.stock.view.MiniFenShiView
-            android:id="@+id/mini_fen_shi_activity_view4"
-            android:layout_width="350dp"
-            android:layout_height="170dp"
-            android:layout_marginTop="10dp"
-            android:background="#f5f5f5" />
+            <ysn.com.stock.view.MiniFenShiView
+                android:id="@+id/mini_fen_shi_activity_view2"
+                android:layout_width="100dp"
+                android:layout_height="65dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp" />
+
+            <TextView
+                android:id="@+id/mini_fen_shi_activity_code2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </LinearLayout>
     </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:orientation="vertical">
+
+            <ysn.com.stock.view.MiniFenShiView
+                android:id="@+id/mini_fen_shi_activity_view3"
+                android:layout_width="100dp"
+                android:layout_height="65dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp" />
+
+            <TextView
+                android:id="@+id/mini_fen_shi_activity_code3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:orientation="vertical">
+
+            <ysn.com.stock.view.MiniFenShiView
+                android:id="@+id/mini_fen_shi_activity_view4"
+                android:layout_width="100dp"
+                android:layout_height="65dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp" />
+
+            <TextView
+                android:id="@+id/mini_fen_shi_activity_code4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
