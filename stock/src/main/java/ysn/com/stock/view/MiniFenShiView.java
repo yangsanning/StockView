@@ -227,11 +227,8 @@ public class MiniFenShiView extends StockView {
             for (FenShiData fenShiData : fenShi.getData()) {
                 float trade = fenShiData.getTrade();
                 stockPriceList.add(trade);
-                if (maxStockPrice < trade) {
-                    maxStockPrice = trade;
-                } else if (minStockPrice > trade) {
-                    minStockPrice = trade;
-                }
+                maxStockPrice = Math.max(trade, maxStockPrice);
+                minStockPrice = Math.min(trade, minStockPrice);
             }
             lastClose = fenShi.getLastClose();
         }
@@ -243,11 +240,8 @@ public class MiniFenShiView extends StockView {
         initData();
         this.stockPriceList = stockPriceList;
         for (Float trade : stockPriceList) {
-            if (maxStockPrice < trade) {
-                maxStockPrice = trade;
-            } else if (minStockPrice > trade) {
-                minStockPrice = trade;
-            }
+            maxStockPrice = Math.max(trade, maxStockPrice);
+            minStockPrice = Math.min(trade, minStockPrice);
         }
         this.lastClose = lastClose;
         initCurrentColor();
