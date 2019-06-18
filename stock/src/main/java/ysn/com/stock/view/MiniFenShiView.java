@@ -16,6 +16,7 @@ import android.util.AttributeSet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import ysn.com.stock.R;
 import ysn.com.stock.bean.FenShi;
@@ -200,6 +201,13 @@ public class MiniFenShiView extends StockView {
         return getY(price, minStockPrice, maxStockPrice);
     }
 
+    private void initData() {
+        stockPriceList.clear();
+        lastClose = 0.0f;
+        maxStockPrice = Float.MIN_VALUE;
+        minStockPrice = Float.MAX_VALUE;
+    }
+
     private void initCurrentColor() {
         if (stockPriceList.isEmpty()) {
             return;
@@ -214,11 +222,11 @@ public class MiniFenShiView extends StockView {
         }
     }
 
-    private void initData() {
-        stockPriceList.clear();
-        lastClose = 0.0f;
-        maxStockPrice = Float.MIN_VALUE;
-        minStockPrice = Float.MAX_VALUE;
+    private void initPeakPrice() {
+        if (Objects.equals(maxStockPrice, minStockPrice)) {
+            minStockPrice = maxStockPrice / 2f;
+            maxStockPrice = maxStockPrice * 3f / 2f;
+        }
     }
 
     public void setNewData(FenShi fenShi) {
@@ -232,6 +240,7 @@ public class MiniFenShiView extends StockView {
             }
             lastClose = fenShi.getLastClose();
         }
+        initPeakPrice();
         initCurrentColor();
         invalidate();
     }
@@ -244,6 +253,7 @@ public class MiniFenShiView extends StockView {
             minStockPrice = Math.min(trade, minStockPrice);
         }
         this.lastClose = lastClose;
+        initPeakPrice();
         initCurrentColor();
         invalidate();
     }
@@ -253,6 +263,7 @@ public class MiniFenShiView extends StockView {
         this.lastClose = lastClose;
         this.maxStockPrice = maxStockPrice;
         this.minStockPrice = minStockPrice;
+        initPeakPrice();
         initCurrentColor();
         invalidate();
     }
