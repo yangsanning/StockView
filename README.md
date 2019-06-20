@@ -87,3 +87,6 @@ allprojects {
 ```android
 implementation 'com.github.yangsanning:StockView:1.0.5'
 ```
+
+### 4.注
+其中走马灯效果，可参考我的[RecyclerViewFlipper](https://github.com/yangsanning/RecyclerViewFlipper)
