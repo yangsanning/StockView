@@ -4,6 +4,9 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import ysn.com.stock.bean.IFenShi;
+import ysn.com.stock.bean.IFenShiData;
+
 /**
  * @Author yangsanning
  * @ClassName FenShiTime
@@ -11,7 +14,7 @@ import java.util.List;
  * @Date 2018/8/15
  * @History 2018/8/15 author: description:
  */
-public class FenShiTime {
+public class FenShiTime implements IFenShi {
 
     /**
      * date : 20180814
@@ -85,7 +88,22 @@ public class FenShiTime {
         this.endTime = endTime;
     }
 
-    public static class DataBean {
+    @Override
+    public String getFenShiCode() {
+        return code;
+    }
+
+    @Override
+    public List<? extends IFenShiData> getFenShiData() {
+        return data;
+    }
+
+    @Override
+    public float getFenShiLastClose() {
+        return settlement;
+    }
+
+    public static class DataBean implements IFenShiData {
         /**
          * dateTime : 201808140930
          * trade : 2780.74
@@ -128,6 +146,26 @@ public class FenShiTime {
 
         public void setAvgPrice(float avgPrice) {
             this.avgPrice = avgPrice;
+        }
+
+        @Override
+        public String getFenShiTime() {
+            return dateTime;
+        }
+
+        @Override
+        public float getFenShiPrice() {
+            return trade;
+        }
+
+        @Override
+        public float getFenShiVolume() {
+            return volume;
+        }
+
+        @Override
+        public float getFenShiAvgPrice() {
+            return avgPrice;
         }
     }
 }

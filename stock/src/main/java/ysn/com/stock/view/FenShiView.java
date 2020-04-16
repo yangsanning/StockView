@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ysn.com.stock.R;
-import ysn.com.stock.bean.FenShi;
-import ysn.com.stock.bean.FenShiData;
+import ysn.com.stock.bean.IFenShi;
+import ysn.com.stock.bean.IFenShiData;
 
 /**
  * @Author yangsanning
@@ -249,19 +249,18 @@ public class FenShiView extends StockView {
         return getY(price, minStockPrice, maxStockPrice);
     }
 
-    public void setData(FenShi fenShi) {
+    public <T extends IFenShi> void setData(T fenShi) {
         if (fenShi != null) {
             stockPriceList.clear();
             stockAvePriceList.clear();
             timeList.clear();
-            List<FenShiData> dataBeanList = fenShi.getData();
-            for (int i = 0; i < dataBeanList.size(); i++) {
-                addStockPrice(dataBeanList.get(i).getTrade(), i);
-                stockAvePriceList.add(dataBeanList.get(i).getAvgPrice());
-                timeList.add(dataBeanList.get(i).getDateTime().substring(8, 10)
-                        + ":" + dataBeanList.get(i).getDateTime().substring(10));
+            List<? extends IFenShiData> fenShiData = fenShi.getFenShiData();
+            for (int i = 0; i < fenShiData.size(); i++) {
+                addStockPrice(fenShiData.get(i).getFenShiPrice(), i);
+                stockAvePriceList.add(fenShiData.get(i).getFenShiAvgPrice());
+                timeList.add(fenShiData.get(i).getFenShiTime().substring(8, 10) + ":" + fenShiData.get(i).getFenShiTime().substring(10));
             }
-            lastClose = fenShi.getLastClose();
+            lastClose = fenShi.getFenShiLastClose();
             initData();
         }
         invalidate();

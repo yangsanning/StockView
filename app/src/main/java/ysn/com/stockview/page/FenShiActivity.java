@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import ysn.com.stock.bean.FenShi;
 import ysn.com.stock.bean.FenShiData;
+import ysn.com.stock.bean.IFenShi;
 import ysn.com.stock.view.FenShiView;
 import ysn.com.stockview.R;
 import ysn.com.stockview.bean.FenShiTime;
@@ -29,26 +30,9 @@ public class FenShiActivity extends AppCompatActivity {
         setTitle(R.string.text_fen_shi);
 
         FenShiView fenShiView1 = findViewById(R.id.fen_shi_activity_view1);
-        fenShiView1.setData(timeToFenShi(JsonUtils.getData((this), ("json/fen_shi1.json"), FenShiTime.class)));
+        fenShiView1.setData(JsonUtils.getData((this), ("json/fen_shi1.json"), FenShiTime.class));
 
         FenShiView fenShiView2 = findViewById(R.id.fen_shi_activity_view2);
-        fenShiView2.setData(timeToFenShi(JsonUtils.getData((this), ("json/fen_shi2.json"), FenShiTime.class)));
-    }
-
-    private FenShi timeToFenShi(FenShiTime time) {
-        if (time == null) {
-            return null;
-        }
-        FenShi fenShi = new FenShi();
-        fenShi.setCode(time.getCode());
-        fenShi.setLastClose(time.getSettlement());
-
-        ArrayList<FenShiData> fenShiDataList = new ArrayList<>();
-        for (FenShiTime.DataBean dataBean : time.getData()) {
-            fenShiDataList.add(new FenShiData(dataBean.getDateTime(), dataBean.getTrade(),
-                    dataBean.getAvgPrice(), dataBean.getVolume()));
-        }
-        fenShi.setData(fenShiDataList);
-        return fenShi;
+        fenShiView2.setData(JsonUtils.getData((this), ("json/fen_shi2.json"), FenShiTime.class));
     }
 }
