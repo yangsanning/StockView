@@ -1,5 +1,7 @@
 package ysn.com.stock.utils;
 
+import java.text.DecimalFormat;
+
 /**
  * @Author yangsanning
  * @ClassName NumberUtils
@@ -8,6 +10,8 @@ package ysn.com.stock.utils;
  * @History 2019/5/23 author: description:
  */
 public class NumberUtils {
+
+    public static final DecimalFormat VOLUME_DECIMAL_FORMAT = new DecimalFormat("0.00");
 
     /**
      * @param value 数值
@@ -26,5 +30,9 @@ public class NumberUtils {
     private static double formatDouble(float value, int digits) {
         double digit = Math.pow(10, digits);
         return (double) Math.round(value * digit) / digit;
+    }
+
+    public static String decimalFormat(float num) {
+        return VOLUME_DECIMAL_FORMAT.format(num);
     }
 }

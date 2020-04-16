@@ -18,5 +18,8 @@
 
         <!--心跳动画时间-->
         <attr name="fsv_heart_beat_fraction_rate" format="integer" />
+
+        <!--是否启用滑动-->
+        <attr name="fsv_is_enabled_slide" format="boolean" />
     </declare-styleable>
 </resources>

@@ -21,7 +21,7 @@
     <!--rgb(102,102,102)-->
     <color name="stock_dotted_row_line">#666666</color>
 
-    <color name="stock_slip_line">#000000</color>
+    <color name="stock_slide_line">#000000</color>
 
     <color name="stock_area_fq">#FFFFFF</color>
 

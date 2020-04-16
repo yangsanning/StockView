@@ -291,7 +291,7 @@ public class StockView extends View {
      * @param position 当前position
      * @return x轴坐标
      */
-    protected float getX(int position) {
+    public float getX(int position) {
         return getColumnX(((viewWidth - tableMargin * 2) / (float) totalCount), position);
     }
 
@@ -313,6 +313,38 @@ public class StockView extends View {
 
     protected int getColor(@ColorRes int colorRes) {
         return context.getResources().getColor(colorRes);
+    }
+
+    public int getViewWidth() {
+        return viewWidth;
+    }
+
+    public float getTitleTableHeight() {
+        return titleTableHeight;
+    }
+
+    public float getTopTableHeight() {
+        return topTableHeight;
+    }
+
+    public float getTimeTableHeight() {
+        return timeTableHeight;
+    }
+
+    public float getTableMargin() {
+        return tableMargin;
+    }
+
+    public Paint getTextPaint() {
+        return textPaint;
+    }
+
+    public Rect getTextRect() {
+        return textRect;
+    }
+
+    public int getTotalCount() {
+        return totalCount;
     }
 
     public void setTotalCount(int totalCount) {

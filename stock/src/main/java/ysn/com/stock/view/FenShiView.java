@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 import ysn.com.stock.R;
 import ysn.com.stock.bean.IFenShi;
 import ysn.com.stock.bean.IFenShiData;
+import ysn.com.stock.helper.FenShiSlideHelper;
 
 /**
  * @Author yangsanning
@@ -62,7 +64,6 @@ public class FenShiView extends StockView {
     private Paint avePricePaint;
     private Path priceAreaPath;
     private Paint priceAreaPaint;
-
     /**
      * isBeat: 是否跳动
      * beatFraction: 变化率
@@ -80,6 +81,9 @@ public class FenShiView extends StockView {
             beatHandler.postDelayed(this, heartBeatRate);
         }
     };
+
+    private boolean isEnabledSlide;
+    private FenShiSlideHelper fenShiSlideHelper;
 
     public FenShiView(Context context) {
         super(context);
@@ -110,6 +114,8 @@ public class FenShiView extends StockView {
         heartInitAlpha = typedArray.getInteger(R.styleable.FenShiView_fsv_heart_init_alpha, 255);
         heartBeatRate = typedArray.getInteger(R.styleable.FenShiView_fsv_heart_beat_rate, 2000);
         heartBeatFractionRate = typedArray.getInteger(R.styleable.FenShiView_fsv_heart_beat_fraction_rate, 2000);
+
+        isEnabledSlide = typedArray.getBoolean(R.styleable.FenShiView_fsv_is_enabled_slide, Boolean.FALSE);
 
         typedArray.recycle();
     }
@@ -145,6 +151,10 @@ public class FenShiView extends StockView {
             beatFraction = (float) animation.getAnimatedValue();
             invalidate();
         });
+
+        if (isEnabledSlide) {
+            fenShiSlideHelper = new FenShiSlideHelper(this);
+        }
     }
 
     @Override
@@ -174,6 +184,22 @@ public class FenShiView extends StockView {
     }
 
     @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (fenShiSlideHelper != null) {
+            fenShiSlideHelper.dispatchTouchEvent(event);
+        }
+        return super.dispatchTouchEvent(event);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (fenShiSlideHelper != null) {
+            return fenShiSlideHelper.onTouchEvent(event);
+        }
+        return super.onTouchEvent(event);
+    }
+
+    @Override
     protected void onChildDraw(Canvas canvas) {
         super.onChildDraw(canvas);
 
@@ -186,6 +212,10 @@ public class FenShiView extends StockView {
 
         // 绘制价格、价格区域、均线、闪烁点
         drawPriceLine(canvas);
+
+        if (fenShiSlideHelper != null) {
+            fenShiSlideHelper.draw(canvas);
+        }
     }
 
     /**
@@ -319,6 +349,10 @@ public class FenShiView extends StockView {
 
         // 百分比坐标值
         percent = decimalFormat.format(((maxStockPrice - lastClose) / lastClose * 100)) + "%";
+
+        if (fenShiSlideHelper != null) {
+            fenShiSlideHelper.setPrice(stockPriceList, maxStockPrice, minStockPrice);
+        }
     }
 
     public void startBeat() {
