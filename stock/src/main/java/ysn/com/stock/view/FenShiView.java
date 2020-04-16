@@ -2,6 +2,7 @@ package ysn.com.stock.view;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -28,20 +29,24 @@ import ysn.com.stock.bean.IFenShiData;
 public class FenShiView extends StockView {
 
     private static final String[] TIME_TEXT = new String[]{"09:30", "11:30/13:00", "15:00"};
-    private static final float DEFAULT_PRICE_STROKE_WIDTH = 2.5f;
 
     /**
-     * HEART_RADIUS: 心脏半径
-     * HEART_DIAMETER: 心脏直径
+     * 价格线宽度
+     */
+    private int priceStrokeWidth;
+
+    /**
+     * heartRadius: 心脏半径
+     * heartDiameter: 心脏直径
      * HEART_INIT_ALPHA: 初始透明度
-     * HEART_BEAT_RATE: 心跳率
+     * HEART_BEAT_RATE: 心率
      * HEART_BEAT_FRACTION_RATE: 心跳动画时间
      */
-    private static final float HEART_RADIUS = 5f;
-    private static final float HEART_DIAMETER = 40f;
-    private static final int HEART_INIT_ALPHA = 255;
-    private static final long HEART_BEAT_RATE = 2000;
-    private static final long HEART_BEAT_FRACTION_RATE = 2000;
+    private int heartRadius;
+    private int heartDiameter;
+    private int heartInitAlpha;
+    private long heartBeatRate;
+    private long heartBeatFractionRate;
 
     private List<Float> stockPriceList = new ArrayList<>();
     private List<Float> stockAvePriceList = new ArrayList<>();
@@ -72,7 +77,7 @@ public class FenShiView extends StockView {
         public void run() {
             beatAnimator.start();
             invalidate();
-            beatHandler.postDelayed(this, HEART_BEAT_RATE);
+            beatHandler.postDelayed(this, heartBeatRate);
         }
     };
 
@@ -94,6 +99,22 @@ public class FenShiView extends StockView {
     }
 
     @Override
+    protected void initAttr(AttributeSet attrs) {
+        super.initAttr(attrs);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.FenShiView);
+
+        priceStrokeWidth = typedArray.getDimensionPixelSize(R.styleable.FenShiView_fsv_price_stroke_width, 2);
+
+        heartRadius = typedArray.getDimensionPixelSize(R.styleable.FenShiView_fsv_heart_radius, 5);
+        heartDiameter = typedArray.getDimensionPixelSize(R.styleable.FenShiView_fsv_heart_diameter, 40);
+        heartInitAlpha = typedArray.getInteger(R.styleable.FenShiView_fsv_heart_init_alpha, 255);
+        heartBeatRate = typedArray.getInteger(R.styleable.FenShiView_fsv_heart_beat_rate, 2000);
+        heartBeatFractionRate = typedArray.getInteger(R.styleable.FenShiView_fsv_heart_beat_fraction_rate, 2000);
+
+        typedArray.recycle();
+    }
+
+    @Override
     protected void initPaint() {
         super.initPaint();
         pricePath = new Path();
@@ -101,14 +122,14 @@ public class FenShiView extends StockView {
         pricePaint.setColor(getColor(R.color.stock_price_line));
         pricePaint.setAntiAlias(true);
         pricePaint.setStyle(Paint.Style.STROKE);
-        pricePaint.setStrokeWidth(DEFAULT_PRICE_STROKE_WIDTH);
+        pricePaint.setStrokeWidth(priceStrokeWidth);
 
         avePricePath = new Path();
         avePricePaint = new Paint();
         avePricePaint.setColor(getColor(R.color.stock_ave_price_line));
         avePricePaint.setAntiAlias(true);
         avePricePaint.setStyle(Paint.Style.STROKE);
-        avePricePaint.setStrokeWidth(DEFAULT_PRICE_STROKE_WIDTH);
+        avePricePaint.setStrokeWidth(priceStrokeWidth);
 
         priceAreaPath = new Path();
         priceAreaPaint = new Paint();
@@ -119,7 +140,7 @@ public class FenShiView extends StockView {
 
         heartPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         heartPaint.setAntiAlias(true);
-        beatAnimator = ValueAnimator.ofFloat(0, 1f).setDuration(HEART_BEAT_FRACTION_RATE);
+        beatAnimator = ValueAnimator.ofFloat(0, 1f).setDuration(heartBeatFractionRate);
         beatAnimator.addUpdateListener(animation -> {
             beatFraction = (float) animation.getAnimatedValue();
             invalidate();
@@ -219,12 +240,12 @@ public class FenShiView extends StockView {
             if (isBeat && i == stockPriceList.size() - 1) {
                 //绘制扩散圆
                 heartPaint.setColor(getColor(R.color.stock_price_line));
-                heartPaint.setAlpha((int) (HEART_INIT_ALPHA - HEART_INIT_ALPHA * beatFraction));
-                canvas.drawCircle(getX(i), getY(price), (HEART_RADIUS + HEART_DIAMETER * beatFraction), heartPaint);
+                heartPaint.setAlpha((int) (heartInitAlpha - heartInitAlpha * beatFraction));
+                canvas.drawCircle(getX(i), getY(price), (heartRadius + heartDiameter * beatFraction), heartPaint);
                 // 绘制中心圆
                 heartPaint.setAlpha(255);
                 heartPaint.setColor(getColor(R.color.stock_price_line));
-                canvas.drawCircle(getX(i), getY(price), HEART_RADIUS, heartPaint);
+                canvas.drawCircle(getX(i), getY(price), heartRadius, heartPaint);
             }
         }
         priceAreaPath.lineTo(getX((stockPriceList.size() - 1)), getTopTableMinY());

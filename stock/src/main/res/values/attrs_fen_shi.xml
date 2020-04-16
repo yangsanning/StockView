@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="FenShiView">
+        <!--价格线宽度-->
+        <attr name="fsv_price_stroke_width" format="dimension|reference" />
+
+        <!--心脏半径-->
+        <attr name="fsv_heart_radius" format="dimension|reference" />
+
+        <!--心脏直径-->
+        <attr name="fsv_heart_diameter" format="dimension|reference" />
+
+        <!--初始透明度-->
+        <attr name="fsv_heart_init_alpha" format="integer" />
+
+        <!--心率-->
+        <attr name="fsv_heart_beat_rate" format="integer" />
+
+        <!--心跳动画时间-->
+        <attr name="fsv_heart_beat_fraction_rate" format="integer" />
+    </declare-styleable>
+</resources>
