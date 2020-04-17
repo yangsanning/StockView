@@ -17,14 +17,15 @@
         <ysn.com.stock.view.FenShiView
             android:id="@+id/fen_shi_activity_view1"
             android:layout_width="match_parent"
-            android:layout_height="230dp"
+            android:layout_height="200dp"
             ysn:fsv_is_enabled_slide="true" />
 
         <ysn.com.stock.view.FenShiView
             android:id="@+id/fen_shi_activity_view2"
             android:layout_width="match_parent"
-            android:layout_height="230dp"
-            android:layout_marginTop="50dp"
+            android:layout_height="280dp"
+            android:layout_marginTop="20dp"
+            ysn:fsv_is_enabled_bottom_tab="true"
             ysn:fsv_is_enabled_slide="true" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

@@ -239,10 +239,10 @@ public class CapitalView extends StockView {
     @Override
     protected void onRowLineDraw(Canvas canvas) {
         linePaint.setColor(rowLineColor);
-        float rowSpacing = getRowSpacing();
+        float rowSpacing = getTopRowSpacing();
         for (int i = 1; i < getTopRowCount(); i++) {
             linePath.reset();
-            float y = getRowY(rowSpacing, i);
+            float y = getTopRowY(rowSpacing, i);
             linePath.moveTo(tableMargin, y);
             linePath.lineTo((viewWidth - tableMargin), y);
             canvas.drawPath(linePath, linePaint);
@@ -311,10 +311,10 @@ public class CapitalView extends StockView {
     private void drawCoordinate(Canvas canvas) {
         textPaint.setTextSize(xYTextSize);
 
-        float rowSpacing = getRowSpacing();
+        float rowSpacing = getTopRowSpacing();
         int topRowCount = getTopRowCount();
         for (int i = 0; i < (topRowCount + 1); i++) {
-            float defaultY = getRowY(rowSpacing, topRowCount - i);
+            float defaultY = getTopRowY(rowSpacing, topRowCount - i);
 
             // 价格坐标
             String text = NumberUtils.numberFormat(getPriceCoordinate(((float) i / topRowCount)), priceDigits);

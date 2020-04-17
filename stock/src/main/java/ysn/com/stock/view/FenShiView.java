@@ -20,6 +20,7 @@ import ysn.com.stock.R;
 import ysn.com.stock.bean.IFenShi;
 import ysn.com.stock.bean.IFenShiData;
 import ysn.com.stock.helper.FenShiSlideHelper;
+import ysn.com.stock.utils.NumberUtils;
 
 /**
  * @Author yangsanning
@@ -58,6 +59,13 @@ public class FenShiView extends StockView {
     private float minStockPrice = 0.0f;
     private String percent = " 100%";
 
+    /**
+     * 当前交易量
+     */
+    private List<Float> stockVolumeList = new ArrayList<>();
+    private float maxStockVolume;
+    private String maxStockVolumeString = "", centreStockVolumeString = "";
+
     private Path pricePath;
     private Paint pricePaint;
     private Path avePricePath;
@@ -82,6 +90,7 @@ public class FenShiView extends StockView {
         }
     };
 
+    private boolean isEnabledBottomTable;
     private boolean isEnabledSlide;
     private FenShiSlideHelper fenShiSlideHelper;
 
@@ -115,6 +124,7 @@ public class FenShiView extends StockView {
         heartBeatRate = typedArray.getInteger(R.styleable.FenShiView_fsv_heart_beat_rate, 2000);
         heartBeatFractionRate = typedArray.getInteger(R.styleable.FenShiView_fsv_heart_beat_fraction_rate, 2000);
 
+        isEnabledBottomTable = typedArray.getBoolean(R.styleable.FenShiView_fsv_is_enabled_bottom_tab, Boolean.FALSE);
         isEnabledSlide = typedArray.getBoolean(R.styleable.FenShiView_fsv_is_enabled_slide, Boolean.FALSE);
 
         typedArray.recycle();
@@ -158,8 +168,8 @@ public class FenShiView extends StockView {
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
+    protected boolean hasBottomTable() {
+        return isEnabledBottomTable;
     }
 
     /**
@@ -212,6 +222,12 @@ public class FenShiView extends StockView {
 
         // 绘制价格、价格区域、均线、闪烁点
         drawPriceLine(canvas);
+
+        // 绘制下表格坐标
+        drawBottomXYText(canvas);
+
+        // 绘制柱形
+        drawPillar(canvas);
 
         if (fenShiSlideHelper != null) {
             fenShiSlideHelper.draw(canvas);
@@ -291,6 +307,42 @@ public class FenShiView extends StockView {
     }
 
     /**
+     * 绘制下表格坐标
+     */
+    private void drawBottomXYText(Canvas canvas) {
+        // 下表格最大量
+        textPaint.getTextBounds(maxStockVolumeString, 0, maxStockVolumeString.length(), textRect);
+        float x = viewWidth - tableMargin - xYTextMargin - textRect.width();
+        canvas.drawText(maxStockVolumeString, x, (getBottomTableMinY() + textRect.height() + xYTextMargin), textPaint);
+
+        // 下表格中间值
+        textPaint.getTextBounds(centreStockVolumeString, 0, centreStockVolumeString.length(), textRect);
+        canvas.drawText(centreStockVolumeString, x, (getBottomTableMinY() + (bottomTableHeight + textRect.height()) / 2), textPaint);
+    }
+
+    /**
+     * 绘制柱形
+     * columnSpace: 宽 - 边距 - 柱子间距(1f)
+     */
+    private void drawPillar(Canvas canvas) {
+        float columnSpace = (viewWidth - (tableMargin * 2) - (totalCount * 1f)) / totalCount;
+        Paint paint = new Paint();
+        paint.setStrokeWidth(columnSpace);
+        for (int i = 0; i < stockPriceList.size() - 1; i++) {
+            if (i == 0) {
+                paint.setColor(getColor(stockPriceList.get(i) >= lastClose ? R.color.stock_red : R.color.stock_green));
+            } else {
+                paint.setColor(getColor(stockPriceList.get(i) >= stockPriceList.get(i - 1) ? R.color.stock_red : R.color.stock_green));
+            }
+            float lineX = tableMargin + (columnSpace * i) + (i * 1f) + 1;
+            float maxHeight = (bottomTableHeight - 1) * 0.95f;
+            float stopY = getBottomTableMaxY() - (stockVolumeList.get(i) * maxHeight) / maxStockVolume;
+            canvas.drawLine(lineX, getBottomTableMaxY(), lineX, stopY, paint);
+        }
+        paint.reset();
+    }
+
+    /**
      * 获取价格线的y轴坐标
      *
      * @param price 当前价格
@@ -305,11 +357,13 @@ public class FenShiView extends StockView {
             stockPriceList.clear();
             stockAvePriceList.clear();
             timeList.clear();
+            stockVolumeList.clear();
             List<? extends IFenShiData> fenShiData = fenShi.getFenShiData();
             for (int i = 0; i < fenShiData.size(); i++) {
                 addStockPrice(fenShiData.get(i).getFenShiPrice(), i);
                 stockAvePriceList.add(fenShiData.get(i).getFenShiAvgPrice());
                 timeList.add(fenShiData.get(i).getFenShiTime().substring(8, 10) + ":" + fenShiData.get(i).getFenShiTime().substring(10));
+                stockVolumeList.add(fenShiData.get(i).getFenShiVolume());
             }
             lastClose = fenShi.getFenShiLastClose();
             initData();
@@ -349,6 +403,14 @@ public class FenShiView extends StockView {
 
         // 百分比坐标值
         percent = decimalFormat.format(((maxStockPrice - lastClose) / lastClose * 100)) + "%";
+
+        // 找到最大成交量
+        for (Float stockVolume : stockVolumeList) {
+            maxStockVolume = Math.max(maxStockVolume, stockVolume);
+        }
+
+        maxStockVolumeString = NumberUtils.getVolume((int) maxStockVolume / 100);
+        centreStockVolumeString = NumberUtils.getVolume((int) maxStockVolume / 200);
 
         if (fenShiSlideHelper != null) {
             fenShiSlideHelper.setPrice(stockPriceList, maxStockPrice, minStockPrice);

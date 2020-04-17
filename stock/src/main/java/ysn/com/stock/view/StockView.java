@@ -39,7 +39,7 @@ public class StockView extends View {
     /**
      * totalCount: 总点数
      */
-    private int totalCount = COUNT_DEFAULT;
+    protected int totalCount = COUNT_DEFAULT;
 
     /**
      * columnCount: 列数+1
@@ -60,8 +60,9 @@ public class StockView extends View {
     protected float titleTableHeight;
     protected float timeTableHeight;
     protected float topTableWidth, topTableHeight;
+    protected float bottomTableHeight;
 
-    protected float xYTextSize, titleTextSize;
+    protected float xYTextSize, xYTextMargin, titleTextSize;
     protected Paint textPaint;
     protected Rect textRect = new Rect();
     protected DecimalFormat decimalFormat;
@@ -132,10 +133,20 @@ public class StockView extends View {
         viewHeight = h;
 
         timeTableHeight = viewHeight * 0.06f;
-        topTableHeight = viewHeight - timeTableHeight;
+        if (hasBottomTable()) {
+            topTableHeight = viewHeight * 0.7f - titleTableHeight;
+            bottomTableHeight = viewHeight - titleTableHeight - topTableHeight - timeTableHeight - 1;
+        } else {
+            topTableHeight = viewHeight - timeTableHeight;
+        }
 
         xYTextSize = timeTableHeight * 0.8f;
+        xYTextMargin = xYTextSize / 5;
         textPaint.setTextSize(xYTextSize);
+    }
+
+    protected boolean hasBottomTable() {
+        return false;
     }
 
     @Override
@@ -171,13 +182,24 @@ public class StockView extends View {
      */
     protected void onBordersDraw(Canvas canvas) {
         // 上表边框
+        linePath.reset();
         linePath.moveTo(tableMargin, getTopTableMinY());
         linePath.lineTo(tableMargin, getTopTableMaxY());
         linePath.lineTo((viewWidth - tableMargin), getTopTableMaxY());
         linePath.lineTo((viewWidth - tableMargin), getTopTableMinY());
         linePath.close();
         canvas.drawPath(linePath, linePaint);
-        linePath.reset();
+
+        // 下表边框
+        if (hasBottomTable()) {
+            linePath.reset();
+            linePath.moveTo(tableMargin, getBottomTableMinY());
+            linePath.lineTo(tableMargin, getBottomTableMaxY());
+            linePath.lineTo((viewWidth - tableMargin), getBottomTableMaxY());
+            linePath.lineTo((viewWidth - tableMargin), getBottomTableMinY());
+            linePath.close();
+            canvas.drawPath(linePath, linePaint);
+        }
     }
 
     /**
@@ -195,6 +217,20 @@ public class StockView extends View {
     }
 
     /**
+     * 获取上表格最大Y
+     */
+    protected float getBottomTableMaxY() {
+        return bottomTableHeight + timeTableHeight;
+    }
+
+    /**
+     * 获取上表格最小Y
+     */
+    protected float getBottomTableMinY() {
+        return timeTableHeight;
+    }
+
+    /**
      * 绘制竖线
      */
     protected void onColumnLineDraw(Canvas canvas) {
@@ -207,6 +243,17 @@ public class StockView extends View {
             linePath.moveTo(x, getTopTableMinY());
             linePath.lineTo(x, getTopTableMaxY());
             canvas.drawPath(linePath, dottedLinePaint);
+        }
+
+        // 绘制下表竖线
+        if (hasBottomTable()) {
+            for (int i = 1; i < getColumnCount(); i++) {
+                linePath.reset();
+                float x = getColumnX(xSpace, i);
+                linePath.moveTo(x, getBottomTableMinY());
+                linePath.lineTo(x, getBottomTableMaxY());
+                canvas.drawPath(linePath, dottedLinePaint);
+            }
         }
     }
 
@@ -230,24 +277,37 @@ public class StockView extends View {
      */
     protected void onRowLineDraw(Canvas canvas) {
         // 绘制上表横线
-        float rowSpacing = getRowSpacing();
+        float rowSpacing = getTopRowSpacing();
         for (int i = 1; i < getTopRowCount(); i++) {
             linePath.reset();
-            float y = getRowY(rowSpacing, i);
+            float y = getTopRowY(rowSpacing, i);
             linePath.moveTo(tableMargin, y);
             linePath.lineTo((viewWidth - tableMargin), y);
             dottedLinePaint.setColor(getColor(i != getTopRowCount() / 2 ?
                     R.color.stock_dotted_column_line : R.color.stock_dotted_row_line));
             canvas.drawPath(linePath, dottedLinePaint);
         }
-    }
 
-    protected float getRowSpacing() {
-        return (topTableHeight - timeTableHeight) / getTopRowCount();
+        // 绘制下表横线
+        if (hasBottomTable()) {
+            rowSpacing = getBottomRowSpacing();
+            dottedLinePaint.setColor(getColor(R.color.stock_dotted_column_line));
+            for (int i = 1; i < getBottomRowCount(); i++) {
+                linePath.reset();
+                float y = getBottomRowY(rowSpacing, i);
+                linePath.moveTo(tableMargin, y);
+                linePath.lineTo((viewWidth - tableMargin), y);
+                canvas.drawPath(linePath, dottedLinePaint);
+            }
+        }
     }
 
     protected int getTopRowCount() {
         return topRowCount;
+    }
+
+    protected float getTopRowSpacing() {
+        return topTableHeight / getTopRowCount();
     }
 
     /**
@@ -257,8 +317,27 @@ public class StockView extends View {
      * @param position 当前position
      * @return 横线y轴坐标
      */
-    protected float getRowY(float ySpace, int position) {
+    protected float getTopRowY(float ySpace, int position) {
         return getTopTableMaxY() + ySpace * position;
+    }
+
+    protected int getBottomRowCount() {
+        return bottomRowCount;
+    }
+
+    protected float getBottomRowSpacing() {
+        return bottomTableHeight / getBottomRowCount();
+    }
+
+    /**
+     * 获取横线y轴坐标
+     *
+     * @param ySpace   横线y轴间隙
+     * @param position 当前position
+     * @return 横线y轴坐标
+     */
+    protected float getBottomRowY(float ySpace, int position) {
+        return timeTableHeight + ySpace * position;
     }
 
     /**
