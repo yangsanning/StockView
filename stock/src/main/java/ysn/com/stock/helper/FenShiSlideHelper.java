@@ -208,7 +208,7 @@ public class FenShiSlideHelper {
      * 绘制滑动线
      */
     private void drawSlideLine(Canvas canvas) {
-        float lineX = getX(slideNum);
+        float lineX = Math.min(getX(slideNum), viewWidth - tableMargin);
         //和绘制竖线
         canvas.drawLine(lineX, -topTableHeight, lineX, viewHeight, slidePaint);
         // 绘制横线
