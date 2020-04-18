@@ -413,9 +413,9 @@ public class FenShiView extends StockView {
         centreStockVolumeString = NumberUtils.getVolume((int) maxStockVolume / 200);
 
         if (fenShiSlideHelper != null) {
-            fenShiSlideHelper.setPrice(stockPriceList, maxStockPrice, minStockPrice);
-            fenShiSlideHelper.setTimeList(timeList);
-            fenShiSlideHelper.setMaxStockVolume(maxStockVolume);
+            fenShiSlideHelper.setPrice(stockPriceList, maxStockPrice, minStockPrice)
+                    .setTimeList(timeList)
+                    .setMaxStockVolume(maxStockVolume);
         }
     }
 
