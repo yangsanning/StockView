@@ -223,11 +223,13 @@ public class FenShiView extends StockView {
         // 绘制价格、价格区域、均线、闪烁点
         drawPriceLine(canvas);
 
-        // 绘制下表格坐标
-        drawBottomXYText(canvas);
+        if (hasBottomTable()) {
+            // 绘制下表格坐标
+            drawBottomXYText(canvas);
 
-        // 绘制柱形
-        drawPillar(canvas);
+            // 绘制柱形
+            drawPillar(canvas);
+        }
 
         if (fenShiSlideHelper != null) {
             fenShiSlideHelper.draw(canvas);
