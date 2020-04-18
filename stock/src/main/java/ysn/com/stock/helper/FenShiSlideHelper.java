@@ -1,10 +1,10 @@
 package ysn.com.stock.helper;
 
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
+import android.support.annotation.ColorRes;
 import android.view.MotionEvent;
 
 import java.util.List;
@@ -27,7 +27,8 @@ public class FenShiSlideHelper {
     private static final int TOUCH_SLOP = 20;
 
     private FenShiView fenShiView;
-    public List<Float> priceList;
+    private List<Float> priceList;
+    private List<String> timeList;
     private float maxStockPrice = 0.0f;
     private float minStockPrice = 0.0f;
     private float maxStockVolume = 0.0f;
@@ -55,18 +56,20 @@ public class FenShiSlideHelper {
     }
 
     private void initPaint() {
-        Resources resources = fenShiView.getContext().getResources();
-
         slidePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        slidePaint.setColor(resources.getColor(R.color.stock_slide_line));
+        slidePaint.setColor(getColor(R.color.stock_slide_line));
         slidePaint.setStrokeWidth(2.0f);
         slidePaint.setStyle(Paint.Style.STROKE);
 
         slideAreaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        slideAreaPaint.setColor(resources.getColor(R.color.stock_area_fq));
+        slideAreaPaint.setColor(getColor(R.color.stock_area_fq));
         slideAreaPaint.setStyle(Paint.Style.FILL);
 
         path = new Path();
+    }
+
+    private int getColor(@ColorRes int colorRes) {
+        return fenShiView.getContext().getResources().getColor(colorRes);
     }
 
     public void dispatchTouchEvent(MotionEvent ev) {
@@ -118,6 +121,9 @@ public class FenShiSlideHelper {
 
             // 绘制滑动线
             drawSlideLine(canvas);
+
+            // 绘制滑动时间
+            drawSlideTime(canvas);
 
             // 绘制滑动值
             drawSlideValue(canvas);
@@ -175,6 +181,47 @@ public class FenShiSlideHelper {
         canvas.drawLine(lineX, -getTopTableHeight(), lineX, getViewHeight(), slidePaint);
         // 绘制横线
         canvas.drawLine(getTableMargin(), slideLineY, (getViewWidth() - getTableMargin()), slideLineY, slidePaint);
+    }
+
+    /**
+     * 绘制滑动时间
+     */
+    private void drawSlideTime(Canvas canvas) {
+        float textMargin = getXYTextMargin();
+        float tableMargin = getTableMargin();
+        float viewWidth = getViewWidth();
+        float timeTableHeight = getTimeTableHeight();
+
+        Paint textPaint = getTextPaint();
+        textPaint.setColor(getColor(R.color.stock_text_title));
+        Rect textRect = getTextRect();
+        String timeText = timeList.get(slideNum);
+        textPaint.getTextBounds(timeText, 0, timeText.length(), textRect);
+
+        float rectWidth = textRect.width() + textMargin * 4;
+        float rectHalfWidth = rectWidth / 2;
+
+        float slideRectLeft = getX(slideNum) - rectHalfWidth;
+        if (slideX < tableMargin + rectHalfWidth) {
+            slideRectLeft = tableMargin;
+        } else if (slideX > viewWidth - tableMargin - rectHalfWidth) {
+            slideRectLeft = viewWidth - tableMargin - rectWidth;
+        }
+
+        float slipPriceTop = 0;
+        float slideRectBottom = timeTableHeight;
+        float slideRectRight = slideRectLeft + rectWidth;
+
+        canvas.drawRect(slideRectLeft, slipPriceTop, slideRectRight, slideRectBottom, slideAreaPaint);
+        path.reset();
+        path.moveTo(slideRectLeft, slipPriceTop);
+        path.lineTo(slideRectRight, slipPriceTop);
+        path.lineTo(slideRectRight, slideRectBottom);
+        path.lineTo(slideRectLeft, slideRectBottom);
+        path.lineTo(slideRectLeft, slipPriceTop);
+        canvas.drawPath(path, textPaint);
+
+        canvas.drawText(timeText, (slideRectLeft + textMargin * 2), ((slideRectBottom + textRect.height()) / 2f), textPaint);
     }
 
     /**
@@ -316,6 +363,15 @@ public class FenShiSlideHelper {
     }
 
     /**
+     * 获取文字间距
+     *
+     * @return
+     */
+    private float getXYTextMargin() {
+        return fenShiView.getXYTextMargin();
+    }
+
+    /**
      * 表格总点数
      */
     private int getTotalCount() {
@@ -352,6 +408,10 @@ public class FenShiSlideHelper {
         this.priceList = priceList;
         this.maxStockPrice = maxStockPrice;
         this.minStockPrice = minStockPrice;
+    }
+
+    public void setTimeList(List<String> timeList) {
+        this.timeList = timeList;
     }
 
     public void setMaxStockVolume(float maxStockVolume) {

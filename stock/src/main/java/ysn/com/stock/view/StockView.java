@@ -422,6 +422,10 @@ public class StockView extends View {
         return tableMargin;
     }
 
+    public float getXYTextMargin() {
+        return xYTextMargin;
+    }
+
     public Paint getTextPaint() {
         return textPaint;
     }

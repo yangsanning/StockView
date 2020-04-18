@@ -414,6 +414,7 @@ public class FenShiView extends StockView {
 
         if (fenShiSlideHelper != null) {
             fenShiSlideHelper.setPrice(stockPriceList, maxStockPrice, minStockPrice);
+            fenShiSlideHelper.setTimeList(timeList);
             fenShiSlideHelper.setMaxStockVolume(maxStockVolume);
         }
     }
