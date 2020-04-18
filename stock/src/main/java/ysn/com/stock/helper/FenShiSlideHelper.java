@@ -30,6 +30,7 @@ public class FenShiSlideHelper {
     public List<Float> priceList;
     private float maxStockPrice = 0.0f;
     private float minStockPrice = 0.0f;
+    private float maxStockVolume = 0.0f;
 
     private Paint slidePaint;
     private Paint slideAreaPaint;
@@ -37,6 +38,9 @@ public class FenShiSlideHelper {
 
     private boolean isLongPress;
     private float slideX, slideY;
+    private float textRectHalfHeight;
+    private float slideLineY;
+    private String slideValue;
 
     private int slideNum;
 
@@ -109,10 +113,10 @@ public class FenShiSlideHelper {
             initSlideData();
 
             // 绘制滑动线
-            drawSlipLine(canvas);
+            drawSlideLine(canvas);
 
-            // 绘制滑动横线以及滑动价格
-            drawSlipPrice(canvas);
+            // 绘制滑动值
+            drawSlideValue(canvas);
         }
     }
 
@@ -120,6 +124,9 @@ public class FenShiSlideHelper {
      * 初始化滑动数据
      */
     private void initSlideData() {
+        // 文本框一半高度
+        textRectHalfHeight = getTimeTableHeight() / 2;
+
         if (slideX - getTableMargin() > 0 && slideX < getTableMargin() + getViewWidth()) {
             slideNum = (int) ((slideX - getTableMargin()) / getViewWidth() * getTotalCount());
         } else if (slideX - getTableMargin() - 2 < 0) {
@@ -127,42 +134,57 @@ public class FenShiSlideHelper {
         } else if (slideX > getTableMargin() + 1 + getViewWidth()) {
             slideNum = priceList.size() - 1;
         }
-
         if (slideNum >= priceList.size()) {
             slideNum = priceList.size() - 1;
+        }
+
+        // 分别对有下表格情况以及没有下表格情况进程处理
+        if (hasBottomTable() && slideY - getTopTableHeight() > 0) {
+            // 滑动线Y坐标
+            float realSlideY = slideY - getTopTableHeight();
+            if (realSlideY <= getBottomTableMinY() + textRectHalfHeight) {
+                slideLineY = getBottomTableMinY() + textRectHalfHeight;
+            } else {
+                slideLineY = Math.min(realSlideY, getBottomTableMaxY() - textRectHalfHeight);
+            }
+
+            // 滑动显示的值
+            slideValue = getSlipPriceVolume();
+        } else {
+            // 滑动线Y坐标
+            if (slideY <= textRectHalfHeight) {
+                slideLineY = textRectHalfHeight - getTopTableHeight();
+            } else if (slideY + textRectHalfHeight - getTopTableHeight() >= 0) {
+                slideLineY = -textRectHalfHeight - 1;
+            } else {
+                slideLineY = slideY - getTopTableHeight();
+            }
+
+            // 滑动显示的值
+            slideValue = getSlipPriceValue();
         }
     }
 
     /**
      * 绘制滑动线
      */
-    private void drawSlipLine(Canvas canvas) {
+    private void drawSlideLine(Canvas canvas) {
         float lineX = getX(slideNum);
-        canvas.drawLine(lineX, -getTopTableHeight(), lineX, 0, slidePaint);
+        //和绘制竖线
+        canvas.drawLine(lineX, -getTopTableHeight(), lineX, getViewHeight(), slidePaint);
+        // 绘制横线
+        canvas.drawLine(getTableMargin(), slideLineY, (getViewWidth() - getTableMargin()), slideLineY, slidePaint);
     }
 
     /**
-     * 绘制滑动横线以及滑动价格
+     * 绘制成滑动值
      */
-    private void drawSlipPrice(Canvas canvas) {
-        float lineY;
-        float textRectHalfHeight = getTimeTableHeight() / 2;
-        if (slideY <= textRectHalfHeight) {
-            lineY = textRectHalfHeight - getTopTableHeight();
-        } else if (slideY + textRectHalfHeight - getTopTableHeight() >= 0) {
-            lineY = -textRectHalfHeight - 1;
-        } else {
-            lineY = slideY - getTopTableHeight();
-        }
-        // 绘制横线
-        canvas.drawLine(getTableMargin(), lineY, (getViewWidth() - getTableMargin()), lineY, slidePaint);
-
+    private void drawSlideValue(Canvas canvas) {
         Paint textPaint = getTextPaint();
         Rect textRect = new Rect();
-        String slipPriceValue = getSlipPriceValue();
-        textPaint.getTextBounds(slipPriceValue, 0, slipPriceValue.length(), textRect);
-        float slideRectTop = lineY - textRectHalfHeight;
-        float slideRectBottom = lineY + textRectHalfHeight;
+        textPaint.getTextBounds(slideValue, 0, slideValue.length(), textRect);
+        float slideRectTop = slideLineY - textRectHalfHeight;
+        float slideRectBottom = slideLineY + textRectHalfHeight;
         float slideRectLeft;
         float slideRectRight;
         if (slideX < getViewWidth() / 3f) {
@@ -177,16 +199,16 @@ public class FenShiSlideHelper {
         canvas.drawRect(slideRectLeft, slideRectTop, slideRectRight, slideRectBottom, slideAreaPaint);
 
         // 绘制边框
+        path.reset();
         path.moveTo(slideRectLeft, slideRectTop);
         path.lineTo(slideRectRight, slideRectTop);
         path.lineTo(slideRectRight, slideRectBottom);
         path.lineTo(slideRectLeft, slideRectBottom);
         path.lineTo(slideRectLeft, slideRectTop);
         canvas.drawPath(path, textPaint);
-        path.reset();
 
         // 绘制文本
-        canvas.drawText(slipPriceValue, (slideRectLeft + (getTableMargin() + 1) * 4), (lineY + textRect.height() / 2f), textPaint);
+        canvas.drawText(slideValue, (slideRectLeft + (getTableMargin() + 1) * 4), (slideLineY + textRect.height() / 2f), textPaint);
     }
 
     /**
@@ -202,10 +224,33 @@ public class FenShiSlideHelper {
     }
 
     /**
+     * 滑动成交量
+     */
+    private String getSlipPriceVolume() {
+        float max = maxStockVolume / 100;
+        if (slideY - getTopTableHeight() < getBottomTableMinY()) {
+            return NumberUtils.decimalFormat(max);
+        } else if (slideY >= getViewHeight()) {
+            return NumberUtils.decimalFormat(0);
+        }
+        float bottomTableHeight = getBottomTableHeight();
+        float h1 = bottomTableHeight - (slideY - getTopTableHeight() - getTimeTableHeight());
+        float volumeY = h1 / bottomTableHeight;
+        return NumberUtils.decimalFormat(volumeY * max);
+    }
+
+    /**
      * 获取表格宽
      */
     private int getViewWidth() {
         return fenShiView.getViewWidth();
+    }
+
+    /**
+     * 获取表格高
+     */
+    private int getViewHeight() {
+        return fenShiView.getViewHeight();
     }
 
     /**
@@ -227,6 +272,24 @@ public class FenShiSlideHelper {
      */
     private float getTimeTableHeight() {
         return fenShiView.getTimeTableHeight();
+    }
+
+    /**
+     * 获取下表格最小高度
+     */
+    private float getBottomTableMinY() {
+        return fenShiView.getBottomTableMinY();
+    }
+
+    /**
+     * 获取下表格最大高度
+     */
+    private float getBottomTableMaxY() {
+        return fenShiView.getBottomTableMaxY();
+    }
+
+    public float getBottomTableHeight() {
+        return fenShiView.getBottomTableHeight();
     }
 
     /**
@@ -265,9 +328,17 @@ public class FenShiSlideHelper {
         return path;
     }
 
+    public boolean hasBottomTable() {
+        return fenShiView.hasBottomTable();
+    }
+
     public void setPrice(List<Float> priceList, float maxStockPrice, float minStockPrice) {
         this.priceList = priceList;
         this.maxStockPrice = maxStockPrice;
         this.minStockPrice = minStockPrice;
+    }
+
+    public void setMaxStockVolume(float maxStockVolume) {
+        this.maxStockVolume = maxStockVolume;
     }
 }

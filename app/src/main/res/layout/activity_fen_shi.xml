@@ -17,8 +17,7 @@
         <ysn.com.stock.view.FenShiView
             android:id="@+id/fen_shi_activity_view1"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            ysn:fsv_is_enabled_slide="true" />
+            android:layout_height="200dp" />
 
         <ysn.com.stock.view.FenShiView
             android:id="@+id/fen_shi_activity_view2"

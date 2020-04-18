@@ -168,7 +168,7 @@ public class FenShiView extends StockView {
     }
 
     @Override
-    protected boolean hasBottomTable() {
+    public boolean hasBottomTable() {
         return isEnabledBottomTable;
     }
 
@@ -414,6 +414,7 @@ public class FenShiView extends StockView {
 
         if (fenShiSlideHelper != null) {
             fenShiSlideHelper.setPrice(stockPriceList, maxStockPrice, minStockPrice);
+            fenShiSlideHelper.setMaxStockVolume(maxStockVolume);
         }
     }
 

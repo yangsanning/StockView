@@ -145,7 +145,7 @@ public class StockView extends View {
         textPaint.setTextSize(xYTextSize);
     }
 
-    protected boolean hasBottomTable() {
+    public boolean hasBottomTable() {
         return false;
     }
 
@@ -219,14 +219,14 @@ public class StockView extends View {
     /**
      * 获取上表格最大Y
      */
-    protected float getBottomTableMaxY() {
+    public float getBottomTableMaxY() {
         return bottomTableHeight + timeTableHeight;
     }
 
     /**
      * 获取上表格最小Y
      */
-    protected float getBottomTableMinY() {
+    public float getBottomTableMinY() {
         return timeTableHeight;
     }
 
@@ -398,6 +398,10 @@ public class StockView extends View {
         return viewWidth;
     }
 
+    public int getViewHeight() {
+        return viewHeight;
+    }
+
     public float getTitleTableHeight() {
         return titleTableHeight;
     }
@@ -408,6 +412,10 @@ public class StockView extends View {
 
     public float getTimeTableHeight() {
         return timeTableHeight;
+    }
+
+    public float getBottomTableHeight() {
+        return bottomTableHeight;
     }
 
     public float getTableMargin() {
