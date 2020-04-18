@@ -3,11 +3,6 @@ package ysn.com.stockview.page;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import java.util.ArrayList;
-
-import ysn.com.stock.bean.FenShi;
-import ysn.com.stock.bean.FenShiData;
-import ysn.com.stock.bean.IFenShi;
 import ysn.com.stock.view.FenShiView;
 import ysn.com.stockview.R;
 import ysn.com.stockview.bean.FenShiTime;

@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Objects;
 
 import ysn.com.stock.R;
-import ysn.com.stock.bean.FenShi;
-import ysn.com.stock.bean.FenShiData;
+import ysn.com.stock.bean.IFenShi;
+import ysn.com.stock.bean.IFenShiData;
 
 /**
  * @Author yangsanning
@@ -229,16 +229,17 @@ public class MiniFenShiView extends StockView {
         }
     }
 
-    public void setNewData(FenShi fenShi) {
+    public <T extends IFenShi> void setNewData(T fenShi) {
         initData();
         if (fenShi != null) {
-            for (FenShiData fenShiData : fenShi.getData()) {
-                float trade = fenShiData.getTrade();
+            List<? extends IFenShiData> fenShiDataList = fenShi.getFenShiData();
+            for (IFenShiData fenShiData : fenShiDataList) {
+                float trade = fenShiData.getFenShiPrice();
                 stockPriceList.add(trade);
                 maxStockPrice = Math.max(trade, maxStockPrice);
                 minStockPrice = Math.min(trade, minStockPrice);
             }
-            lastClose = fenShi.getLastClose();
+            lastClose = fenShi.getFenShiLastClose();
         }
         initPeakPrice();
         initCurrentColor();

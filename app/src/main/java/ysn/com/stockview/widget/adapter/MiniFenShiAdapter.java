@@ -12,9 +12,9 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import ysn.com.stock.bean.FenShi;
 import ysn.com.stock.view.MiniFenShiView;
 import ysn.com.stockview.R;
+import ysn.com.stockview.bean.FenShiTime;
 
 /**
  * @Author yangsanning
@@ -25,11 +25,11 @@ import ysn.com.stockview.R;
  */
 public class MiniFenShiAdapter extends RecyclerView.Adapter<MiniFenShiAdapter.MiniFenShiHolder> {
 
-    private List<FenShi> data;
+    private List<FenShiTime> data;
     private int size;
     private LayoutInflater inflate;
 
-    public MiniFenShiAdapter(List<FenShi> data, Context context) {
+    public MiniFenShiAdapter(List<FenShiTime> data, Context context) {
         this.data = data;
         size = this.data.size();
         inflate = LayoutInflater.from(context);
@@ -44,12 +44,12 @@ public class MiniFenShiAdapter extends RecyclerView.Adapter<MiniFenShiAdapter.Mi
 
     @Override
     public void onBindViewHolder(@NonNull MiniFenShiHolder holder, int position) {
-        FenShi fenShi = data.get(position % size);
-        holder.codeTextView.setText(fenShi.getCode());
-        holder.miniFenShiView.setNewData(fenShi);
+        FenShiTime fenShiTime = data.get(position % size);
+        holder.codeTextView.setText(fenShiTime.getCode());
+        holder.miniFenShiView.setNewData(fenShiTime);
         holder.itemView.setOnClickListener(view -> {
-            Toast.makeText(view.getContext(), fenShi.getCode(), Toast.LENGTH_SHORT).show();
-            Log.d("test", fenShi.getCode());
+            Toast.makeText(view.getContext(), fenShiTime.getCode(), Toast.LENGTH_SHORT).show();
+            Log.d("test", fenShiTime.getCode());
         });
     }
 
