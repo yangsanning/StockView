@@ -75,7 +75,11 @@ public class FenShiSlideHelper {
 
     public boolean onTouchEvent(MotionEvent event) {
         float x = event.getX();
-        float y = event.getY();
+        /**
+         * 因圆点是(0,topTableHeight), 为了方便计算, 这里也以圆点为中心
+         * 圆点坐标更改: {@link ysn.com.stock.view.StockView#onDraw(Canvas)}
+         */
+        float y = event.getY() - getTopTableHeight();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 slideX = x;
@@ -139,25 +143,22 @@ public class FenShiSlideHelper {
         }
 
         // 分别对有下表格情况以及没有下表格情况进程处理
-        if (hasBottomTable() && slideY - getTopTableHeight() > 0) {
+        if (hasBottomTable() && slideY > 0) {
             // 滑动线Y坐标
-            float realSlideY = slideY - getTopTableHeight();
-            if (realSlideY <= getBottomTableMinY() + textRectHalfHeight) {
+            if (slideY <= getBottomTableMinY() + textRectHalfHeight) {
                 slideLineY = getBottomTableMinY() + textRectHalfHeight;
             } else {
-                slideLineY = Math.min(realSlideY, getBottomTableMaxY() - textRectHalfHeight);
+                slideLineY = Math.min(slideY, getBottomTableMaxY() - textRectHalfHeight);
             }
 
             // 滑动显示的值
             slideValue = getSlipPriceVolume();
         } else {
             // 滑动线Y坐标
-            if (slideY <= textRectHalfHeight) {
-                slideLineY = textRectHalfHeight - getTopTableHeight();
-            } else if (slideY + textRectHalfHeight - getTopTableHeight() >= 0) {
-                slideLineY = -textRectHalfHeight - 1;
+            if (slideY > -textRectHalfHeight) {
+                slideLineY = -textRectHalfHeight;
             } else {
-                slideLineY = slideY - getTopTableHeight();
+                slideLineY = Math.max(slideY, getTopTableMaxY() + textRectHalfHeight);
             }
 
             // 滑动显示的值
@@ -215,12 +216,13 @@ public class FenShiSlideHelper {
      * 获取滑动价格
      */
     private String getSlipPriceValue() {
-        if (slideY <= getTitleTableHeight()) {
+        if (slideY < getTopTableMaxY()) {
             return NumberUtils.decimalFormat(maxStockPrice);
-        } else if (slideY >= getTitleTableHeight() + getTopTableHeight()) {
+        } else if (slideY > -textRectHalfHeight) {
             return NumberUtils.decimalFormat(minStockPrice);
         }
-        return NumberUtils.decimalFormat((maxStockPrice - (slideY - getTitleTableHeight()) / getTopTableHeight() * (maxStockPrice - minStockPrice)));
+        float volumeY = (Math.abs(slideY) * (maxStockPrice - minStockPrice)) / getTopTableHeight() + minStockPrice;
+        return NumberUtils.decimalFormat(volumeY);
     }
 
     /**
@@ -228,15 +230,15 @@ public class FenShiSlideHelper {
      */
     private String getSlipPriceVolume() {
         float max = maxStockVolume / 100;
-        if (slideY - getTopTableHeight() < getBottomTableMinY()) {
+        float bottomTableMinY = getBottomTableMinY();
+        if (slideY < bottomTableMinY) {
             return NumberUtils.decimalFormat(max);
-        } else if (slideY >= getViewHeight()) {
+        } else if (slideY > getBottomTableMaxY()) {
             return NumberUtils.decimalFormat(0);
         }
         float bottomTableHeight = getBottomTableHeight();
-        float h1 = bottomTableHeight - (slideY - getTopTableHeight() - getTimeTableHeight());
-        float volumeY = h1 / bottomTableHeight;
-        return NumberUtils.decimalFormat(volumeY * max);
+        float volumeY = (bottomTableHeight - (slideY - bottomTableMinY)) / bottomTableHeight * max;
+        return NumberUtils.decimalFormat(volumeY);
     }
 
     /**
@@ -265,6 +267,20 @@ public class FenShiSlideHelper {
      */
     private float getTopTableHeight() {
         return fenShiView.getTopTableHeight();
+    }
+
+    /**
+     * 获取上表格最大Y
+     */
+    public float getTopTableMaxY() {
+        return fenShiView.getTopTableMaxY();
+    }
+
+    /**
+     * 获取上表格最小Y
+     */
+    public float getTopTableMinY() {
+        return fenShiView.getTopTableMinY();
     }
 
     /**

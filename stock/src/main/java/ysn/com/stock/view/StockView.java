@@ -205,14 +205,14 @@ public class StockView extends View {
     /**
      * 获取上表格最大Y
      */
-    protected float getTopTableMaxY() {
+    public float getTopTableMaxY() {
         return (tableMargin + titleTableHeight - topTableHeight);
     }
 
     /**
      * 获取上表格最小Y
      */
-    protected float getTopTableMinY() {
+    public float getTopTableMinY() {
         return -tableMargin;
     }
 
