@@ -1,55 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:cv="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:padding="20dp"
+    android:fillViewport="true"
     tools:context=".MainActivity">
-
-    <ysn.com.stock.view.CapitalView
-        android:id="@+id/capital_activity_view1"
-        android:layout_width="match_parent"
-        android:layout_height="210dp" />
-
-    <ysn.com.stock.view.CapitalView
-        android:id="@+id/capital_activity_view2"
-        android:layout_width="match_parent"
-        android:layout_height="210dp"
-        cv:cv_in_flow_digits="3"
-        cv:cv_in_flow_unit="1000"
-        cv:cv_price_digits="2"
-        cv:cv_left_title="@string/capital_left_title"
-        cv:cv_right_title="今日资金净流入(千元)"
-        cv:cv_bg_color="@color/capital_bg"
-        cv:cv_column_line_color="@color/capital_column_line"
-        cv:cv_finance_in_flow_color="@color/capital_finance_in_flow"
-        cv:cv_main_in_flow_color="@color/capital_main_in_flow"
-        cv:cv_price_color="@color/capital_price"
-        cv:cv_retail_in_flow_color="@color/capital_retail_in_flow"
-        cv:cv_row_line_color="@color/capital_row_line"
-        cv:cv_text_color="@color/capital_text"
-        android:layout_marginTop="50dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="20dp">
 
-        <CheckBox
-            android:id="@+id/capital_activity_check_box1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="主力净流入"
-            android:textColor="@color/capital_main_in_flow" />
+        <ysn.com.stock.view.CapitalView
+            android:id="@+id/capital_activity_view1"
+            android:layout_width="match_parent"
+            android:layout_height="210dp" />
 
-        <CheckBox
-            android:id="@+id/capital_activity_check_box2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:text="散户净流入"
-            android:textColor="@color/capital_retail_in_flow" />
+        <ysn.com.stock.view.CapitalView
+            android:id="@+id/capital_activity_view2"
+            android:layout_width="match_parent"
+            android:layout_height="210dp"
+            android:layout_marginTop="50dp"
+            cv:cv_bg_color="@color/capital_bg"
+            cv:cv_column_line_color="@color/capital_column_line"
+            cv:cv_finance_in_flow_color="@color/capital_finance_in_flow"
+            cv:cv_in_flow_digits="3"
+            cv:cv_in_flow_unit="1000"
+            cv:cv_left_title="@string/capital_left_title"
+            cv:cv_main_in_flow_color="@color/capital_main_in_flow"
+            cv:cv_price_color="@color/capital_price"
+            cv:cv_price_digits="2"
+            cv:cv_retail_in_flow_color="@color/capital_retail_in_flow"
+            cv:cv_right_title="今日资金净流入(千元)"
+            cv:cv_row_line_color="@color/capital_row_line"
+            cv:cv_text_color="@color/capital_text" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <CheckBox
+                android:id="@+id/capital_activity_check_box1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="主力净流入"
+                android:textColor="@color/capital_main_in_flow" />
+
+            <CheckBox
+                android:id="@+id/capital_activity_check_box2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:text="散户净流入"
+                android:textColor="@color/capital_retail_in_flow" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</android.support.v4.widget.NestedScrollView>
