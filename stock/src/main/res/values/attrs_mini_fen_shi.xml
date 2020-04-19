@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MiniFenShiView">
+        <!-- 涨颜色-->
+        <attr name="mfsv_up_color" format="color" />
+        <!-- 跌颜色-->
+        <attr name="mfsv_down_color" format="color" />
+        <!-- 不涨不跌颜色-->
+        <attr name="mfsv_equal_color" format="color" />
+        <!-- 渐变底部颜色-->
+        <attr name="mfsv_gradient_bottom_color" format="color" />
+
+        <!-- 实线宽-->
+        <attr name="mfsv_stroke_width" format="dimension" />
+        <!-- 价格区域透明度-->
+        <attr name="mfsv_area_alpha" format="integer" />
+        <!-- 虚线宽-->
+        <attr name="mfsv_dotted_line_width" format="dimension" />
+        <!-- 虚线间距-->
+        <attr name="mfsv_dotted_line_space" format="dimension" />
+    </declare-styleable>
+</resources>

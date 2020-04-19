@@ -55,7 +55,7 @@ public class MiniFenShiView extends StockView {
     private int currentColor;
 
     private int strokeWidth;
-    private int alpha;
+    private int areaAlpha;
 
     private PathEffect pathEffect;
 
@@ -81,13 +81,13 @@ public class MiniFenShiView extends StockView {
         super.initAttr(attrs);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.MiniFenShiView);
 
-        upColor = typedArray.getColor(R.styleable.MiniFenShiView_mfsv_up, getColor(R.color.mini_fen_shi_up));
-        downColor = typedArray.getColor(R.styleable.MiniFenShiView_mfsv_down, getColor(R.color.mini_fen_shi_down));
-        equalColor = typedArray.getColor(R.styleable.MiniFenShiView_mfsv_equal, getColor(R.color.mini_fen_shi_equal));
-        gradientBottomColor = typedArray.getColor(R.styleable.MiniFenShiView_mfsv_gradient_bottom, getColor(R.color.mini_fen_shi_gradient_bottom));
+        upColor = typedArray.getColor(R.styleable.MiniFenShiView_mfsv_up_color, getColor(R.color.mini_fen_shi_up));
+        downColor = typedArray.getColor(R.styleable.MiniFenShiView_mfsv_down_color, getColor(R.color.mini_fen_shi_down));
+        equalColor = typedArray.getColor(R.styleable.MiniFenShiView_mfsv_equal_color, getColor(R.color.mini_fen_shi_equal));
+        gradientBottomColor = typedArray.getColor(R.styleable.MiniFenShiView_mfsv_gradient_bottom_color, getColor(R.color.mini_fen_shi_gradient_bottom));
 
         strokeWidth = typedArray.getDimensionPixelSize(R.styleable.MiniFenShiView_mfsv_stroke_width, 4);
-        alpha = typedArray.getDimensionPixelSize(R.styleable.MiniFenShiView_mfsv_alpha, 150);
+        areaAlpha = typedArray.getDimensionPixelSize(R.styleable.MiniFenShiView_mfsv_area_alpha, 150);
 
         int dottedWidth = typedArray.getDimensionPixelSize(R.styleable.MiniFenShiView_mfsv_dotted_line_width, 20);
         int dottedSpace = typedArray.getDimensionPixelSize(R.styleable.MiniFenShiView_mfsv_dotted_line_space, 20);
@@ -110,7 +110,7 @@ public class MiniFenShiView extends StockView {
         priceAreaPath = new Path();
         priceAreaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         priceAreaPaint.setStyle(Paint.Style.FILL);
-        priceAreaPaint.setAlpha(alpha);
+        priceAreaPaint.setAlpha(areaAlpha);
 
         dottedLinePaint.setPathEffect(pathEffect);
     }
