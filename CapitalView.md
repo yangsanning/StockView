@@ -4,7 +4,7 @@
 
 | [CapitalView]                   | 
 | ------------------------------- | 
-| <img src="images/capitalview.gif" height="512" /> |
+| <img src="images/capitalview.png" height="512" /> |
 
 
 ## 主要文件
