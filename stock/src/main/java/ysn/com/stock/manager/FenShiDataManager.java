@@ -4,6 +4,7 @@ import android.support.annotation.IntRange;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import ysn.com.stock.bean.IFenShi;
@@ -175,6 +176,14 @@ public class FenShiDataManager {
         return volumeList.size();
     }
 
+    public float getMaxPrice() {
+        return maxPrice;
+    }
+
+    public float getMaxVolume() {
+        return maxVolume;
+    }
+
     /**
      * 设置数据
      */
@@ -229,9 +238,7 @@ public class FenShiDataManager {
         percent = decimalFormat.format(((maxPrice - lastClose) / lastClose * 100)) + "%";
 
         // 找到最大成交量
-        for (Float stockVolume : volumeList) {
-            maxVolume = Math.max(maxVolume, stockVolume);
-        }
+        maxVolume = Collections.max(volumeList);
 
         maxVolumeString = NumberUtils.getVolume((int) maxVolume / 100);
         centreVolumeString = NumberUtils.getVolume((int) maxVolume / 200);

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="FiveDayFenShiView">
+        <!--价格线宽度-->
+        <attr name="fdfsv_price_stroke_width" format="dimension|reference" />
+
+        <!--心脏半径-->
+        <attr name="fdfsv_heart_radius" format="dimension|reference" />
+
+        <!--心脏直径-->
+        <attr name="fdfsv_heart_diameter" format="dimension|reference" />
+
+        <!--初始透明度-->
+        <attr name="fdfsv_heart_init_alpha" format="integer" />
+
+        <!--心率-->
+        <attr name="fdfsv_heart_beat_rate" format="integer" />
+
+        <!--心跳动画时间-->
+        <attr name="fdfsv_heart_beat_fraction_rate" format="integer" />
+
+        <!--是否启用下表格-->
+        <attr name="fdfsv_is_enabled_bottom_tab" format="boolean" />
+
+        <!--是否启用滑动-->
+        <attr name="fdfsv_is_enabled_slide" format="boolean" />
+    </declare-styleable>
+</resources>

@@ -2,6 +2,7 @@
     <string name="app_name">股票控件</string>
 
     <string name="text_fen_shi">普通分时图</string>
+    <string name="text_five_day_fen_shi">五日分时图</string>
     <string name="text_capital">资金趋势图</string>
     <string name="text_mini_fen_shi">迷你分时图</string>
 
