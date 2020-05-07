@@ -1,7 +1,9 @@
 package ysn.com.stock.manager;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import ysn.com.stock.bean.IFenShi;
 import ysn.com.stock.utils.NumberUtils;
@@ -21,6 +23,7 @@ public class FiveDayFenShiDataManager {
     public FenShiDataManager dataManager3;
     public FenShiDataManager dataManager4;
     public FenShiDataManager dataManager5;
+    private List<FenShiDataManager> dataManagerList = new ArrayList<>();
 
     /**
      * 昨收(中间坐标值)
@@ -94,27 +97,63 @@ public class FiveDayFenShiDataManager {
             date = TimeUtils.string2Date(fenShi.getFenShiData().get(0).getFenShiTime());
             lastClose = dataManager5.lastClose;
 
-            maxPrice = 0;
-            maxPrice = Math.max(maxPrice, dataManager1.getMaxPrice());
-            maxPrice = Math.max(maxPrice, dataManager2.getMaxPrice());
-            maxPrice = Math.max(maxPrice, dataManager3.getMaxPrice());
-            maxPrice = Math.max(maxPrice, dataManager4.getMaxPrice());
-            maxPrice = Math.max(maxPrice, dataManager5.getMaxPrice());
-
-            minPrice = lastClose * 2 - maxPrice;
-
-            maxVolume = 0;
-            maxVolume = Math.max(maxVolume, dataManager1.getMaxVolume());
-            maxVolume = Math.max(maxVolume, dataManager2.getMaxVolume());
-            maxVolume = Math.max(maxVolume, dataManager3.getMaxVolume());
-            maxVolume = Math.max(maxVolume, dataManager4.getMaxVolume());
-            maxVolume = Math.max(maxVolume, dataManager5.getMaxVolume());
-
-            // 百分比坐标值
-            percent = decimalFormat.format(((maxPrice - lastClose) / lastClose * 100)) + "%";
-
-            maxVolumeString = NumberUtils.getVolume((int) maxVolume / 100);
-            centreVolumeString = NumberUtils.getVolume((int) maxVolume / 200);
+            initDataManagerList();
+            initData();
         }
+    }
+
+    /**
+     * 过滤掉没有数据的 dataManager
+     */
+    private void initDataManagerList() {
+        dataManagerList.clear();
+        if (!dataManager1.isPriceEmpty()) {
+            dataManagerList.add(dataManager1);
+        }
+        if (!dataManager2.isPriceEmpty()) {
+            dataManagerList.add(dataManager2);
+        }
+        if (!dataManager3.isPriceEmpty()) {
+            dataManagerList.add(dataManager3);
+        }
+        if (!dataManager4.isPriceEmpty()) {
+            dataManagerList.add(dataManager4);
+        }
+        if (!dataManager5.isPriceEmpty()) {
+            dataManagerList.add(dataManager5);
+        }
+    }
+
+    private void initData() {
+        FenShiDataManager fenShiDataManager = dataManagerList.get(0);
+        maxPrice = fenShiDataManager.maxPrice;
+        minPrice = fenShiDataManager.minPrice;
+        maxVolume = fenShiDataManager.maxVolume;
+
+        for (int i = 1; i < dataManagerList.size(); i++) {
+            FenShiDataManager dataManager = dataManagerList.get(i);
+            maxPrice = Math.max(maxPrice, dataManager.maxPrice);
+            minPrice = Math.min(minPrice, dataManager.minPrice);
+            maxVolume = Math.max(maxVolume, dataManager.maxVolume);
+        }
+
+        if (Math.abs(minPrice - lastClose) > Math.abs(maxPrice - lastClose)) {
+            float temp = maxPrice;
+            maxPrice = minPrice;
+            minPrice = temp;
+        }
+
+        if (maxPrice > lastClose) {
+            minPrice = lastClose * 2 - maxPrice;
+        } else {
+            minPrice = maxPrice;
+            maxPrice = lastClose * 2 - maxPrice;
+        }
+
+        // 百分比坐标值
+        percent = decimalFormat.format(((maxPrice - lastClose) / lastClose * 100)) + "%";
+
+        maxVolumeString = NumberUtils.getVolume((int) maxVolume / 100);
+        centreVolumeString = NumberUtils.getVolume((int) maxVolume / 200);
     }
 }

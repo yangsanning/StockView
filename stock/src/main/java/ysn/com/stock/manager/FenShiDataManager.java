@@ -176,14 +176,6 @@ public class FenShiDataManager {
         return volumeList.size();
     }
 
-    public float getMaxPrice() {
-        return maxPrice;
-    }
-
-    public float getMaxVolume() {
-        return maxVolume;
-    }
-
     /**
      * 设置数据
      */
