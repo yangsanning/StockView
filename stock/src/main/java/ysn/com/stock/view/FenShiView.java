@@ -13,14 +13,10 @@ import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ysn.com.stock.R;
 import ysn.com.stock.bean.IFenShi;
-import ysn.com.stock.bean.IFenShiData;
+import ysn.com.stock.manager.FenShiDataManager;
 import ysn.com.stock.helper.FenShiSlideHelper;
-import ysn.com.stock.utils.NumberUtils;
 
 /**
  * @Author yangsanning
@@ -32,6 +28,8 @@ import ysn.com.stock.utils.NumberUtils;
 public class FenShiView extends StockView {
 
     private static final String[] TIME_TEXT = new String[]{"09:30", "11:30/13:00", "15:00"};
+
+    private FenShiDataManager dataManager;
 
     /**
      * 价格线宽度
@@ -50,21 +48,6 @@ public class FenShiView extends StockView {
     private int heartInitAlpha;
     private long heartBeatRate;
     private long heartBeatFractionRate;
-
-    private List<Float> stockPriceList = new ArrayList<>();
-    private List<Float> stockAvePriceList = new ArrayList<>();
-    private List<String> timeList = new ArrayList<>();
-    private float lastClose = 0.0f;
-    private float maxStockPrice = 0.0f;
-    private float minStockPrice = 0.0f;
-    private String percent = " 100%";
-
-    /**
-     * 当前交易量
-     */
-    private List<Float> stockVolumeList = new ArrayList<>();
-    private float maxStockVolume;
-    private String maxStockVolumeString = "", centreStockVolumeString = "";
 
     private Path pricePath;
     private Paint pricePaint;
@@ -109,6 +92,16 @@ public class FenShiView extends StockView {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public FenShiView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+    }
+
+    @Override
+    protected void init(AttributeSet attrs) {
+        super.init(attrs);
+        if (isEnabledSlide) {
+            fenShiSlideHelper = new FenShiSlideHelper(this);
+        }
+
+        dataManager = new FenShiDataManager(decimalFormat);
     }
 
     @Override
@@ -161,10 +154,6 @@ public class FenShiView extends StockView {
             beatFraction = (float) animation.getAnimatedValue();
             invalidate();
         });
-
-        if (isEnabledSlide) {
-            fenShiSlideHelper = new FenShiSlideHelper(this);
-        }
     }
 
     @Override
@@ -213,7 +202,7 @@ public class FenShiView extends StockView {
     protected void onChildDraw(Canvas canvas) {
         super.onChildDraw(canvas);
 
-        if (stockPriceList.isEmpty()) {
+        if (dataManager.isPriceEmpty()) {
             return;
         }
 
@@ -241,7 +230,7 @@ public class FenShiView extends StockView {
      */
     private void drawXYText(Canvas canvas) {
         // 价格最大值
-        String text = decimalFormat.format(maxStockPrice);
+        String text = decimalFormat.format(dataManager.maxPrice);
         textPaint.setColor(getColor(R.color.stock_red));
         textPaint.getTextBounds(text, (0), text.length(), textRect);
         float textMargin = getTextMargin();
@@ -249,24 +238,24 @@ public class FenShiView extends StockView {
         canvas.drawText(text, textMargin, y, textPaint);
 
         // 增幅
-        text = "+" + percent;
+        text = "+" + dataManager.percent;
         textPaint.getTextBounds(text, 0, text.length(), textRect);
         canvas.drawText(text, (viewWidth - textRect.width() - textMargin), y, textPaint);
 
         // 价格最小值
         textPaint.setColor(getColor(R.color.stock_green));
         y = getTopTableMinY() - textMargin;
-        canvas.drawText(decimalFormat.format(minStockPrice), textMargin, y, textPaint);
+        canvas.drawText(decimalFormat.format(dataManager.minPrice), textMargin, y, textPaint);
 
         // 减幅
-        text = "-" + percent;
+        text = "-" + dataManager.percent;
         textPaint.setColor(getColor(R.color.stock_green));
         textPaint.getTextBounds(text, 0, text.length(), textRect);
         canvas.drawText(text, (viewWidth - textRect.width() - textMargin), y, textPaint);
 
         // 中间坐标
         textPaint.setColor(getColor(R.color.stock_text_title));
-        text = decimalFormat.format(lastClose);
+        text = decimalFormat.format(dataManager.lastClose);
         canvas.drawText(text, textMargin, (-(topTableHeight - textRect.height()) / 2f), textPaint);
     }
 
@@ -274,18 +263,18 @@ public class FenShiView extends StockView {
      * 绘制价格、价格区域、均线、闪烁点
      */
     private void drawPriceLine(Canvas canvas) {
-        float price = stockPriceList.get(0);
+        float price = dataManager.getPrice(0);
         pricePath.moveTo(tableMargin, getY(price));
         priceAreaPath.moveTo(tableMargin, getTopTableMinY());
         priceAreaPath.lineTo(tableMargin, getY(price));
-        avePricePath.moveTo(tableMargin, getY(stockAvePriceList.get(0)));
-        for (int i = 1; i < stockPriceList.size(); i++) {
-            price = stockPriceList.get(i);
+        avePricePath.moveTo(tableMargin, getY(dataManager.getAvePrice(0)));
+        for (int i = 1; i < dataManager.priceSize(); i++) {
+            price = dataManager.getPrice(i);
             pricePath.lineTo(getX(i), getY(price));
             priceAreaPath.lineTo(getX(i), getY(price));
-            avePricePath.lineTo(getX(i), getY(stockAvePriceList.get(i)));
+            avePricePath.lineTo(getX(i), getY(dataManager.getAvePrice(i)));
 
-            if (isBeat && i == stockPriceList.size() - 1) {
+            if (isBeat && dataManager.isLastPrice(i)) {
                 //绘制扩散圆
                 heartPaint.setColor(getColor(R.color.stock_price_line));
                 heartPaint.setAlpha((int) (heartInitAlpha - heartInitAlpha * beatFraction));
@@ -296,7 +285,7 @@ public class FenShiView extends StockView {
                 canvas.drawCircle(getX(i), getY(price), heartRadius, heartPaint);
             }
         }
-        priceAreaPath.lineTo(getX((stockPriceList.size() - 1)), getTopTableMinY());
+        priceAreaPath.lineTo(getX(dataManager.getLastPricePosition()), getTopTableMinY());
         priceAreaPath.close();
 
         canvas.drawPath(pricePath, pricePaint);
@@ -313,13 +302,13 @@ public class FenShiView extends StockView {
      */
     private void drawBottomXYText(Canvas canvas) {
         // 下表格最大量
-        textPaint.getTextBounds(maxStockVolumeString, 0, maxStockVolumeString.length(), textRect);
+        textPaint.getTextBounds(dataManager.maxVolumeString, 0, dataManager.maxVolumeString.length(), textRect);
         float x = viewWidth - tableMargin - xYTextMargin - textRect.width();
-        canvas.drawText(maxStockVolumeString, x, (getBottomTableMinY() + textRect.height() + xYTextMargin), textPaint);
+        canvas.drawText(dataManager.maxVolumeString, x, (getBottomTableMinY() + textRect.height() + xYTextMargin), textPaint);
 
         // 下表格中间值
-        textPaint.getTextBounds(centreStockVolumeString, 0, centreStockVolumeString.length(), textRect);
-        canvas.drawText(centreStockVolumeString, x, (getBottomTableMinY() + (bottomTableHeight + textRect.height()) / 2), textPaint);
+        textPaint.getTextBounds(dataManager.centreVolumeString, 0, dataManager.centreVolumeString.length(), textRect);
+        canvas.drawText(dataManager.centreVolumeString, x, (getBottomTableMinY() + (bottomTableHeight + textRect.height()) / 2), textPaint);
     }
 
     /**
@@ -330,15 +319,15 @@ public class FenShiView extends StockView {
         float columnSpace = (viewWidth - (tableMargin * 2) - (totalCount * 1f)) / totalCount;
         Paint paint = new Paint();
         paint.setStrokeWidth(columnSpace);
-        for (int i = 0; i < stockPriceList.size() - 1; i++) {
+        for (int i = 0; i < dataManager.priceSize() - 1; i++) {
             if (i == 0) {
-                paint.setColor(getColor(stockPriceList.get(i) >= lastClose ? R.color.stock_red : R.color.stock_green));
+                paint.setColor(getColor(dataManager.getPrice(i) >= dataManager.lastClose ? R.color.stock_red : R.color.stock_green));
             } else {
-                paint.setColor(getColor(stockPriceList.get(i) >= stockPriceList.get(i - 1) ? R.color.stock_red : R.color.stock_green));
+                paint.setColor(getColor(dataManager.getPrice(i) >= dataManager.getPrice(i - 1) ? R.color.stock_red : R.color.stock_green));
             }
             float lineX = tableMargin + (columnSpace * i) + (i * 1f) + 1;
             float maxHeight = (bottomTableHeight - 1) * 0.95f;
-            float stopY = getBottomTableMaxY() - (stockVolumeList.get(i) * maxHeight) / maxStockVolume;
+            float stopY = getBottomTableMaxY() - (dataManager.getVolume(i) * maxHeight) / dataManager.maxVolume;
             canvas.drawLine(lineX, getBottomTableMaxY(), lineX, stopY, paint);
         }
         paint.reset();
@@ -351,86 +340,32 @@ public class FenShiView extends StockView {
      * @return 价格线的y轴坐标
      */
     private float getY(float price) {
-        return getY(price, minStockPrice, maxStockPrice);
+        return getY(price, dataManager.minPrice, dataManager.maxPrice);
     }
 
     public <T extends IFenShi> void setData(T fenShi) {
-        if (fenShi != null) {
-            stockPriceList.clear();
-            stockAvePriceList.clear();
-            timeList.clear();
-            stockVolumeList.clear();
-            List<? extends IFenShiData> fenShiData = fenShi.getFenShiData();
-            for (int i = 0; i < fenShiData.size(); i++) {
-                addStockPrice(fenShiData.get(i).getFenShiPrice(), i);
-                stockAvePriceList.add(fenShiData.get(i).getFenShiAvgPrice());
-                timeList.add(fenShiData.get(i).getFenShiTime().substring(8, 10) + ":" + fenShiData.get(i).getFenShiTime().substring(10));
-                stockVolumeList.add(fenShiData.get(i).getFenShiVolume());
-            }
-            lastClose = fenShi.getFenShiLastClose();
-            initData();
+        dataManager.setData(fenShi);
+
+        if (fenShiSlideHelper != null) {
+            fenShiSlideHelper.setPrice(dataManager.priceList, dataManager.maxPrice, dataManager.minPrice)
+                    .setTimeList(dataManager.timeList)
+                    .setMaxStockVolume(dataManager.maxVolume);
         }
         invalidate();
         startBeat();
     }
 
-    private void addStockPrice(float trade, int position) {
-        stockPriceList.add(trade);
-
-        if (position == 0) {
-            maxStockPrice = trade;
-            minStockPrice = trade;
-        }
-
-        if (maxStockPrice < trade) {
-            maxStockPrice = trade;
-        } else if (minStockPrice > trade) {
-            minStockPrice = trade;
-        }
-    }
-
-    private void initData() {
-        if (Math.abs(minStockPrice - lastClose) > Math.abs(maxStockPrice - lastClose)) {
-            float temp = maxStockPrice;
-            maxStockPrice = minStockPrice;
-            minStockPrice = temp;
-        }
-
-        if (maxStockPrice > lastClose) {
-            minStockPrice = lastClose * 2 - maxStockPrice;
-        } else {
-            minStockPrice = maxStockPrice;
-            maxStockPrice = lastClose * 2 - maxStockPrice;
-        }
-
-        // 百分比坐标值
-        percent = decimalFormat.format(((maxStockPrice - lastClose) / lastClose * 100)) + "%";
-
-        // 找到最大成交量
-        for (Float stockVolume : stockVolumeList) {
-            maxStockVolume = Math.max(maxStockVolume, stockVolume);
-        }
-
-        maxStockVolumeString = NumberUtils.getVolume((int) maxStockVolume / 100);
-        centreStockVolumeString = NumberUtils.getVolume((int) maxStockVolume / 200);
-
-        if (fenShiSlideHelper != null) {
-            fenShiSlideHelper.setPrice(stockPriceList, maxStockPrice, minStockPrice)
-                    .setTimeList(timeList)
-                    .setMaxStockVolume(maxStockVolume);
-        }
-    }
-
     public void startBeat() {
         stopBeat();
-        if (!timeList.isEmpty() && isBeatTime()) {
+        if (dataManager.isTimeNotEmpty() && isBeatTime()) {
             isBeat = true;
             beatHandler.post(beatRunnable);
         }
     }
 
     private boolean isBeatTime() {
-        return !"11:30".equals(timeList.get(timeList.size() - 1)) && !"15:00".equals(timeList.get(timeList.size() - 1));
+        String lastTime = dataManager.getLastTime();
+        return !"11:30".equals(lastTime) && !"15:00".equals(lastTime);
     }
 
     public void stopBeat() {
