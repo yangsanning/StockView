@@ -1,11 +1,11 @@
 package ysn.com.stock.manager;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
 import ysn.com.stock.bean.IFenShi;
 import ysn.com.stock.utils.NumberUtils;
+import ysn.com.stock.utils.TimeUtils;
 
 /**
  * @Author yangsanning
@@ -43,11 +43,6 @@ public class FiveDayFenShiDataManager {
     public String percent = " 100%";
 
     /**
-     * 当前交易量
-     */
-    public List<Float> volumeList = new ArrayList<>();
-
-    /**
      * 最大交易量
      */
     public float maxVolume;
@@ -61,6 +56,11 @@ public class FiveDayFenShiDataManager {
      * 交易量中间坐标
      */
     public String centreVolumeString = "";
+
+    /**
+     * 最新一天
+     */
+    public Date date;
 
     public FiveDayFenShiDataManager(DecimalFormat decimalFormat) {
         dataManager1 = new FenShiDataManager(decimalFormat);
@@ -88,48 +88,33 @@ public class FiveDayFenShiDataManager {
     }
 
     public <T extends IFenShi> void setData5(T fenShi) {
-        dataManager5.setData(fenShi);
-        initPeak();
-    }
+        if (fenShi != null) {
+            dataManager5.setData(fenShi);
 
-    private void initPeak() {
-        maxPrice = 0;
-        maxPrice = Math.max(maxPrice, dataManager1.getMaxPrice());
-        maxPrice = Math.max(maxPrice, dataManager2.getMaxPrice());
-        maxPrice = Math.max(maxPrice, dataManager3.getMaxPrice());
-        maxPrice = Math.max(maxPrice, dataManager4.getMaxPrice());
-        maxPrice = Math.max(maxPrice, dataManager5.getMaxPrice());
+            date = TimeUtils.string2Date(fenShi.getFenShiData().get(0).getFenShiTime());
+            lastClose = dataManager5.lastClose;
 
-        minPrice = dataManager5.lastClose * 2 - maxPrice;
+            maxPrice = 0;
+            maxPrice = Math.max(maxPrice, dataManager1.getMaxPrice());
+            maxPrice = Math.max(maxPrice, dataManager2.getMaxPrice());
+            maxPrice = Math.max(maxPrice, dataManager3.getMaxPrice());
+            maxPrice = Math.max(maxPrice, dataManager4.getMaxPrice());
+            maxPrice = Math.max(maxPrice, dataManager5.getMaxPrice());
 
-        maxVolume = 0;
-        maxVolume = Math.max(maxVolume, dataManager1.getMaxVolume());
-        maxVolume = Math.max(maxVolume, dataManager2.getMaxVolume());
-        maxVolume = Math.max(maxVolume, dataManager3.getMaxVolume());
-        maxVolume = Math.max(maxVolume, dataManager4.getMaxVolume());
-        maxVolume = Math.max(maxVolume, dataManager5.getMaxVolume());
-
-        initData();
-    }
-
-    private void initData() {
-        if (Math.abs(minPrice - lastClose) > Math.abs(maxPrice - lastClose)) {
-            float temp = maxPrice;
-            maxPrice = minPrice;
-            minPrice = temp;
-        }
-
-        if (maxPrice > lastClose) {
             minPrice = lastClose * 2 - maxPrice;
-        } else {
-            minPrice = maxPrice;
-            maxPrice = lastClose * 2 - maxPrice;
+
+            maxVolume = 0;
+            maxVolume = Math.max(maxVolume, dataManager1.getMaxVolume());
+            maxVolume = Math.max(maxVolume, dataManager2.getMaxVolume());
+            maxVolume = Math.max(maxVolume, dataManager3.getMaxVolume());
+            maxVolume = Math.max(maxVolume, dataManager4.getMaxVolume());
+            maxVolume = Math.max(maxVolume, dataManager5.getMaxVolume());
+
+            // 百分比坐标值
+            percent = decimalFormat.format(((maxPrice - lastClose) / lastClose * 100)) + "%";
+
+            maxVolumeString = NumberUtils.getVolume((int) maxVolume / 100);
+            centreVolumeString = NumberUtils.getVolume((int) maxVolume / 200);
         }
-
-        // 百分比坐标值
-        percent = decimalFormat.format(((maxPrice - lastClose) / lastClose * 100)) + "%";
-
-        maxVolumeString = NumberUtils.getVolume((int) maxVolume / 100);
-        centreVolumeString = NumberUtils.getVolume((int) maxVolume / 200);
     }
 }
