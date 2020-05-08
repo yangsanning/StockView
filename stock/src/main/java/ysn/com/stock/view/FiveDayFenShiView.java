@@ -3,13 +3,18 @@ package ysn.com.stock.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 
+import java.util.Map;
+
 import ysn.com.stock.R;
 import ysn.com.stock.bean.IFenShi;
+import ysn.com.stock.manager.FenShiDataManager;
 import ysn.com.stock.manager.FiveDayFenShiDataManager;
 import ysn.com.stock.utils.TimeUtils;
 
@@ -42,6 +47,9 @@ public class FiveDayFenShiView extends StockView {
     private boolean isEnabledBottomTable;
     private boolean isEnabledSlide;
 
+    private Path pricePath;
+    private Paint pricePaint;
+
     /**
      * 每个数据格的宽(5份)
      */
@@ -69,7 +77,7 @@ public class FiveDayFenShiView extends StockView {
     @Override
     protected void init(AttributeSet attrs) {
         super.init(attrs);
-        dataManager = new FiveDayFenShiDataManager(decimalFormat);
+        dataManager = new FiveDayFenShiDataManager(getColumnCount(), decimalFormat);
     }
 
     @Override
@@ -89,6 +97,17 @@ public class FiveDayFenShiView extends StockView {
         isEnabledSlide = typedArray.getBoolean(R.styleable.FiveDayFenShiView_fdfsv_is_enabled_slide, Boolean.FALSE);
 
         typedArray.recycle();
+    }
+
+    @Override
+    protected void initPaint() {
+        super.initPaint();
+        pricePath = new Path();
+        pricePaint = new Paint();
+        pricePaint.setColor(getColor(R.color.stock_price_line));
+        pricePaint.setAntiAlias(true);
+        pricePaint.setStyle(Paint.Style.STROKE);
+        pricePaint.setStrokeWidth(priceStrokeWidth);
     }
 
     @Override
@@ -124,12 +143,17 @@ public class FiveDayFenShiView extends StockView {
     protected void onChildDraw(Canvas canvas) {
         super.onChildDraw(canvas);
 
-        if (dataManager.dataManager5.isPriceEmpty()) {
+        if (dataManager.dataManagerList.isEmpty()) {
             return;
         }
 
         // 绘制坐标峰值
         drawXYText(canvas);
+
+        // 绘制价格曲线、闪烁点
+        for (Map.Entry<Integer, FenShiDataManager> entry : dataManager.dataManagerMap.entrySet()) {
+            drawPriceLine(canvas, entry.getValue(), entry.getKey());
+        }
 
         if (hasBottomTable()) {
             // 绘制下表格坐标
@@ -172,6 +196,46 @@ public class FiveDayFenShiView extends StockView {
     }
 
     /**
+     * 绘制价格曲线、闪烁点
+     */
+    private void drawPriceLine(Canvas canvas, FenShiDataManager dataManager, int position) {
+        float x = tableMargin + dataWidth * position;
+        float y = getY(dataManager.getPrice(0));
+        pricePath.moveTo(x, y);
+        for (int i = 1; i < dataManager.priceSize(); i++) {
+            x = getX(i) + dataWidth * position;
+            y = getY(dataManager.getPrice(i));
+            pricePath.lineTo(x, y);
+        }
+
+        canvas.drawPath(pricePath, pricePaint);
+
+        pricePath.reset();
+    }
+
+    /**
+     * 获取价格线的y轴坐标
+     *
+     * @param price 当前价格
+     * @return 价格线的y轴坐标
+     */
+    private float getY(float price) {
+        return getY(price, dataManager.minPrice, dataManager.maxPrice);
+    }
+
+    /**
+     * 获取x轴坐标
+     *
+     * @param position 当前position
+     * @return x轴坐标
+     */
+    @Override
+    public float getX(int position) {
+        return getColumnX(((dataWidth) / (float) totalCount), position);
+    }
+
+
+    /**
      * 绘制下表格坐标
      */
     private void drawBottomXYText(Canvas canvas) {
@@ -186,23 +250,23 @@ public class FiveDayFenShiView extends StockView {
     }
 
     public <T extends IFenShi> void setData1(T fenShi) {
-        dataManager.setData1(fenShi);
+        dataManager.setData(0, fenShi);
     }
 
     public <T extends IFenShi> void setData2(T fenShi) {
-        dataManager.setData2(fenShi);
+        dataManager.setData(1, fenShi);
     }
 
     public <T extends IFenShi> void setData3(T fenShi) {
-        dataManager.setData3(fenShi);
+        dataManager.setData(2, fenShi);
     }
 
     public <T extends IFenShi> void setData4(T fenShi) {
-        dataManager.setData4(fenShi);
+        dataManager.setData(3, fenShi);
     }
 
     public <T extends IFenShi> void setData5(T fenShi) {
-        dataManager.setData5(fenShi);
+        dataManager.setData(4, fenShi);
         invalidate();
     }
 }

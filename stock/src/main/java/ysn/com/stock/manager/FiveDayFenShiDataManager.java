@@ -3,6 +3,7 @@ package ysn.com.stock.manager;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import ysn.com.stock.bean.IFenShi;
@@ -18,12 +19,8 @@ import ysn.com.stock.utils.TimeUtils;
 public class FiveDayFenShiDataManager {
 
     private DecimalFormat decimalFormat;
-    public FenShiDataManager dataManager1;
-    public FenShiDataManager dataManager2;
-    public FenShiDataManager dataManager3;
-    public FenShiDataManager dataManager4;
-    public FenShiDataManager dataManager5;
-    private List<FenShiDataManager> dataManagerList = new ArrayList<>();
+    public LinkedHashMap<Integer, FenShiDataManager> dataManagerMap = new LinkedHashMap<>();
+    public List<FenShiDataManager> dataManagerList = new ArrayList<>();
 
     /**
      * 昨收(中间坐标值)
@@ -65,40 +62,27 @@ public class FiveDayFenShiDataManager {
      */
     public Date date;
 
-    public FiveDayFenShiDataManager(DecimalFormat decimalFormat) {
-        dataManager1 = new FenShiDataManager(decimalFormat);
-        dataManager2 = new FenShiDataManager(decimalFormat);
-        dataManager3 = new FenShiDataManager(decimalFormat);
-        dataManager4 = new FenShiDataManager(decimalFormat);
-        dataManager5 = new FenShiDataManager(decimalFormat);
+    public FiveDayFenShiDataManager(int count, DecimalFormat decimalFormat) {
+        for (int i = 0; i < count; i++) {
+            dataManagerMap.put(i, new FenShiDataManager(decimalFormat));
+        }
         this.decimalFormat = decimalFormat;
     }
 
-    public <T extends IFenShi> void setData1(T fenShi) {
-        dataManager1.setData(fenShi);
-    }
-
-    public <T extends IFenShi> void setData2(T fenShi) {
-        dataManager2.setData(fenShi);
-    }
-
-    public <T extends IFenShi> void setData3(T fenShi) {
-        dataManager3.setData(fenShi);
-    }
-
-    public <T extends IFenShi> void setData4(T fenShi) {
-        dataManager4.setData(fenShi);
-    }
-
-    public <T extends IFenShi> void setData5(T fenShi) {
-        if (fenShi != null) {
-            dataManager5.setData(fenShi);
+    public <T extends IFenShi> void setData(int position, T fenShi) {
+        if (fenShi == null) {
+            return;
+        }
+        FenShiDataManager dataManager = dataManagerMap.get(position);
+        if (dataManagerMap.size() - 1 == position) {
+            dataManager.setData(fenShi);
 
             date = TimeUtils.string2Date(fenShi.getFenShiData().get(0).getFenShiTime());
-            lastClose = dataManager5.lastClose;
-
+            lastClose = dataManager.lastClose;
             initDataManagerList();
             initData();
+        } else {
+            dataManager.setData(fenShi);
         }
     }
 
@@ -107,31 +91,21 @@ public class FiveDayFenShiDataManager {
      */
     private void initDataManagerList() {
         dataManagerList.clear();
-        if (!dataManager1.isPriceEmpty()) {
-            dataManagerList.add(dataManager1);
-        }
-        if (!dataManager2.isPriceEmpty()) {
-            dataManagerList.add(dataManager2);
-        }
-        if (!dataManager3.isPriceEmpty()) {
-            dataManagerList.add(dataManager3);
-        }
-        if (!dataManager4.isPriceEmpty()) {
-            dataManagerList.add(dataManager4);
-        }
-        if (!dataManager5.isPriceEmpty()) {
-            dataManagerList.add(dataManager5);
+        for (FenShiDataManager dataManager : dataManagerMap.values()) {
+            if (!dataManager.isPriceEmpty()) {
+                dataManagerList.add(dataManager);
+            }
         }
     }
 
     private void initData() {
-        FenShiDataManager fenShiDataManager = dataManagerList.get(0);
-        maxPrice = fenShiDataManager.maxPrice;
-        minPrice = fenShiDataManager.minPrice;
-        maxVolume = fenShiDataManager.maxVolume;
+        FenShiDataManager dataManager = dataManagerList.get(0);
+        maxPrice = dataManager.maxPrice;
+        minPrice = dataManager.minPrice;
+        maxVolume = dataManager.maxVolume;
 
         for (int i = 1; i < dataManagerList.size(); i++) {
-            FenShiDataManager dataManager = dataManagerList.get(i);
+            dataManager = dataManagerList.get(i);
             maxPrice = Math.max(maxPrice, dataManager.maxPrice);
             minPrice = Math.min(minPrice, dataManager.minPrice);
             maxVolume = Math.max(maxVolume, dataManager.maxVolume);
