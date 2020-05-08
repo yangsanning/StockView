@@ -237,7 +237,9 @@ public class FenShiDataManager {
         percent = decimalFormat.format(((maxPrice - lastClose) / lastClose * 100)) + "%";
 
         // 找到最大成交量
-        maxVolume = Collections.max(volumeList);
+        if (volumeList != null && !volumeList.isEmpty()) {
+            maxVolume = Collections.max(volumeList);
+        }
 
         maxVolumeString = NumberUtils.getVolume((int) maxVolume / 100);
         centreVolumeString = NumberUtils.getVolume((int) maxVolume / 200);

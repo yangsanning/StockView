@@ -159,6 +159,11 @@ public class FiveDayFenShiView extends StockView {
         if (hasBottomTable()) {
             // 绘制下表格坐标
             drawBottomXYText(canvas);
+
+            // 绘制柱形
+            for (Map.Entry<Integer, FenShiDataManager> entry : dataManager.dataManagerMap.entrySet()) {
+                drawPillar(canvas, entry.getValue(), entry.getKey());
+            }
         }
     }
 
@@ -248,6 +253,28 @@ public class FiveDayFenShiView extends StockView {
         // 下表格中间值
         textPaint.getTextBounds(dataManager.centreVolumeString, 0, dataManager.centreVolumeString.length(), textRect);
         canvas.drawText(dataManager.centreVolumeString, x, (getBottomTableMinY() + (bottomTableHeight + textRect.height()) / 2), textPaint);
+    }
+
+    /**
+     * 绘制柱形
+     * columnSpace: 宽 - 边距 - 柱子间距(1f)
+     */
+    private void drawPillar(Canvas canvas, FenShiDataManager dataManager, int position) {
+        float columnSpace = (dataWidth - (totalCount * 1f)) / totalCount;
+        Paint paint = new Paint();
+        paint.setStrokeWidth(columnSpace);
+        for (int i = 0; i < dataManager.priceSize() - 1; i++) {
+            if (i == 0) {
+                paint.setColor(getColor(dataManager.getPrice(i) >= dataManager.lastClose ? R.color.stock_red : R.color.stock_green));
+            } else {
+                paint.setColor(getColor(dataManager.getPrice(i) >= dataManager.getPrice(i - 1) ? R.color.stock_red : R.color.stock_green));
+            }
+            float lineX = tableMargin + (columnSpace * i) + (i * 1f) + 1 + dataWidth * position;
+            float maxHeight = (bottomTableHeight - 1) * 0.95f;
+            float stopY = getBottomTableMaxY() - (dataManager.getVolume(i) * maxHeight) / dataManager.maxVolume;
+            canvas.drawLine(lineX, getBottomTableMaxY(), lineX, stopY, paint);
+        }
+        paint.reset();
     }
 
     public <T extends IFenShi> void seftData(List<T> fenShiList) {
