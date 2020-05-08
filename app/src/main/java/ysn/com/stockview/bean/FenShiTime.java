@@ -2,10 +2,12 @@ package ysn.com.stockview.bean;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
 import java.util.List;
 
 import ysn.com.stock.bean.IFenShi;
 import ysn.com.stock.bean.IFenShiData;
+import ysn.com.stock.utils.TimeUtils;
 
 /**
  * @Author yangsanning
@@ -24,13 +26,12 @@ public class FenShiTime implements IFenShi {
      */
 
     private String date;
+    @SerializedName(value = "settlement", alternate = {"preSettlement"})
     private float settlement;
     private String symbol;
     @SerializedName(value = "code", alternate = {"stockCode", "bkcode", "zscode"})
     private String code;
     private List<DataBean> data;
-    private int nodeNumber;
-    private String endTime;
 
     public String getDate() {
         return date;
@@ -72,22 +73,6 @@ public class FenShiTime implements IFenShi {
         this.settlement = settlement;
     }
 
-    public void setNodeNumber(int nodeNumber) {
-        this.nodeNumber = nodeNumber;
-    }
-
-    public int getNodeNumber() {
-        return nodeNumber;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
-
     @Override
     public String getFenShiCode() {
         return code;
@@ -103,6 +88,11 @@ public class FenShiTime implements IFenShi {
         return settlement;
     }
 
+    @Override
+    public Date getFenShiDate() {
+        return TimeUtils.string2Date(date);
+    }
+
     public static class DataBean implements IFenShiData {
         /**
          * dateTime : 201808140930
@@ -110,8 +100,9 @@ public class FenShiTime implements IFenShi {
          * volume : 2693903
          */
 
-        @SerializedName(value = "dateTime", alternate = {"realDateTime"})
+        @SerializedName(value = "dateTime", alternate = {"realDateTime", "date"})
         private String dateTime;
+        @SerializedName(value = "trade", alternate = {"close"})
         private float trade;
         private float avgPrice;
         private float volume;

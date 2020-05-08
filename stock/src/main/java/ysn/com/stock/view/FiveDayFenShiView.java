@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 
+import java.util.List;
 import java.util.Map;
 
 import ysn.com.stock.R;
@@ -132,8 +133,8 @@ public class FiveDayFenShiView extends StockView {
         textPaint.setColor(getColor(R.color.stock_text_title));
 
         // 绘制时间坐标
-        for (int i = 0; i < getColumnCount(); i++) {
-            String text = TimeUtils.getReduceDataString(dataManager.date, i);
+        for (int i = 0; i < dataManager.dateList.size(); i++) {
+            String text = TimeUtils.formatDay(dataManager.dateList.get(i).getTime());
             textPaint.getTextBounds(text, (0), text.length(), textRect);
             canvas.drawText(text, (dataWidth * i + (dataWidth - textRect.width()) / 2f), getTimeTextY(), textPaint);
         }
@@ -249,24 +250,8 @@ public class FiveDayFenShiView extends StockView {
         canvas.drawText(dataManager.centreVolumeString, x, (getBottomTableMinY() + (bottomTableHeight + textRect.height()) / 2), textPaint);
     }
 
-    public <T extends IFenShi> void setData1(T fenShi) {
-        dataManager.setData(0, fenShi);
-    }
-
-    public <T extends IFenShi> void setData2(T fenShi) {
-        dataManager.setData(1, fenShi);
-    }
-
-    public <T extends IFenShi> void setData3(T fenShi) {
-        dataManager.setData(2, fenShi);
-    }
-
-    public <T extends IFenShi> void setData4(T fenShi) {
-        dataManager.setData(3, fenShi);
-    }
-
-    public <T extends IFenShi> void setData5(T fenShi) {
-        dataManager.setData(4, fenShi);
+    public <T extends IFenShi> void seftData(List<T> fenShiList) {
+        dataManager.setData(fenShiList);
         invalidate();
     }
 }

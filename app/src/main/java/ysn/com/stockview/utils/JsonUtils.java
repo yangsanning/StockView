@@ -4,10 +4,15 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Scanner;
+
+import ysn.com.stock.bean.IFenShi;
+import ysn.com.stockview.bean.FenShiTime;
 
 /**
  * @Author yangsanning
@@ -31,6 +36,27 @@ public class JsonUtils {
         try {
             inputStream = context.getAssets().open(fileName);
             return new Gson().fromJson(convertStreamToString(inputStream), classOfT);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 获取去最原始的数据信息
+     *
+     * @return json data
+     */
+    public static List<FenShiTime> getDataList(Context context, String fileName) {
+        if (TextUtils.isEmpty(fileName)) {
+            return null;
+        }
+        InputStream inputStream = null;
+        try {
+            inputStream = context.getAssets().open(fileName);
+
+            return new Gson().fromJson(convertStreamToString(inputStream), new TypeToken<List<FenShiTime>>() {
+            }.getType());
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -23,6 +23,11 @@ public class FiveDayFenShiDataManager {
     public List<FenShiDataManager> dataManagerList = new ArrayList<>();
 
     /**
+     * 时间坐标
+     */
+    public List<Date> dateList = new ArrayList<>();
+
+    /**
      * 昨收(中间坐标值)
      */
     public float lastClose = 0.0f;
@@ -57,11 +62,6 @@ public class FiveDayFenShiDataManager {
      */
     public String centreVolumeString = "";
 
-    /**
-     * 最新一天
-     */
-    public Date date;
-
     public FiveDayFenShiDataManager(int count, DecimalFormat decimalFormat) {
         for (int i = 0; i < count; i++) {
             dataManagerMap.put(i, new FenShiDataManager(decimalFormat));
@@ -69,21 +69,19 @@ public class FiveDayFenShiDataManager {
         this.decimalFormat = decimalFormat;
     }
 
-    public <T extends IFenShi> void setData(int position, T fenShi) {
-        if (fenShi == null) {
-            return;
+    public <T extends IFenShi> void setData(List<T> fenShiList) {
+        int mapSize = dataManagerMap.values().size();
+        for (int i = mapSize - 1; i >= 0; i--) {
+            int dValue = i - mapSize + fenShiList.size();
+            if (dValue < 0) {
+                break;
+            } else {
+                dataManagerMap.get(i).setData(fenShiList.get(dValue));
+            }
         }
-        FenShiDataManager dataManager = dataManagerMap.get(position);
-        if (dataManagerMap.size() - 1 == position) {
-            dataManager.setData(fenShi);
-
-            date = TimeUtils.string2Date(fenShi.getFenShiData().get(0).getFenShiTime());
-            lastClose = dataManager.lastClose;
-            initDataManagerList();
-            initData();
-        } else {
-            dataManager.setData(fenShi);
-        }
+        lastClose = fenShiList.get(fenShiList.size() - 1).getFenShiLastClose();
+        initDataManagerList();
+        initData();
     }
 
     /**
@@ -91,10 +89,17 @@ public class FiveDayFenShiDataManager {
      */
     private void initDataManagerList() {
         dataManagerList.clear();
-        for (FenShiDataManager dataManager : dataManagerMap.values()) {
+        for (int i = 0; i < dataManagerMap.size(); i++) {
+            FenShiDataManager dataManager = dataManagerMap.get(i);
             if (!dataManager.isPriceEmpty()) {
                 dataManagerList.add(dataManager);
             }
+
+            // 记录时间
+            if (dataManager.date == null && i + 1 < dataManagerMap.size()) {
+                dataManager.date = TimeUtils.reduceDay(dataManagerMap.get(i + 1).date, 1);
+            }
+            dateList.add(dataManager.date);
         }
     }
 

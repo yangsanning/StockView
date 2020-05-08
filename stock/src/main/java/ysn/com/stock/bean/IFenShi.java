@@ -1,5 +1,6 @@
 package ysn.com.stock.bean;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,4 +25,9 @@ public interface IFenShi {
      * 昨日收盘价
      */
     float getFenShiLastClose();
+
+    /**
+     * 分时日期
+     */
+    Date getFenShiDate();
 }

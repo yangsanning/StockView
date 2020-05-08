@@ -5,6 +5,7 @@ import android.support.annotation.IntRange;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import ysn.com.stock.bean.IFenShi;
@@ -75,6 +76,11 @@ public class FenShiDataManager {
      * 交易量中间坐标
      */
     public String centreVolumeString = "";
+
+    /**
+     * 当前数据的时间
+     */
+    public Date date;
 
     public FenShiDataManager(DecimalFormat decimalFormat) {
         this.decimalFormat = decimalFormat;
@@ -193,6 +199,7 @@ public class FenShiDataManager {
                 volumeList.add(fenShiData.get(i).getFenShiVolume());
             }
             lastClose = fenShi.getFenShiLastClose();
+            date = fenShi.getFenShiDate();
             initData();
         }
     }

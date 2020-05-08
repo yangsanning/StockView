@@ -3,7 +3,8 @@ package ysn.com.stockview.page;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import ysn.com.stock.view.FenShiView;
+import java.util.List;
+
 import ysn.com.stock.view.FiveDayFenShiView;
 import ysn.com.stockview.R;
 import ysn.com.stockview.bean.FenShiTime;
@@ -26,10 +27,8 @@ public class FiveDayFenShiActivity extends AppCompatActivity {
         setTitle(R.string.text_five_day_fen_shi);
 
         FiveDayFenShiView fiveDayFenShiView = findViewById(R.id.five_day_fen_shi_activity_view);
-        fiveDayFenShiView.setData1(JsonUtils.getData((this), ("json/fen_shi2.json"), FenShiTime.class));
-        fiveDayFenShiView.setData2(JsonUtils.getData((this), ("json/fen_shi2.json"), FenShiTime.class));
-        fiveDayFenShiView.setData3(JsonUtils.getData((this), ("json/fen_shi2.json"), FenShiTime.class));
-        fiveDayFenShiView.setData4(JsonUtils.getData((this), ("json/fen_shi2.json"), FenShiTime.class));
-        fiveDayFenShiView.setData5(JsonUtils.getData((this), ("json/fen_shi2.json"), FenShiTime.class));
+        List<FenShiTime> dataList = JsonUtils.getDataList((this), ("json/five_day_fen_shi_top_four.json"));
+        dataList.add(JsonUtils.getData((this), ("json/five_day_fen_shi_last.json"), FenShiTime.class));
+        fiveDayFenShiView.seftData(dataList);
     }
 }
