@@ -1,11 +1,13 @@
 package ysn.com.stock.view;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Build;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
@@ -44,6 +46,24 @@ public class FiveDayFenShiView extends StockView {
     private int heartInitAlpha;
     private long heartBeatRate;
     private long heartBeatFractionRate;
+
+    /**
+     * isBeat: 是否跳动
+     * beatFraction: 变化率
+     */
+    private boolean isBeat = false;
+    private float beatFraction;
+    private Paint heartPaint;
+    private ValueAnimator beatAnimator;
+    private Handler beatHandler = new Handler();
+    private Runnable beatRunnable = new Runnable() {
+        @Override
+        public void run() {
+            beatAnimator.start();
+            invalidate();
+            beatHandler.postDelayed(this, heartBeatRate);
+        }
+    };
 
     private boolean isEnabledBottomTable;
     private boolean isEnabledSlide;
@@ -109,6 +129,14 @@ public class FiveDayFenShiView extends StockView {
         pricePaint.setAntiAlias(true);
         pricePaint.setStyle(Paint.Style.STROKE);
         pricePaint.setStrokeWidth(priceStrokeWidth);
+
+        heartPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        heartPaint.setAntiAlias(true);
+        beatAnimator = ValueAnimator.ofFloat(0, 1f).setDuration(heartBeatFractionRate);
+        beatAnimator.addUpdateListener(animation -> {
+            beatFraction = (float) animation.getAnimatedValue();
+            invalidate();
+        });
     }
 
     @Override
@@ -212,6 +240,17 @@ public class FiveDayFenShiView extends StockView {
             x = getX(i) + dataWidth * position;
             y = getY(dataManager.getPrice(i));
             pricePath.lineTo(x, y);
+
+            if (position == getColumnCount() - 1 && isBeat && dataManager.isLastPrice(i)) {
+                //绘制扩散圆
+                heartPaint.setColor(getColor(R.color.stock_price_line));
+                heartPaint.setAlpha((int) (heartInitAlpha - heartInitAlpha * beatFraction));
+                canvas.drawCircle(x, y, (heartRadius + heartDiameter * beatFraction), heartPaint);
+                // 绘制中心圆
+                heartPaint.setAlpha(255);
+                heartPaint.setColor(getColor(R.color.stock_price_line));
+                canvas.drawCircle(x, y, heartRadius, heartPaint);
+            }
         }
 
         canvas.drawPath(pricePath, pricePaint);
@@ -280,5 +319,24 @@ public class FiveDayFenShiView extends StockView {
     public <T extends IFenShi> void seftData(List<T> fenShiList) {
         dataManager.setData(fenShiList);
         invalidate();
+        startBeat();
+    }
+
+    public void startBeat() {
+        stopBeat();
+        if (dataManager.getLastDataManager().isTimeNotEmpty() && isBeatTime()) {
+            isBeat = true;
+            beatHandler.post(beatRunnable);
+        }
+    }
+
+    private boolean isBeatTime() {
+        String lastTime = dataManager.getLastDataManager().getLastTime();
+        return !"11:30".equals(lastTime) && !"15:00".equals(lastTime);
+    }
+
+    public void stopBeat() {
+        isBeat = false;
+        beatHandler.removeCallbacks(beatRunnable);
     }
 }

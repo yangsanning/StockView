@@ -135,4 +135,8 @@ public class FiveDayFenShiDataManager {
         maxVolumeString = NumberUtils.getVolume((int) maxVolume / 100);
         centreVolumeString = NumberUtils.getVolume((int) maxVolume / 200);
     }
+
+    public FenShiDataManager getLastDataManager() {
+        return dataManagerMap.get(dataManagerMap.size() - 1);
+    }
 }
