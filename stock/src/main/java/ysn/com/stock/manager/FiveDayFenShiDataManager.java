@@ -18,7 +18,7 @@ import ysn.com.stock.utils.TimeUtils;
  */
 public class FiveDayFenShiDataManager {
 
-    private DecimalFormat decimalFormat;
+    public DecimalFormat decimalFormat;
     public LinkedHashMap<Integer, FenShiDataManager> dataManagerMap = new LinkedHashMap<>();
     public List<FenShiDataManager> dataManagerList = new ArrayList<>();
 

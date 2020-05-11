@@ -18,6 +18,7 @@
             android:id="@+id/five_day_fen_shi_activity_view"
             android:layout_width="match_parent"
             android:layout_height="280dp"
-            ysn:fdfsv_is_enabled_bottom_tab="true" />
+            ysn:fdfsv_is_enabled_bottom_tab="true"
+            ysn:fdfsv_is_enabled_slide="true" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

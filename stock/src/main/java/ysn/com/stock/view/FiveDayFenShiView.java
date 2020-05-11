@@ -11,12 +11,14 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 
 import java.util.List;
 import java.util.Map;
 
 import ysn.com.stock.R;
 import ysn.com.stock.bean.IFenShi;
+import ysn.com.stock.helper.FiveDayFenShiSlideHelper;
 import ysn.com.stock.manager.FenShiDataManager;
 import ysn.com.stock.manager.FiveDayFenShiDataManager;
 import ysn.com.stock.utils.TimeUtils;
@@ -77,6 +79,7 @@ public class FiveDayFenShiView extends StockView {
     private int dataWidth;
 
     FiveDayFenShiDataManager dataManager;
+    FiveDayFenShiSlideHelper slideHelper;
 
     public FiveDayFenShiView(Context context) {
         super(context);
@@ -99,6 +102,10 @@ public class FiveDayFenShiView extends StockView {
     protected void init(AttributeSet attrs) {
         super.init(attrs);
         dataManager = new FiveDayFenShiDataManager(getColumnCount(), decimalFormat);
+
+        if (isEnabledSlide) {
+            slideHelper = new FiveDayFenShiSlideHelper(this, dataManager);
+        }
     }
 
     @Override
@@ -150,9 +157,29 @@ public class FiveDayFenShiView extends StockView {
     }
 
     @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (slideHelper != null) {
+            slideHelper.dispatchTouchEvent(event);
+        }
+        return super.dispatchTouchEvent(event);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (slideHelper != null) {
+            return slideHelper.onTouchEvent(event);
+        }
+        return super.onTouchEvent(event);
+    }
+
+    @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         dataWidth = getViewWidth() / getColumnCount();
+
+        if (slideHelper != null) {
+            slideHelper.dataWidth = dataWidth;
+        }
     }
 
     @Override
@@ -192,6 +219,10 @@ public class FiveDayFenShiView extends StockView {
             for (Map.Entry<Integer, FenShiDataManager> entry : dataManager.dataManagerMap.entrySet()) {
                 drawPillar(canvas, entry.getValue(), entry.getKey());
             }
+        }
+
+        if (slideHelper != null) {
+            slideHelper.draw(canvas);
         }
     }
 
@@ -278,7 +309,6 @@ public class FiveDayFenShiView extends StockView {
     public float getX(int position) {
         return getColumnX(((dataWidth) / (float) totalCount), position);
     }
-
 
     /**
      * 绘制下表格坐标
