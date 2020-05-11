@@ -90,6 +90,10 @@ public class FenShiDataManager {
         return priceList.isEmpty();
     }
 
+    public boolean isPriceNoEmpty() {
+        return !isPriceEmpty();
+    }
+
     public boolean isTimeEmpty() {
         return timeList.isEmpty();
     }

@@ -15,8 +15,8 @@ import android.view.MotionEvent;
 
 import ysn.com.stock.R;
 import ysn.com.stock.bean.IFenShi;
-import ysn.com.stock.manager.FenShiDataManager;
 import ysn.com.stock.helper.FenShiSlideHelper;
+import ysn.com.stock.manager.FenShiDataManager;
 
 /**
  * @Author yangsanning
@@ -97,11 +97,10 @@ public class FenShiView extends StockView {
     @Override
     protected void init(AttributeSet attrs) {
         super.init(attrs);
-        if (isEnabledSlide) {
-            fenShiSlideHelper = new FenShiSlideHelper(this);
-        }
-
         dataManager = new FenShiDataManager(decimalFormat);
+        if (isEnabledSlide) {
+            fenShiSlideHelper = new FenShiSlideHelper(this, dataManager);
+        }
     }
 
     @Override
@@ -345,12 +344,6 @@ public class FenShiView extends StockView {
 
     public <T extends IFenShi> void setData(T fenShi) {
         dataManager.setData(fenShi);
-
-        if (fenShiSlideHelper != null) {
-            fenShiSlideHelper.setPrice(dataManager.priceList, dataManager.maxPrice, dataManager.minPrice)
-                    .setTimeList(dataManager.timeList)
-                    .setMaxStockVolume(dataManager.maxVolume);
-        }
         invalidate();
         startBeat();
     }
