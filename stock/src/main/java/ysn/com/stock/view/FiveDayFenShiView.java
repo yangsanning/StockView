@@ -78,6 +78,16 @@ public class FiveDayFenShiView extends StockView {
      */
     private int dataWidth;
 
+    /**
+     * bottomTableMaxY: 下表格最大宽度
+     * pillarSpace: 柱状图间距
+     * maxPillarHeight: 柱状图绘制最大高度
+     */
+    private float bottomTableMaxY;
+    private Paint pillarPaint;
+    private float pillarSpace;
+    private float maxPillarHeight;
+
     FiveDayFenShiDataManager dataManager;
     FiveDayFenShiSlideHelper slideHelper;
 
@@ -144,6 +154,8 @@ public class FiveDayFenShiView extends StockView {
             beatFraction = (float) animation.getAnimatedValue();
             invalidate();
         });
+
+        pillarPaint = new Paint();
     }
 
     @Override
@@ -180,6 +192,20 @@ public class FiveDayFenShiView extends StockView {
         if (slideHelper != null) {
             slideHelper.dataWidth = dataWidth;
         }
+
+        // 这里对柱形图最大高度进行限制, 避免顶到时间表格难看
+        maxPillarHeight = (bottomTableHeight - 1) * 0.95f;
+        bottomTableMaxY = getBottomTableMaxY();
+        initPillarSpace();
+    }
+
+    /**
+     * 初始化柱状图间距
+     */
+    private void initPillarSpace() {
+        // pillarSpace= 宽  - 柱子间距(1f)
+        pillarSpace = (dataWidth - (totalCount * 1f)) / totalCount;
+        pillarPaint.setStrokeWidth(pillarSpace);
     }
 
     @Override
@@ -206,20 +232,23 @@ public class FiveDayFenShiView extends StockView {
         // 绘制坐标峰值
         drawXYText(canvas);
 
-        // 绘制价格曲线、闪烁点
-        for (Map.Entry<Integer, FenShiDataManager> entry : dataManager.dataManagerMap.entrySet()) {
-            drawPriceLine(canvas, entry.getValue(), entry.getKey());
-        }
-
         if (hasBottomTable()) {
-            // 绘制下表格坐标
-            drawBottomXYText(canvas);
-
             // 绘制柱形
             for (Map.Entry<Integer, FenShiDataManager> entry : dataManager.dataManagerMap.entrySet()) {
-                drawPillar(canvas, entry.getValue(), entry.getKey());
+                drawPriceLineAndPillar(canvas, entry.getValue(), entry.getKey());
+            }
+
+            // 绘制下表格坐标
+            drawBottomXYText(canvas);
+        } else {
+            // 绘制价格曲线、闪烁点
+            for (Map.Entry<Integer, FenShiDataManager> entry : dataManager.dataManagerMap.entrySet()) {
+                drawPriceLine(canvas, entry.getValue(), entry.getKey());
             }
         }
+
+        // 绘制价格曲线
+        drawPricePath(canvas);
 
         if (slideHelper != null) {
             slideHelper.draw(canvas);
@@ -261,32 +290,104 @@ public class FiveDayFenShiView extends StockView {
     }
 
     /**
+     * 绘制价格、价格区域、均线、闪烁点、柱形图
+     * 相比于{@link #drawPriceLine}多了柱形图绘制, 之所以加多一个方法是为了减少循环耗时，以及避免没必要的判断
+     */
+    private void drawPriceLineAndPillar(Canvas canvas, FenShiDataManager dataManager, int position) {
+        // 设置价格圆点（第一个点）
+        moveToPrice(dataManager, position);
+
+        // 绘制第一个点柱状图（第一个点要跟昨收做对比）
+        drawFirstPillar(canvas, dataManager, position);
+
+        for (int i = 1; i < dataManager.priceSize(); i++) {
+            // 记录后续价格点
+            lineToPrice(canvas, dataManager, position, i);
+
+            // 绘制后续柱形图
+            drawPillar(canvas, dataManager, position, i);
+        }
+    }
+
+    /**
      * 绘制价格曲线、闪烁点
      */
     private void drawPriceLine(Canvas canvas, FenShiDataManager dataManager, int position) {
-        float x = tableMargin + dataWidth * position;
-        float y = getY(dataManager.getPrice(0));
-        pricePath.moveTo(x, y);
+        // 设置价格圆点（第一个点）
+        moveToPrice(dataManager, position);
         for (int i = 1; i < dataManager.priceSize(); i++) {
-            x = getX(i) + dataWidth * position;
-            y = getY(dataManager.getPrice(i));
-            pricePath.lineTo(x, y);
-
-            if (position == getColumnCount() - 1 && isBeat && dataManager.isLastPrice(i)) {
-                //绘制扩散圆
-                heartPaint.setColor(getColor(R.color.stock_price_line));
-                heartPaint.setAlpha((int) (heartInitAlpha - heartInitAlpha * beatFraction));
-                canvas.drawCircle(x, y, (heartRadius + heartDiameter * beatFraction), heartPaint);
-                // 绘制中心圆
-                heartPaint.setAlpha(255);
-                heartPaint.setColor(getColor(R.color.stock_price_line));
-                canvas.drawCircle(x, y, heartRadius, heartPaint);
-            }
+            // 记录后续价格点
+            lineToPrice(canvas, dataManager, position, i);
         }
+    }
 
+    /**
+     * 设置价格圆点（第一个点）
+     */
+    private void moveToPrice(FenShiDataManager dataManager, int position) {
+        float priceX = getPriceX(0, position);
+        float priceY = getPriceY(dataManager.getPrice(0));
+        pricePath.moveTo(priceX, priceY);
+    }
+
+    /**
+     * 绘制第一个点柱状图（第一个点要跟昨收做对比）
+     */
+    private void drawFirstPillar(Canvas canvas, FenShiDataManager dataManager, int position) {
+        float lineX = getPillarX(0, position);
+        float stopY = getPillarHeight(dataManager, 0);
+        pillarPaint.setColor(getColor(dataManager.getPrice(0) >= dataManager.lastClose ? R.color.stock_red : R.color.stock_green));
+        canvas.drawLine(lineX, getBottomTableMaxY(), lineX, stopY, pillarPaint);
+    }
+
+    /**
+     * 记录后续价格点
+     */
+    private void lineToPrice(Canvas canvas, FenShiDataManager dataManager, int position, int i) {
+        float priceX = getPriceX(i, position);
+        float priceY = getPriceY(dataManager.getPrice(i));
+        pricePath.lineTo(priceX, priceY);
+
+        if (position == getColumnCount() - 1 && isBeat && dataManager.isLastPrice(i)) {
+            //绘制扩散圆
+            heartPaint.setColor(getColor(R.color.stock_price_line));
+            heartPaint.setAlpha((int) (heartInitAlpha - heartInitAlpha * beatFraction));
+            canvas.drawCircle(priceX, priceY, (heartRadius + heartDiameter * beatFraction), heartPaint);
+            // 绘制中心圆
+            heartPaint.setAlpha(255);
+            heartPaint.setColor(getColor(R.color.stock_price_line));
+            canvas.drawCircle(priceX, priceY, heartRadius, heartPaint);
+        }
+    }
+
+    /**
+     * 绘制后续柱形图
+     */
+    private void drawPillar(Canvas canvas, FenShiDataManager dataManager, int position, int i) {
+        float lineX;
+        float stopY;
+        pillarPaint.setColor(getColor(dataManager.getPrice(i) >= dataManager.getPrice(i - 1) ? R.color.stock_red : R.color.stock_green));
+        lineX = getPillarX(i, position);
+        stopY = getPillarHeight(dataManager, i);
+        canvas.drawLine(lineX, getBottomTableMaxY(), lineX, stopY, pillarPaint);
+    }
+
+    /**
+     * 绘制价格曲线
+     */
+    private void drawPricePath(Canvas canvas) {
         canvas.drawPath(pricePath, pricePaint);
-
         pricePath.reset();
+    }
+
+    /**
+     * 获取x轴坐标
+     *
+     * @param i 当前position
+     * @return x轴坐标
+     */
+    public float getPriceX(int i, int position) {
+        return getColumnX(((dataWidth) / (float) totalCount), i) + dataWidth * position;
     }
 
     /**
@@ -295,19 +396,8 @@ public class FiveDayFenShiView extends StockView {
      * @param price 当前价格
      * @return 价格线的y轴坐标
      */
-    private float getY(float price) {
+    private float getPriceY(float price) {
         return getY(price, dataManager.minPrice, dataManager.maxPrice);
-    }
-
-    /**
-     * 获取x轴坐标
-     *
-     * @param position 当前position
-     * @return x轴坐标
-     */
-    @Override
-    public float getX(int position) {
-        return getColumnX(((dataWidth) / (float) totalCount), position);
     }
 
     /**
@@ -325,28 +415,26 @@ public class FiveDayFenShiView extends StockView {
     }
 
     /**
-     * 绘制柱形
-     * columnSpace: 宽 - 边距 - 柱子间距(1f)
+     * 获取第i个柱状图的绘制位置（x坐标）
+     *
+     * @param i 第几个
+     * @return 第position个数据
      */
-    private void drawPillar(Canvas canvas, FenShiDataManager dataManager, int position) {
-        float columnSpace = (dataWidth - (totalCount * 1f)) / totalCount;
-        Paint paint = new Paint();
-        paint.setStrokeWidth(columnSpace);
-        for (int i = 0; i < dataManager.priceSize() - 1; i++) {
-            if (i == 0) {
-                paint.setColor(getColor(dataManager.getPrice(i) >= dataManager.lastClose ? R.color.stock_red : R.color.stock_green));
-            } else {
-                paint.setColor(getColor(dataManager.getPrice(i) >= dataManager.getPrice(i - 1) ? R.color.stock_red : R.color.stock_green));
-            }
-            float lineX = tableMargin + (columnSpace * i) + (i * 1f) + 1 + dataWidth * position;
-            float maxHeight = (bottomTableHeight - 1) * 0.95f;
-            float stopY = getBottomTableMaxY() - (dataManager.getVolume(i) * maxHeight) / dataManager.maxVolume;
-            canvas.drawLine(lineX, getBottomTableMaxY(), lineX, stopY, paint);
-        }
-        paint.reset();
+    private float getPillarX(int i, int position) {
+        return tableMargin + (pillarSpace * i) + (i * 1f) + 1 + dataWidth * position;
     }
 
-    public <T extends IFenShi> void seftData(List<T> fenShiList) {
+    /**
+     * 获取第i个柱状图的高度（stop y坐标）
+     *
+     * @param i 第几个
+     * @return 第i个柱状图的高度（stop y坐标）
+     */
+    private float getPillarHeight(FenShiDataManager dataManager, int i) {
+        return bottomTableMaxY - (dataManager.getVolume(i) * maxPillarHeight) / dataManager.maxVolume;
+    }
+
+    public <T extends IFenShi> void setData(List<T> fenShiList) {
         dataManager.setData(fenShiList);
         invalidate();
         startBeat();

@@ -338,6 +338,6 @@ public class FiveDayFenShiSlideHelper {
      * 根据点获取X坐标
      */
     private float getX(int slideNum) {
-        return fiveDayFenShiView.getX(slideNum) + slidePosition * dataWidth;
+        return fiveDayFenShiView.getPriceX(slideNum, slidePosition);
     }
 }
