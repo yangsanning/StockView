@@ -2,7 +2,6 @@ package ysn.com.stock.manager;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -25,7 +24,7 @@ public class FiveDayFenShiDataManager {
     /**
      * 时间坐标
      */
-    public List<Date> dateList = new ArrayList<>();
+    public List<Long> dateList = new ArrayList<>();
 
     /**
      * 昨收(中间坐标值)
@@ -76,7 +75,7 @@ public class FiveDayFenShiDataManager {
             if (dValue < 0) {
                 break;
             } else {
-                dataManagerMap.get(i).setData(fenShiList.get(dValue));
+                dataManagerMap.get(i).setData(fenShiList.get(dValue), false);
             }
         }
         lastClose = fenShiList.get(fenShiList.size() - 1).getFenShiLastClose();
@@ -96,10 +95,10 @@ public class FiveDayFenShiDataManager {
             }
 
             // 记录时间
-            if (dataManager.date == null && i + 1 < dataManagerMap.size()) {
-                dataManager.date = TimeUtils.reduceDay(dataManagerMap.get(i + 1).date, 1);
+            if (dataManager.time == 0 && i + 1 < dataManagerMap.size()) {
+                dataManager.time = TimeUtils.reduceDay(dataManagerMap.get(i + 1).time, 1);
             }
-            dateList.add(dataManager.date);
+            dateList.add(dataManager.time);
         }
     }
 

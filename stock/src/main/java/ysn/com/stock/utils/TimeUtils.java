@@ -14,30 +14,20 @@ import java.util.Locale;
  */
 public class TimeUtils {
 
-    private static final String FORMAT_YYYY_MM_DD = "yyyyMMdd";
-    public static final String FORMAT_DAY = "MM-dd";
+    private static final String FORMAT_YYYY_MM_DD = "yyyy-MM-dd";
+    public static final String FORMAT_DAY = "MMdd";
 
-    public static Date string2Date(String date) {
+    public static long formatYyyyMmDd(String date) {
         try {
-            return new SimpleDateFormat(FORMAT_YYYY_MM_DD, Locale.getDefault()).parse(date);
+            return new SimpleDateFormat(FORMAT_YYYY_MM_DD, Locale.getDefault()).parse(date).getTime();
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return null;
+        return 0;
     }
 
     public static String formatDay(long timestamp) {
         return new SimpleDateFormat(FORMAT_DAY, Locale.getDefault()).format(new Date(timestamp));
-    }
-
-    /**
-     * @param reduce date1 的前x天的天数
-     */
-    public static Date reduceDay(Date date, int reduce) {
-        if (date == null) {
-            return date;
-        }
-        return new Date(reduceDay(date.getTime(), reduce));
     }
 
     /**

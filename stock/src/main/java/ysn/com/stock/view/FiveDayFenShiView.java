@@ -215,7 +215,7 @@ public class FiveDayFenShiView extends StockView {
 
         // 绘制时间坐标
         for (int i = 0; i < dataManager.dateList.size(); i++) {
-            String text = TimeUtils.formatDay(dataManager.dateList.get(i).getTime());
+            String text = TimeUtils.formatDay(dataManager.dateList.get(i));
             textPaint.getTextBounds(text, (0), text.length(), textRect);
             canvas.drawText(text, (dataWidth * i + (dataWidth - textRect.width()) / 2f), getTimeTextY(), textPaint);
         }

@@ -4,8 +4,6 @@ import android.support.annotation.IntRange;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import ysn.com.stock.bean.IFenShi;
@@ -80,7 +78,7 @@ public class FenShiDataManager {
     /**
      * 当前数据的时间
      */
-    public Date date;
+    public long time;
 
     public FenShiDataManager(DecimalFormat decimalFormat) {
         this.decimalFormat = decimalFormat;
@@ -186,10 +184,14 @@ public class FenShiDataManager {
         return volumeList.size();
     }
 
+    public <T extends IFenShi> void setData(T fenShi) {
+        setData(fenShi, true);
+    }
+
     /**
      * 设置数据
      */
-    public <T extends IFenShi> void setData(T fenShi) {
+    public <T extends IFenShi> void setData(T fenShi, boolean isInit) {
         if (fenShi != null) {
             priceList.clear();
             avePriceList.clear();
@@ -200,11 +202,13 @@ public class FenShiDataManager {
                 addStockPrice(fenShiData.get(i).getFenShiPrice(), i);
                 avePriceList.add(fenShiData.get(i).getFenShiAvgPrice());
                 timeList.add(fenShiData.get(i).getFenShiTime().substring(8, 10) + ":" + fenShiData.get(i).getFenShiTime().substring(10));
-                volumeList.add(fenShiData.get(i).getFenShiVolume());
+                addVolume(fenShiData.get(i).getFenShiVolume(), i);
             }
             lastClose = fenShi.getFenShiLastClose();
-            date = fenShi.getFenShiDate();
-            initData();
+            time = fenShi.getFenShiTime();
+            if (isInit) {
+                initData();
+            }
         }
     }
 
@@ -220,6 +224,16 @@ public class FenShiDataManager {
             maxPrice = trade;
         } else if (minPrice > trade) {
             minPrice = trade;
+        }
+    }
+
+    private void addVolume(float volume, int position) {
+        volumeList.add(volume);
+        if (position == 0) {
+            maxVolume = volume;
+        }
+        if (maxVolume < volume) {
+            maxVolume = volume;
         }
     }
 
@@ -239,11 +253,6 @@ public class FenShiDataManager {
 
         // 百分比坐标值
         percent = decimalFormat.format(((maxPrice - lastClose) / lastClose * 100)) + "%";
-
-        // 找到最大成交量
-        if (volumeList != null && !volumeList.isEmpty()) {
-            maxVolume = Collections.max(volumeList);
-        }
 
         maxVolumeString = NumberUtils.getVolume((int) maxVolume / 100);
         centreVolumeString = NumberUtils.getVolume((int) maxVolume / 200);

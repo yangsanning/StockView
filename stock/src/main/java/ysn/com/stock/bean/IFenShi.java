@@ -27,7 +27,7 @@ public interface IFenShi {
     float getFenShiLastClose();
 
     /**
-     * 分时日期
+     * 分时时间
      */
-    Date getFenShiDate();
+    long getFenShiTime();
 }

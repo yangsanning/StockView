@@ -2,7 +2,6 @@ package ysn.com.stockview.bean;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Date;
 import java.util.List;
 
 import ysn.com.stock.bean.IFenShi;
@@ -89,8 +88,8 @@ public class FenShiTime implements IFenShi {
     }
 
     @Override
-    public Date getFenShiDate() {
-        return TimeUtils.string2Date(date);
+    public long getFenShiTime() {
+        return date == null ? 0 : TimeUtils.formatYyyyMmDd(date);
     }
 
     public static class DataBean implements IFenShiData {
