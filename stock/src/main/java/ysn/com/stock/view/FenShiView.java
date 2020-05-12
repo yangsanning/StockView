@@ -55,6 +55,17 @@ public class FenShiView extends StockView {
     private Paint avePricePaint;
     private Path priceAreaPath;
     private Paint priceAreaPaint;
+
+    /**
+     * bottomTableMaxY: 下表格最大宽度
+     * pillarSpace: 柱状图间距
+     * maxPillarHeight: 柱状图绘制最大高度
+     */
+    private float bottomTableMaxY;
+    private Paint pillarPaint;
+    private float pillarSpace;
+    private float maxPillarHeight;
+
     /**
      * isBeat: 是否跳动
      * beatFraction: 变化率
@@ -125,6 +136,7 @@ public class FenShiView extends StockView {
     @Override
     protected void initPaint() {
         super.initPaint();
+        // 初始化价格
         pricePath = new Path();
         pricePaint = new Paint();
         pricePaint.setColor(getColor(R.color.stock_price_line));
@@ -132,6 +144,7 @@ public class FenShiView extends StockView {
         pricePaint.setStyle(Paint.Style.STROKE);
         pricePaint.setStrokeWidth(priceStrokeWidth);
 
+        // 初始化均价
         avePricePath = new Path();
         avePricePaint = new Paint();
         avePricePaint.setColor(getColor(R.color.stock_ave_price_line));
@@ -139,6 +152,7 @@ public class FenShiView extends StockView {
         avePricePaint.setStyle(Paint.Style.STROKE);
         avePricePaint.setStrokeWidth(priceStrokeWidth);
 
+        // 初始化价格区域
         priceAreaPath = new Path();
         priceAreaPaint = new Paint();
         priceAreaPaint.setColor(getColor(R.color.stock_price_line));
@@ -146,6 +160,7 @@ public class FenShiView extends StockView {
         priceAreaPaint.setStrokeWidth(2);
         priceAreaPaint.setAlpha(15);
 
+        // 初始化扩散圆
         heartPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         heartPaint.setAntiAlias(true);
         beatAnimator = ValueAnimator.ofFloat(0, 1f).setDuration(heartBeatFractionRate);
@@ -153,11 +168,33 @@ public class FenShiView extends StockView {
             beatFraction = (float) animation.getAnimatedValue();
             invalidate();
         });
+
+        // 初始化柱形图
+        pillarPaint = new Paint();
     }
 
     @Override
     public boolean hasBottomTable() {
         return isEnabledBottomTable;
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+
+        // 这里对柱形图最大高度进行限制, 避免顶到时间表格难看
+        maxPillarHeight = (bottomTableHeight - 1) * 0.95f;
+        bottomTableMaxY = getBottomTableMaxY();
+        initPillarSpace();
+    }
+
+    /**
+     * 初始化柱状图间距
+     */
+    private void initPillarSpace() {
+        // pillarSpace= 宽 - 边距 - 柱子间距(1f)
+        pillarSpace = (viewWidth - (tableMargin * 2) - (totalCount * 1f)) / totalCount;
+        pillarPaint.setStrokeWidth(pillarSpace);
     }
 
     /**
@@ -205,18 +242,17 @@ public class FenShiView extends StockView {
             return;
         }
 
-        // 绘制坐标峰值
-        drawXYText(canvas);
-
-        // 绘制价格、价格区域、均线、闪烁点
-        drawPriceLine(canvas);
+        // 绘制上表格坐标
+        drawTopTableCoordinate(canvas);
 
         if (hasBottomTable()) {
-            // 绘制下表格坐标
-            drawBottomXYText(canvas);
+            // 绘制价格、价格区域、均线、闪烁点、柱形图
+            drawPriceLineAndPillar(canvas);
 
-            // 绘制柱形
-            drawPillar(canvas);
+            // 绘制下表格坐标
+            drawBottomTableCoordinate(canvas);
+        }else {
+            drawPriceLine(canvas);
         }
 
         if (fenShiSlideHelper != null) {
@@ -225,9 +261,9 @@ public class FenShiView extends StockView {
     }
 
     /**
-     * 绘制坐标峰值
+     * 绘制上表格坐标
      */
-    private void drawXYText(Canvas canvas) {
+    private void drawTopTableCoordinate(Canvas canvas) {
         // 价格最大值
         String text = decimalFormat.format(dataManager.maxPrice);
         textPaint.setColor(getColor(R.color.stock_red));
@@ -259,47 +295,88 @@ public class FenShiView extends StockView {
     }
 
     /**
-     * 绘制价格、价格区域、均线、闪烁点
+     * 绘制价格、价格区域、均线、闪烁点、柱形图
+     * 相比于drawPriceLine多了柱形图绘制, 之所以加多一个方法是为了减少循环耗时，以及避免没必要的判断
      */
-    private void drawPriceLine(Canvas canvas) {
+    private void drawPriceLineAndPillar(Canvas canvas) {
+        // 抽取第一个点确定Path的圆点
         float price = dataManager.getPrice(0);
-        pricePath.moveTo(tableMargin, getY(price));
+        pricePath.moveTo(tableMargin, getPriceY(price));
         priceAreaPath.moveTo(tableMargin, getTopTableMinY());
-        priceAreaPath.lineTo(tableMargin, getY(price));
-        avePricePath.moveTo(tableMargin, getY(dataManager.getAvePrice(0)));
+        priceAreaPath.lineTo(tableMargin, getPriceY(price));
+        avePricePath.moveTo(tableMargin, getPriceY(dataManager.getAvePrice(0)));
+
+        // 柱状图第一个点要跟昨收做对比
+        float pillarX = getPillarX(0);
+        float pillarStopY = getPillarHeight(0);
+        pillarPaint.setColor(getColor(dataManager.getPrice(0) >= dataManager.lastClose ? R.color.stock_red : R.color.stock_green));
+        canvas.drawLine(pillarX, bottomTableMaxY, pillarX, pillarStopY, pillarPaint);
+
+        // 对后续点做处理
         for (int i = 1; i < dataManager.priceSize(); i++) {
             price = dataManager.getPrice(i);
-            pricePath.lineTo(getX(i), getY(price));
-            priceAreaPath.lineTo(getX(i), getY(price));
-            avePricePath.lineTo(getX(i), getY(dataManager.getAvePrice(i)));
+            pricePath.lineTo(getX(i), getPriceY(price));
+            priceAreaPath.lineTo(getX(i), getPriceY(price));
+            avePricePath.lineTo(getX(i), getPriceY(dataManager.getAvePrice(i)));
 
             if (isBeat && dataManager.isLastPrice(i)) {
-                //绘制扩散圆
+                // 绘制扩散圆
                 heartPaint.setColor(getColor(R.color.stock_price_line));
                 heartPaint.setAlpha((int) (heartInitAlpha - heartInitAlpha * beatFraction));
-                canvas.drawCircle(getX(i), getY(price), (heartRadius + heartDiameter * beatFraction), heartPaint);
+                canvas.drawCircle(getX(i), getPriceY(price), (heartRadius + heartDiameter * beatFraction), heartPaint);
+
                 // 绘制中心圆
                 heartPaint.setAlpha(255);
                 heartPaint.setColor(getColor(R.color.stock_price_line));
-                canvas.drawCircle(getX(i), getY(price), heartRadius, heartPaint);
+                canvas.drawCircle(getX(i), getPriceY(price), heartRadius, heartPaint);
             }
+
+            // 柱形图绘制
+            pillarPaint.setColor(getColor(dataManager.getPrice(i) >= dataManager.getPrice(i - 1) ? R.color.stock_red : R.color.stock_green));
+            pillarX = getPillarX(i);
+            pillarStopY = getPillarHeight(i);
+            canvas.drawLine(pillarX, bottomTableMaxY, pillarX, pillarStopY, pillarPaint);
         }
+
+        // 价格颜色区域需要进行闭合处理
         priceAreaPath.lineTo(getX(dataManager.getLastPricePosition()), getTopTableMinY());
         priceAreaPath.close();
 
+        // 绘制曲线以及区域
         canvas.drawPath(pricePath, pricePaint);
         canvas.drawPath(priceAreaPath, priceAreaPaint);
         canvas.drawPath(avePricePath, avePricePaint);
 
+        // 使用完后，重置画笔
         pricePath.reset();
         priceAreaPath.reset();
         avePricePath.reset();
     }
 
     /**
+     * 获取第i个柱状图的绘制位置（x坐标）
+     *
+     * @param i 第几个
+     * @return 第i个柱状图的绘制位置（x坐标）
+     */
+    private float getPillarX(int i) {
+        return tableMargin + (pillarSpace * i) + (i * 1f) + 1;
+    }
+
+    /**
+     * 获取第i个柱状图的高度（stop y坐标）
+     *
+     * @param i 第几个
+     * @return 第i个柱状图的高度（stop y坐标）
+     */
+    private float getPillarHeight(int i) {
+        return bottomTableMaxY - (dataManager.getVolume(i) * maxPillarHeight) / dataManager.maxVolume;
+    }
+
+    /**
      * 绘制下表格坐标
      */
-    private void drawBottomXYText(Canvas canvas) {
+    private void drawBottomTableCoordinate(Canvas canvas) {
         // 下表格最大量
         textPaint.getTextBounds(dataManager.maxVolumeString, 0, dataManager.maxVolumeString.length(), textRect);
         float x = viewWidth - tableMargin - xYTextMargin - textRect.width();
@@ -311,34 +388,58 @@ public class FenShiView extends StockView {
     }
 
     /**
-     * 绘制柱形
-     * columnSpace: 宽 - 边距 - 柱子间距(1f)
+     * 绘制价格、价格区域、均线、闪烁点
      */
-    private void drawPillar(Canvas canvas) {
-        float columnSpace = (viewWidth - (tableMargin * 2) - (totalCount * 1f)) / totalCount;
-        Paint paint = new Paint();
-        paint.setStrokeWidth(columnSpace);
-        for (int i = 0; i < dataManager.priceSize() - 1; i++) {
-            if (i == 0) {
-                paint.setColor(getColor(dataManager.getPrice(i) >= dataManager.lastClose ? R.color.stock_red : R.color.stock_green));
-            } else {
-                paint.setColor(getColor(dataManager.getPrice(i) >= dataManager.getPrice(i - 1) ? R.color.stock_red : R.color.stock_green));
+    private void drawPriceLine(Canvas canvas) {
+        // 抽取第一个点确定Path的圆点
+        float priceY = getPriceY(dataManager.getPrice(0));
+        pricePath.moveTo(tableMargin,priceY );
+        priceAreaPath.moveTo(tableMargin, getTopTableMinY());
+        priceAreaPath.lineTo(tableMargin,priceY);
+        avePricePath.moveTo(tableMargin, getPriceY(dataManager.getAvePrice(0)));
+
+        // 对后续点做处理
+        for (int i = 1; i < dataManager.priceSize(); i++) {
+            priceY = getPriceY(dataManager.getPrice(i));
+            pricePath.lineTo(getX(i), priceY);
+            priceAreaPath.lineTo(getX(i), priceY);
+            avePricePath.lineTo(getX(i), getPriceY(dataManager.getAvePrice(i)));
+
+            if (isBeat && dataManager.isLastPrice(i)) {
+                // 绘制扩散圆
+                heartPaint.setColor(getColor(R.color.stock_price_line));
+                heartPaint.setAlpha((int) (heartInitAlpha - heartInitAlpha * beatFraction));
+                canvas.drawCircle(getX(i), priceY, (heartRadius + heartDiameter * beatFraction), heartPaint);
+
+                // 绘制中心圆
+                heartPaint.setAlpha(255);
+                heartPaint.setColor(getColor(R.color.stock_price_line));
+                canvas.drawCircle(getX(i), priceY, heartRadius, heartPaint);
             }
-            float lineX = tableMargin + (columnSpace * i) + (i * 1f) + 1;
-            float maxHeight = (bottomTableHeight - 1) * 0.95f;
-            float stopY = getBottomTableMaxY() - (dataManager.getVolume(i) * maxHeight) / dataManager.maxVolume;
-            canvas.drawLine(lineX, getBottomTableMaxY(), lineX, stopY, paint);
         }
-        paint.reset();
+
+        // 价格颜色区域需要进行闭合处理
+        priceAreaPath.lineTo(getX(dataManager.getLastPricePosition()), getTopTableMinY());
+        priceAreaPath.close();
+
+        // 绘制曲线以及区域
+        canvas.drawPath(pricePath, pricePaint);
+        canvas.drawPath(priceAreaPath, priceAreaPaint);
+        canvas.drawPath(avePricePath, avePricePaint);
+
+        // 使用完后，重置画笔
+        pricePath.reset();
+        priceAreaPath.reset();
+        avePricePath.reset();
     }
 
     /**
-     * 获取价格线的y轴坐标
+     * 根据当前价格值获取相应y轴坐标
      *
      * @param price 当前价格
-     * @return 价格线的y轴坐标
+     * @return 当前价格的相应y轴坐标
      */
-    private float getY(float price) {
+    private float getPriceY(float price) {
         return getY(price, dataManager.minPrice, dataManager.maxPrice);
     }
 
@@ -348,6 +449,9 @@ public class FenShiView extends StockView {
         startBeat();
     }
 
+    /**
+     * 开始心跳
+     */
     public void startBeat() {
         stopBeat();
         if (dataManager.isTimeNotEmpty() && isBeatTime()) {
@@ -356,11 +460,17 @@ public class FenShiView extends StockView {
         }
     }
 
-    private boolean isBeatTime() {
+    /**
+     * 是否可以开启心跳
+     */
+    public boolean isBeatTime() {
         String lastTime = dataManager.getLastTime();
         return !"11:30".equals(lastTime) && !"15:00".equals(lastTime);
     }
 
+    /**
+     * 停止心跳
+     */
     public void stopBeat() {
         isBeat = false;
         beatHandler.removeCallbacks(beatRunnable);

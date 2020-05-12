@@ -378,6 +378,8 @@ public class StockView extends View {
      * 获取y轴坐标
      *
      * @param value 当前值
+     * @param minValue 最小值
+     * @param maxValue 最大值
      * @return y轴坐标
      */
     protected float getY(float value, float minValue, float maxValue) {
