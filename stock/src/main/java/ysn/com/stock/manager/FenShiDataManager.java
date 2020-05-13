@@ -67,6 +67,11 @@ public class FenShiDataManager {
     public float maxVolume;
 
     /**
+     * 当前交易量坐标值
+     */
+    public String currentVolumeString = "";
+
+    /**
      * 最大交易量坐标值
      */
     public String maxVolumeString = "";
@@ -180,14 +185,21 @@ public class FenShiDataManager {
      * 根据position获取成交量
      */
     public float getVolume(@IntRange(from = 0) int position) {
-        return position < aveVolumeSize() ? volumeList.get(position) : 0;
+        return position < volumeSize() ? volumeList.get(position) : 0;
     }
 
     /**
      * 成交量集合大小
      */
-    public int aveVolumeSize() {
+    public int volumeSize() {
         return volumeList.size();
+    }
+
+    /**
+     * 获取最后一个成交量
+     */
+    public float getLastVolume() {
+        return volumeList.get(volumeSize() - 1);
     }
 
     public <T extends IFenShi> void setData(T fenShi) {
@@ -260,6 +272,7 @@ public class FenShiDataManager {
         // 百分比坐标值
         percent = decimalFormat.format(((maxPrice - lastClose) / lastClose * 100)) + "%";
 
+        currentVolumeString = fenShiUnitInterceptor == null ? "量：" + NumberUtils.getVolume((int) getLastVolume()) : fenShiUnitInterceptor.currentVolume(getLastVolume());
         maxVolumeString = fenShiUnitInterceptor == null ? NumberUtils.getVolume((int) maxVolume) : fenShiUnitInterceptor.maxVolume(maxVolume);
         centreVolumeString = fenShiUnitInterceptor == null ? NumberUtils.getVolume((int) maxVolume / 2) : fenShiUnitInterceptor.centreVolume(maxVolume / 2);
     }

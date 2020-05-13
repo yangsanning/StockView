@@ -12,13 +12,18 @@ import ysn.com.stock.utils.NumberUtils;
 public class FenShiInterceptor implements FenShiUnitInterceptor {
 
     @Override
+    public String currentVolume(float currentVolume) {
+        return "量:" + NumberUtils.getVolume((int) currentVolume / 100);
+    }
+
+    @Override
     public String maxVolume(float maxVolume) {
-        return NumberUtils.getVolume((int) maxVolume / 100) ;
+        return NumberUtils.getVolume((int) maxVolume / 100);
     }
 
     @Override
     public String centreVolume(float centreVolume) {
-        return NumberUtils.getVolume((int) centreVolume / 100) ;
+        return NumberUtils.getVolume((int) centreVolume / 100);
     }
 
     @Override
@@ -28,6 +33,6 @@ public class FenShiInterceptor implements FenShiUnitInterceptor {
 
     @Override
     public String slipVolume(float slipVolume) {
-        return NumberUtils.decimalFormat(slipVolume / 100) ;
+        return NumberUtils.decimalFormat(slipVolume / 100);
     }
 }

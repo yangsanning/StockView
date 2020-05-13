@@ -12,13 +12,18 @@ import ysn.com.stock.utils.NumberUtils;
 public class FiveDayFenShiInterceptor implements FenShiUnitInterceptor {
 
     @Override
+    public String currentVolume(float currentVolume) {
+        return "量:" + NumberUtils.getVolume((int) currentVolume);
+    }
+
+    @Override
     public String maxVolume(float maxVolume) {
-        return NumberUtils.getVolume((int) maxVolume) ;
+        return NumberUtils.getVolume((int) maxVolume);
     }
 
     @Override
     public String centreVolume(float centreVolume) {
-        return NumberUtils.getVolume((int) centreVolume ) ;
+        return NumberUtils.getVolume((int) centreVolume);
     }
 
     @Override
@@ -28,6 +33,6 @@ public class FiveDayFenShiInterceptor implements FenShiUnitInterceptor {
 
     @Override
     public String slipVolume(float slipVolume) {
-        return NumberUtils.decimalFormat(slipVolume) ;
+        return NumberUtils.decimalFormat(slipVolume);
     }
 }

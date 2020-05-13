@@ -432,7 +432,12 @@ public class FenShiView extends StockView {
      * 绘制下表格坐标
      */
     private void drawBottomTableCoordinate(Canvas canvas) {
-        // 下表格最大量
+        // 下表格当前成交量
+        textPaint.getTextBounds(fenShiDataManager.currentVolumeString, 0, fenShiDataManager.currentVolumeString.length(), textRect);
+        canvas.drawText(fenShiDataManager.currentVolumeString, tableMargin + xYTextMargin,
+                (getBottomTableMinY() + textRect.height() + xYTextMargin), textPaint);
+
+        // 下表格最大成交量
         textPaint.getTextBounds(fenShiDataManager.maxVolumeString, 0, fenShiDataManager.maxVolumeString.length(), textRect);
         canvas.drawText(fenShiDataManager.maxVolumeString, (viewWidth - tableMargin - xYTextMargin - textRect.width()),
                 (getBottomTableMinY() + textRect.height() + xYTextMargin), textPaint);

@@ -240,7 +240,7 @@ public class FiveDayFenShiView extends StockView {
             }
 
             // 绘制下表格坐标
-            drawBottomXYText(canvas);
+            drawBottomTableCoordinate(canvas);
         } else {
             // 绘制价格曲线、闪烁点
             for (Map.Entry<Integer, FenShiDataManager> entry : fiveDayFenShiDataManager.dataManagerMap.entrySet()) {
@@ -404,7 +404,12 @@ public class FiveDayFenShiView extends StockView {
     /**
      * 绘制下表格坐标
      */
-    private void drawBottomXYText(Canvas canvas) {
+    private void drawBottomTableCoordinate(Canvas canvas) {
+        // 下表格当前成交量
+        textPaint.getTextBounds(fiveDayFenShiDataManager.currentVolumeString, 0, fiveDayFenShiDataManager.currentVolumeString.length(), textRect);
+        canvas.drawText(fiveDayFenShiDataManager.currentVolumeString, tableMargin + xYTextMargin,
+                (getBottomTableMinY() + textRect.height() + xYTextMargin), textPaint);
+
         // 下表格最大量
         textPaint.getTextBounds(fiveDayFenShiDataManager.maxVolumeString, 0, fiveDayFenShiDataManager.maxVolumeString.length(), textRect);
         canvas.drawText(fiveDayFenShiDataManager.maxVolumeString, (viewWidth - tableMargin - xYTextMargin - textRect.width()),

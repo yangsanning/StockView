@@ -53,6 +53,11 @@ public class FiveDayFenShiDataManager {
     public float maxVolume;
 
     /**
+     * 当前交易量坐标值
+     */
+    public String currentVolumeString = "";
+
+    /**
      * 最大交易量坐标值
      */
     public String maxVolumeString = "";
@@ -137,6 +142,8 @@ public class FiveDayFenShiDataManager {
         // 百分比坐标值
         percent = decimalFormat.format(((maxPrice - lastClose) / lastClose * 100)) + "%";
 
+        currentVolumeString = fenShiUnitInterceptor == null ?
+                "量：" + NumberUtils.getVolume((int) getLastDataManager().getLastVolume()) : fenShiUnitInterceptor.currentVolume(getLastDataManager().getLastVolume());
         maxVolumeString = fenShiUnitInterceptor == null ? NumberUtils.getVolume((int) maxVolume) : fenShiUnitInterceptor.maxVolume(maxVolume);
         centreVolumeString = fenShiUnitInterceptor == null ? NumberUtils.getVolume((int) maxVolume / 2) : fenShiUnitInterceptor.centreVolume(maxVolume / 2);
     }

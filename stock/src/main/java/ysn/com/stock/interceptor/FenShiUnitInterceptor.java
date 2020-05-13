@@ -9,6 +9,14 @@ package ysn.com.stock.interceptor;
 public interface FenShiUnitInterceptor {
 
     /**
+     * 拦截处理下表格当前成交量坐标
+     *
+     * @param currentVolume 当前成交量
+     * @return 下表格当前成交量
+     */
+    String currentVolume(float currentVolume);
+
+    /**
      * 拦截处理下表格最大值坐标
      *
      * @param maxVolume 成交量最大值
