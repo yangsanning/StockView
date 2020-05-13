@@ -407,12 +407,13 @@ public class FiveDayFenShiView extends StockView {
     private void drawBottomXYText(Canvas canvas) {
         // 下表格最大量
         textPaint.getTextBounds(fiveDayFenShiDataManager.maxVolumeString, 0, fiveDayFenShiDataManager.maxVolumeString.length(), textRect);
-        float x = viewWidth - tableMargin - xYTextMargin - textRect.width();
-        canvas.drawText(fiveDayFenShiDataManager.maxVolumeString, x, (getBottomTableMinY() + textRect.height() + xYTextMargin), textPaint);
+        canvas.drawText(fiveDayFenShiDataManager.maxVolumeString, (viewWidth - tableMargin - xYTextMargin - textRect.width()),
+                (getBottomTableMinY() + textRect.height() + xYTextMargin), textPaint);
 
         // 下表格中间值
         textPaint.getTextBounds(fiveDayFenShiDataManager.centreVolumeString, 0, fiveDayFenShiDataManager.centreVolumeString.length(), textRect);
-        canvas.drawText(fiveDayFenShiDataManager.centreVolumeString, x, (getBottomTableMinY() + (bottomTableHeight + textRect.height()) / 2), textPaint);
+        canvas.drawText(fiveDayFenShiDataManager.centreVolumeString, (viewWidth - tableMargin - xYTextMargin - textRect.width()),
+                (getBottomTableMinY() + (bottomTableHeight + textRect.height()) / 2), textPaint);
     }
 
     /**
