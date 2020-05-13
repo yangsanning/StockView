@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import ysn.com.stock.bean.IFenShi;
+import ysn.com.stock.interceptor.FenShiUnitInterceptor;
 import ysn.com.stock.utils.NumberUtils;
 import ysn.com.stock.utils.TimeUtils;
 
@@ -60,6 +61,11 @@ public class FiveDayFenShiDataManager {
      * 交易量中间坐标
      */
     public String centreVolumeString = "";
+
+    /**
+     * 分时单位转换拦截器
+     */
+    private FenShiUnitInterceptor fenShiUnitInterceptor;
 
     public FiveDayFenShiDataManager(int count, DecimalFormat decimalFormat) {
         for (int i = 0; i < count; i++) {
@@ -131,11 +137,21 @@ public class FiveDayFenShiDataManager {
         // 百分比坐标值
         percent = decimalFormat.format(((maxPrice - lastClose) / lastClose * 100)) + "%";
 
-        maxVolumeString = NumberUtils.getVolume((int) maxVolume / 100);
-        centreVolumeString = NumberUtils.getVolume((int) maxVolume / 200);
+        maxVolumeString = fenShiUnitInterceptor == null ? NumberUtils.getVolume((int) maxVolume) : fenShiUnitInterceptor.maxVolume(maxVolume);
+        centreVolumeString = fenShiUnitInterceptor == null ? NumberUtils.getVolume((int) maxVolume / 2) : fenShiUnitInterceptor.maxVolume(maxVolume / 2);
     }
 
     public FenShiDataManager getLastDataManager() {
         return dataManagerMap.get(dataManagerMap.size() - 1);
+    }
+
+    /**
+     * 设置分时单位转换拦截器
+     */
+    public void setFenShiUnitInterceptor(FenShiUnitInterceptor fenShiUnitInterceptor) {
+        this.fenShiUnitInterceptor = fenShiUnitInterceptor;
+        for (FenShiDataManager dataManager : dataManagerMap.values()) {
+            dataManager.setFenShiUnitInterceptor(fenShiUnitInterceptor);
+        }
     }
 }

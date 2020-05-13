@@ -8,6 +8,7 @@ import android.support.annotation.ColorRes;
 import android.view.MotionEvent;
 
 import ysn.com.stock.R;
+import ysn.com.stock.interceptor.FenShiUnitInterceptor;
 import ysn.com.stock.manager.FenShiDataManager;
 import ysn.com.stock.utils.NumberUtils;
 import ysn.com.stock.view.StockView;
@@ -59,6 +60,11 @@ public class FenShiSlideHelper {
         isLongPress = true;
         stockView.postInvalidate();
     };
+
+    /**
+     * 分时单位转换拦截器
+     */
+    private FenShiUnitInterceptor fenShiUnitInterceptor;
 
     public FenShiSlideHelper(StockView stockView, FenShiDataManager dataManager) {
         this.stockView = stockView;
@@ -191,7 +197,7 @@ public class FenShiSlideHelper {
             }
 
             // 滑动显示的值
-            slideValue = getSlipPriceVolume();
+            slideValue = getSlipVolume();
         } else {
             // 滑动线Y坐标
             if (slideY > -textRectHalfHeight) {
@@ -201,7 +207,7 @@ public class FenShiSlideHelper {
             }
 
             // 滑动显示的值
-            slideValue = getSlipPriceValue();
+            slideValue = getSlipPrice();
         }
     }
 
@@ -286,28 +292,31 @@ public class FenShiSlideHelper {
     /**
      * 获取滑动价格
      */
-    private String getSlipPriceValue() {
+    private String getSlipPrice() {
+        float slipPrice;
         if (slideY < topTableMaxY) {
-            return NumberUtils.decimalFormat(dataManager.maxPrice);
+            slipPrice = dataManager.maxPrice;
         } else if (slideY > -textRectHalfHeight) {
-            return NumberUtils.decimalFormat(dataManager.minPrice);
+            slipPrice = dataManager.minPrice;
+        } else {
+            slipPrice = (Math.abs(slideY) * (dataManager.maxPrice - dataManager.minPrice)) / topTableHeight + dataManager.minPrice;
         }
-        float volumeY = (Math.abs(slideY) * (dataManager.maxPrice - dataManager.minPrice)) / topTableHeight + dataManager.minPrice;
-        return NumberUtils.decimalFormat(volumeY);
+        return fenShiUnitInterceptor == null ? NumberUtils.decimalFormat(slipPrice) : fenShiUnitInterceptor.slipPrice(slipPrice);
     }
 
     /**
      * 滑动成交量
      */
-    private String getSlipPriceVolume() {
-        float max = dataManager.maxVolume / 100;
+    private String getSlipVolume() {
+        float slipVolume;
         if (slideY < bottomTableMinY) {
-            return NumberUtils.decimalFormat(max);
+            slipVolume = dataManager.maxVolume;
         } else if (slideY > bottomTableMaxY) {
-            return NumberUtils.decimalFormat(0);
+            slipVolume = 0;
+        } else {
+            slipVolume = (bottomTableHeight - (slideY - bottomTableMinY)) / bottomTableHeight * dataManager.maxVolume;
         }
-        float volumeY = (bottomTableHeight - (slideY - bottomTableMinY)) / bottomTableHeight * max;
-        return NumberUtils.decimalFormat(volumeY);
+        return fenShiUnitInterceptor == null ? NumberUtils.decimalFormat(slipVolume) : fenShiUnitInterceptor.slipVolume(slipVolume);
     }
 
     /**
@@ -322,5 +331,12 @@ public class FenShiSlideHelper {
      */
     private float getX(int slideNum) {
         return stockView.getX(slideNum);
+    }
+
+    /**
+     * 设置分时单位转换拦截器
+     */
+    public void setFenShiUnitInterceptor(FenShiUnitInterceptor fenShiUnitInterceptor) {
+        this.fenShiUnitInterceptor = fenShiUnitInterceptor;
     }
 }

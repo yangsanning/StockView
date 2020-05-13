@@ -9,6 +9,7 @@ import ysn.com.stock.view.FiveDayFenShiView;
 import ysn.com.stockview.R;
 import ysn.com.stockview.bean.FenShiTime;
 import ysn.com.stockview.utils.JsonUtils;
+import ysn.com.stockview.widget.interceptor.FiveDayFenShiInterceptor;
 
 /**
  * @Author yangsanning
@@ -27,6 +28,7 @@ public class FiveDayFenShiActivity extends AppCompatActivity {
         setTitle(R.string.text_five_day_fen_shi);
 
         FiveDayFenShiView fiveDayFenShiView = findViewById(R.id.five_day_fen_shi_activity_view);
+        fiveDayFenShiView.setFenShiUnitInterceptor(new FiveDayFenShiInterceptor());
         List<FenShiTime> dataList = JsonUtils.getDataList((this), ("json/five_day_fen_shi_top_four.json"));
         dataList.add(JsonUtils.getData((this), ("json/five_day_fen_shi_last.json"), FenShiTime.class));
         fiveDayFenShiView.setData(dataList);

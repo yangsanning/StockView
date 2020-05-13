@@ -8,6 +8,7 @@ import java.util.List;
 
 import ysn.com.stock.bean.IFenShi;
 import ysn.com.stock.bean.IFenShiData;
+import ysn.com.stock.interceptor.FenShiUnitInterceptor;
 import ysn.com.stock.utils.NumberUtils;
 
 /**
@@ -79,6 +80,11 @@ public class FenShiDataManager {
      * 当前数据的时间
      */
     public long time;
+
+    /**
+     * 分时单位转换拦截器
+     */
+    private FenShiUnitInterceptor fenShiUnitInterceptor;
 
     public FenShiDataManager(DecimalFormat decimalFormat) {
         this.decimalFormat = decimalFormat;
@@ -254,7 +260,14 @@ public class FenShiDataManager {
         // 百分比坐标值
         percent = decimalFormat.format(((maxPrice - lastClose) / lastClose * 100)) + "%";
 
-        maxVolumeString = NumberUtils.getVolume((int) maxVolume / 100);
-        centreVolumeString = NumberUtils.getVolume((int) maxVolume / 200);
+        maxVolumeString = fenShiUnitInterceptor == null ? NumberUtils.getVolume((int) maxVolume) : fenShiUnitInterceptor.maxVolume(maxVolume);
+        centreVolumeString = fenShiUnitInterceptor == null ? NumberUtils.getVolume((int) maxVolume / 2) : fenShiUnitInterceptor.maxVolume(maxVolume / 2);
+    }
+
+    /**
+     * 设置分时单位转换拦截器
+     */
+    public void setFenShiUnitInterceptor(FenShiUnitInterceptor fenShiUnitInterceptor) {
+        this.fenShiUnitInterceptor = fenShiUnitInterceptor;
     }
 }

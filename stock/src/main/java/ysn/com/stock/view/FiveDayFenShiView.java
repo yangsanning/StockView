@@ -19,6 +19,7 @@ import java.util.Map;
 import ysn.com.stock.R;
 import ysn.com.stock.bean.IFenShi;
 import ysn.com.stock.helper.FiveDayFenShiSlideHelper;
+import ysn.com.stock.interceptor.FenShiUnitInterceptor;
 import ysn.com.stock.manager.FenShiDataManager;
 import ysn.com.stock.manager.FiveDayFenShiDataManager;
 import ysn.com.stock.utils.TimeUtils;
@@ -88,8 +89,8 @@ public class FiveDayFenShiView extends StockView {
     private float pillarSpace;
     private float maxPillarHeight;
 
-    FiveDayFenShiDataManager dataManager;
-    FiveDayFenShiSlideHelper slideHelper;
+    FiveDayFenShiDataManager fiveDayFenShiDataManager;
+    FiveDayFenShiSlideHelper fiveDayFenShiSlideHelper;
 
     public FiveDayFenShiView(Context context) {
         super(context);
@@ -111,10 +112,10 @@ public class FiveDayFenShiView extends StockView {
     @Override
     protected void init(AttributeSet attrs) {
         super.init(attrs);
-        dataManager = new FiveDayFenShiDataManager(getColumnCount(), decimalFormat);
+        fiveDayFenShiDataManager = new FiveDayFenShiDataManager(getColumnCount(), decimalFormat);
 
         if (isEnabledSlide) {
-            slideHelper = new FiveDayFenShiSlideHelper(this, dataManager);
+            fiveDayFenShiSlideHelper = new FiveDayFenShiSlideHelper(this, fiveDayFenShiDataManager);
         }
     }
 
@@ -170,16 +171,16 @@ public class FiveDayFenShiView extends StockView {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        if (slideHelper != null) {
-            slideHelper.dispatchTouchEvent(event);
+        if (fiveDayFenShiSlideHelper != null) {
+            fiveDayFenShiSlideHelper.dispatchTouchEvent(event);
         }
         return super.dispatchTouchEvent(event);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (slideHelper != null) {
-            return slideHelper.onTouchEvent(event);
+        if (fiveDayFenShiSlideHelper != null) {
+            return fiveDayFenShiSlideHelper.onTouchEvent(event);
         }
         return super.onTouchEvent(event);
     }
@@ -189,8 +190,8 @@ public class FiveDayFenShiView extends StockView {
         super.onSizeChanged(w, h, oldw, oldh);
         dataWidth = getViewWidth() / getColumnCount();
 
-        if (slideHelper != null) {
-            slideHelper.dataWidth = dataWidth;
+        if (fiveDayFenShiSlideHelper != null) {
+            fiveDayFenShiSlideHelper.dataWidth = dataWidth;
         }
 
         // 这里对柱形图最大高度进行限制, 避免顶到时间表格难看
@@ -214,8 +215,8 @@ public class FiveDayFenShiView extends StockView {
         textPaint.setColor(getColor(R.color.stock_text_title));
 
         // 绘制时间坐标
-        for (int i = 0; i < dataManager.dateList.size(); i++) {
-            String text = TimeUtils.formatDay(dataManager.dateList.get(i));
+        for (int i = 0; i < fiveDayFenShiDataManager.dateList.size(); i++) {
+            String text = TimeUtils.formatDay(fiveDayFenShiDataManager.dateList.get(i));
             textPaint.getTextBounds(text, (0), text.length(), textRect);
             canvas.drawText(text, (dataWidth * i + (dataWidth - textRect.width()) / 2f), getTimeTextY(), textPaint);
         }
@@ -225,7 +226,7 @@ public class FiveDayFenShiView extends StockView {
     protected void onChildDraw(Canvas canvas) {
         super.onChildDraw(canvas);
 
-        if (dataManager.dataManagerList.isEmpty()) {
+        if (fiveDayFenShiDataManager.dataManagerList.isEmpty()) {
             return;
         }
 
@@ -234,7 +235,7 @@ public class FiveDayFenShiView extends StockView {
 
         if (hasBottomTable()) {
             // 绘制柱形
-            for (Map.Entry<Integer, FenShiDataManager> entry : dataManager.dataManagerMap.entrySet()) {
+            for (Map.Entry<Integer, FenShiDataManager> entry : fiveDayFenShiDataManager.dataManagerMap.entrySet()) {
                 drawPriceLineAndPillar(canvas, entry.getValue(), entry.getKey());
             }
 
@@ -242,7 +243,7 @@ public class FiveDayFenShiView extends StockView {
             drawBottomXYText(canvas);
         } else {
             // 绘制价格曲线、闪烁点
-            for (Map.Entry<Integer, FenShiDataManager> entry : dataManager.dataManagerMap.entrySet()) {
+            for (Map.Entry<Integer, FenShiDataManager> entry : fiveDayFenShiDataManager.dataManagerMap.entrySet()) {
                 drawPriceLine(canvas, entry.getValue(), entry.getKey());
             }
         }
@@ -250,8 +251,8 @@ public class FiveDayFenShiView extends StockView {
         // 绘制价格曲线
         drawPricePath(canvas);
 
-        if (slideHelper != null) {
-            slideHelper.draw(canvas);
+        if (fiveDayFenShiSlideHelper != null) {
+            fiveDayFenShiSlideHelper.draw(canvas);
         }
     }
 
@@ -260,7 +261,7 @@ public class FiveDayFenShiView extends StockView {
      */
     private void drawXYText(Canvas canvas) {
         // 价格最大值
-        String text = decimalFormat.format(dataManager.maxPrice);
+        String text = decimalFormat.format(fiveDayFenShiDataManager.maxPrice);
         textPaint.setColor(getColor(R.color.stock_red));
         textPaint.getTextBounds(text, (0), text.length(), textRect);
         float textMargin = getTextMargin();
@@ -268,24 +269,24 @@ public class FiveDayFenShiView extends StockView {
         canvas.drawText(text, textMargin, y, textPaint);
 
         // 增幅
-        text = "+" + dataManager.percent;
+        text = "+" + fiveDayFenShiDataManager.percent;
         textPaint.getTextBounds(text, 0, text.length(), textRect);
         canvas.drawText(text, (viewWidth - textRect.width() - textMargin), y, textPaint);
 
         // 价格最小值
         textPaint.setColor(getColor(R.color.stock_green));
         y = getTopTableMinY() - textMargin;
-        canvas.drawText(decimalFormat.format(dataManager.minPrice), textMargin, y, textPaint);
+        canvas.drawText(decimalFormat.format(fiveDayFenShiDataManager.minPrice), textMargin, y, textPaint);
 
         // 减幅
-        text = "-" + dataManager.percent;
+        text = "-" + fiveDayFenShiDataManager.percent;
         textPaint.setColor(getColor(R.color.stock_green));
         textPaint.getTextBounds(text, 0, text.length(), textRect);
         canvas.drawText(text, (viewWidth - textRect.width() - textMargin), y, textPaint);
 
         // 中间坐标
         textPaint.setColor(getColor(R.color.stock_text_title));
-        text = decimalFormat.format(dataManager.lastClose);
+        text = decimalFormat.format(fiveDayFenShiDataManager.lastClose);
         canvas.drawText(text, textMargin, (-(topTableHeight - textRect.height()) / 2f), textPaint);
     }
 
@@ -397,7 +398,7 @@ public class FiveDayFenShiView extends StockView {
      * @return 价格线的y轴坐标
      */
     private float getPriceY(float price) {
-        return getY(price, dataManager.minPrice, dataManager.maxPrice);
+        return getY(price, fiveDayFenShiDataManager.minPrice, fiveDayFenShiDataManager.maxPrice);
     }
 
     /**
@@ -405,13 +406,13 @@ public class FiveDayFenShiView extends StockView {
      */
     private void drawBottomXYText(Canvas canvas) {
         // 下表格最大量
-        textPaint.getTextBounds(dataManager.maxVolumeString, 0, dataManager.maxVolumeString.length(), textRect);
+        textPaint.getTextBounds(fiveDayFenShiDataManager.maxVolumeString, 0, fiveDayFenShiDataManager.maxVolumeString.length(), textRect);
         float x = viewWidth - tableMargin - xYTextMargin - textRect.width();
-        canvas.drawText(dataManager.maxVolumeString, x, (getBottomTableMinY() + textRect.height() + xYTextMargin), textPaint);
+        canvas.drawText(fiveDayFenShiDataManager.maxVolumeString, x, (getBottomTableMinY() + textRect.height() + xYTextMargin), textPaint);
 
         // 下表格中间值
-        textPaint.getTextBounds(dataManager.centreVolumeString, 0, dataManager.centreVolumeString.length(), textRect);
-        canvas.drawText(dataManager.centreVolumeString, x, (getBottomTableMinY() + (bottomTableHeight + textRect.height()) / 2), textPaint);
+        textPaint.getTextBounds(fiveDayFenShiDataManager.centreVolumeString, 0, fiveDayFenShiDataManager.centreVolumeString.length(), textRect);
+        canvas.drawText(fiveDayFenShiDataManager.centreVolumeString, x, (getBottomTableMinY() + (bottomTableHeight + textRect.height()) / 2), textPaint);
     }
 
     /**
@@ -435,26 +436,33 @@ public class FiveDayFenShiView extends StockView {
     }
 
     public <T extends IFenShi> void setData(List<T> fenShiList) {
-        dataManager.setData(fenShiList);
+        fiveDayFenShiDataManager.setData(fenShiList);
         invalidate();
         startBeat();
     }
 
     public void startBeat() {
         stopBeat();
-        if (dataManager.getLastDataManager().isTimeNotEmpty() && isBeatTime()) {
+        if (fiveDayFenShiDataManager.getLastDataManager().isTimeNotEmpty() && isBeatTime()) {
             isBeat = true;
             beatHandler.post(beatRunnable);
         }
     }
 
     private boolean isBeatTime() {
-        String lastTime = dataManager.getLastDataManager().getLastTime();
+        String lastTime = fiveDayFenShiDataManager.getLastDataManager().getLastTime();
         return !"11:30".equals(lastTime) && !"15:00".equals(lastTime);
     }
 
     public void stopBeat() {
         isBeat = false;
         beatHandler.removeCallbacks(beatRunnable);
+    }
+
+    /**
+     * 设置分时单位转换拦截器
+     */
+    public void setFenShiUnitInterceptor(FenShiUnitInterceptor fenShiUnitInterceptor) {
+        fiveDayFenShiDataManager.setFenShiUnitInterceptor(fenShiUnitInterceptor);
     }
 }

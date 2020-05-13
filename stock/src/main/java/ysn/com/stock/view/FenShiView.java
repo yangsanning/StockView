@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 import ysn.com.stock.R;
 import ysn.com.stock.bean.IFenShi;
 import ysn.com.stock.helper.FenShiSlideHelper;
+import ysn.com.stock.interceptor.FenShiUnitInterceptor;
 import ysn.com.stock.manager.FenShiDataManager;
 
 /**
@@ -28,8 +29,6 @@ import ysn.com.stock.manager.FenShiDataManager;
 public class FenShiView extends StockView {
 
     private static final String[] TIME_TEXT = new String[]{"09:30", "11:30/13:00", "15:00"};
-
-    private FenShiDataManager dataManager;
 
     /**
      * 价格线宽度
@@ -86,6 +85,8 @@ public class FenShiView extends StockView {
 
     private boolean isEnabledBottomTable;
     private boolean isEnabledSlide;
+
+    private FenShiDataManager fenShiDataManager;
     private FenShiSlideHelper fenShiSlideHelper;
 
     public FenShiView(Context context) {
@@ -108,9 +109,9 @@ public class FenShiView extends StockView {
     @Override
     protected void init(AttributeSet attrs) {
         super.init(attrs);
-        dataManager = new FenShiDataManager(decimalFormat);
+        fenShiDataManager = new FenShiDataManager(decimalFormat);
         if (isEnabledSlide) {
-            fenShiSlideHelper = new FenShiSlideHelper(this, dataManager);
+            fenShiSlideHelper = new FenShiSlideHelper(this, fenShiDataManager);
         }
     }
 
@@ -238,7 +239,7 @@ public class FenShiView extends StockView {
     protected void onChildDraw(Canvas canvas) {
         super.onChildDraw(canvas);
 
-        if (dataManager.isPriceEmpty()) {
+        if (fenShiDataManager.isPriceEmpty()) {
             return;
         }
 
@@ -269,7 +270,7 @@ public class FenShiView extends StockView {
      */
     private void drawTopTableCoordinate(Canvas canvas) {
         // 价格最大值
-        String text = decimalFormat.format(dataManager.maxPrice);
+        String text = decimalFormat.format(fenShiDataManager.maxPrice);
         textPaint.setColor(getColor(R.color.stock_red));
         textPaint.getTextBounds(text, (0), text.length(), textRect);
         float textMargin = getTextMargin();
@@ -277,24 +278,24 @@ public class FenShiView extends StockView {
         canvas.drawText(text, textMargin, y, textPaint);
 
         // 增幅
-        text = "+" + dataManager.percent;
+        text = "+" + fenShiDataManager.percent;
         textPaint.getTextBounds(text, 0, text.length(), textRect);
         canvas.drawText(text, (viewWidth - textRect.width() - textMargin), y, textPaint);
 
         // 价格最小值
         textPaint.setColor(getColor(R.color.stock_green));
         y = getTopTableMinY() - textMargin;
-        canvas.drawText(decimalFormat.format(dataManager.minPrice), textMargin, y, textPaint);
+        canvas.drawText(decimalFormat.format(fenShiDataManager.minPrice), textMargin, y, textPaint);
 
         // 减幅
-        text = "-" + dataManager.percent;
+        text = "-" + fenShiDataManager.percent;
         textPaint.setColor(getColor(R.color.stock_green));
         textPaint.getTextBounds(text, 0, text.length(), textRect);
         canvas.drawText(text, (viewWidth - textRect.width() - textMargin), y, textPaint);
 
         // 中间坐标
         textPaint.setColor(getColor(R.color.stock_text_title));
-        text = decimalFormat.format(dataManager.lastClose);
+        text = decimalFormat.format(fenShiDataManager.lastClose);
         canvas.drawText(text, textMargin, (-(topTableHeight - textRect.height()) / 2f), textPaint);
     }
 
@@ -309,7 +310,7 @@ public class FenShiView extends StockView {
         // 绘制第一个点柱状图（第一个点要跟昨收做对比）
         drawFirstPillar(canvas);
 
-        for (int i = 1; i < dataManager.priceSize(); i++) {
+        for (int i = 1; i < fenShiDataManager.priceSize(); i++) {
             // 记录后续价格点
             lineToPrice(canvas, i);
 
@@ -326,7 +327,7 @@ public class FenShiView extends StockView {
         moveToPrice();
 
         // 对后续点做处理
-        for (int i = 1; i < dataManager.priceSize(); i++) {
+        for (int i = 1; i < fenShiDataManager.priceSize(); i++) {
             lineToPrice(canvas, i);
         }
     }
@@ -336,11 +337,11 @@ public class FenShiView extends StockView {
      */
     private void moveToPrice() {
         float priceX = getX(0);
-        float priceY = getPriceY(dataManager.getPrice(0));
+        float priceY = getPriceY(fenShiDataManager.getPrice(0));
         pricePath.moveTo(priceX, priceY);
         priceAreaPath.moveTo(priceX, getTopTableMinY());
         priceAreaPath.lineTo(priceX, priceY);
-        avePricePath.moveTo(priceX, getPriceY(dataManager.getAvePrice(0)));
+        avePricePath.moveTo(priceX, getPriceY(fenShiDataManager.getAvePrice(0)));
     }
 
     /**
@@ -349,7 +350,7 @@ public class FenShiView extends StockView {
     private void drawFirstPillar(Canvas canvas) {
         float pillarX = getPillarX(0);
         float pillarStopY = getPillarHeight(0);
-        pillarPaint.setColor(getColor(dataManager.getPrice(0) >= dataManager.lastClose ? R.color.stock_red : R.color.stock_green));
+        pillarPaint.setColor(getColor(fenShiDataManager.getPrice(0) >= fenShiDataManager.lastClose ? R.color.stock_red : R.color.stock_green));
         canvas.drawLine(pillarX, bottomTableMaxY, pillarX, pillarStopY, pillarPaint);
     }
 
@@ -358,12 +359,12 @@ public class FenShiView extends StockView {
      */
     private void lineToPrice(Canvas canvas, int i) {
         float priceX = getX(i);
-        float priceY = getPriceY(dataManager.getPrice(i));
+        float priceY = getPriceY(fenShiDataManager.getPrice(i));
         pricePath.lineTo(priceX, priceY);
         priceAreaPath.lineTo(priceX, priceY);
-        avePricePath.lineTo(priceX, getPriceY(dataManager.getAvePrice(i)));
+        avePricePath.lineTo(priceX, getPriceY(fenShiDataManager.getAvePrice(i)));
 
-        if (isBeat && dataManager.isLastPrice(i)) {
+        if (isBeat && fenShiDataManager.isLastPrice(i)) {
             // 绘制扩散圆
             heartPaint.setColor(getColor(R.color.stock_price_line));
             heartPaint.setAlpha((int) (heartInitAlpha - heartInitAlpha * beatFraction));
@@ -382,7 +383,7 @@ public class FenShiView extends StockView {
     private void drawPillar(Canvas canvas, int i) {
         float pillarX;
         float pillarStopY;
-        pillarPaint.setColor(getColor(dataManager.getPrice(i) >= dataManager.getPrice(i - 1) ? R.color.stock_red : R.color.stock_green));
+        pillarPaint.setColor(getColor(fenShiDataManager.getPrice(i) >= fenShiDataManager.getPrice(i - 1) ? R.color.stock_red : R.color.stock_green));
         pillarX = getPillarX(i);
         pillarStopY = getPillarHeight(i);
         canvas.drawLine(pillarX, bottomTableMaxY, pillarX, pillarStopY, pillarPaint);
@@ -393,7 +394,7 @@ public class FenShiView extends StockView {
      */
     private void drawPricePath(Canvas canvas) {
         // 价格颜色区域需要进行闭合处理
-        priceAreaPath.lineTo(getX(dataManager.getLastPricePosition()), getTopTableMinY());
+        priceAreaPath.lineTo(getX(fenShiDataManager.getLastPricePosition()), getTopTableMinY());
         priceAreaPath.close();
 
         // 绘制曲线以及区域
@@ -424,7 +425,7 @@ public class FenShiView extends StockView {
      * @return 第i个柱状图的高度（stop y坐标）
      */
     private float getPillarHeight(int i) {
-        return bottomTableMaxY - (dataManager.getVolume(i) * maxPillarHeight) / dataManager.maxVolume;
+        return bottomTableMaxY - (fenShiDataManager.getVolume(i) * maxPillarHeight) / fenShiDataManager.maxVolume;
     }
 
     /**
@@ -432,13 +433,13 @@ public class FenShiView extends StockView {
      */
     private void drawBottomTableCoordinate(Canvas canvas) {
         // 下表格最大量
-        textPaint.getTextBounds(dataManager.maxVolumeString, 0, dataManager.maxVolumeString.length(), textRect);
+        textPaint.getTextBounds(fenShiDataManager.maxVolumeString, 0, fenShiDataManager.maxVolumeString.length(), textRect);
         float x = viewWidth - tableMargin - xYTextMargin - textRect.width();
-        canvas.drawText(dataManager.maxVolumeString, x, (getBottomTableMinY() + textRect.height() + xYTextMargin), textPaint);
+        canvas.drawText(fenShiDataManager.maxVolumeString, x, (getBottomTableMinY() + textRect.height() + xYTextMargin), textPaint);
 
         // 下表格中间值
-        textPaint.getTextBounds(dataManager.centreVolumeString, 0, dataManager.centreVolumeString.length(), textRect);
-        canvas.drawText(dataManager.centreVolumeString, x, (getBottomTableMinY() + (bottomTableHeight + textRect.height()) / 2), textPaint);
+        textPaint.getTextBounds(fenShiDataManager.centreVolumeString, 0, fenShiDataManager.centreVolumeString.length(), textRect);
+        canvas.drawText(fenShiDataManager.centreVolumeString, x, (getBottomTableMinY() + (bottomTableHeight + textRect.height()) / 2), textPaint);
     }
 
     /**
@@ -448,11 +449,11 @@ public class FenShiView extends StockView {
      * @return 当前价格的相应y轴坐标
      */
     private float getPriceY(float price) {
-        return getY(price, dataManager.minPrice, dataManager.maxPrice);
+        return getY(price, fenShiDataManager.minPrice, fenShiDataManager.maxPrice);
     }
 
     public <T extends IFenShi> void setData(T fenShi) {
-        dataManager.setData(fenShi);
+        fenShiDataManager.setData(fenShi);
         invalidate();
         startBeat();
     }
@@ -462,7 +463,7 @@ public class FenShiView extends StockView {
      */
     public void startBeat() {
         stopBeat();
-        if (dataManager.isTimeNotEmpty() && isBeatTime()) {
+        if (fenShiDataManager.isTimeNotEmpty() && isBeatTime()) {
             isBeat = true;
             beatHandler.post(beatRunnable);
         }
@@ -472,7 +473,7 @@ public class FenShiView extends StockView {
      * 是否可以开启心跳
      */
     public boolean isBeatTime() {
-        String lastTime = dataManager.getLastTime();
+        String lastTime = fenShiDataManager.getLastTime();
         return !"11:30".equals(lastTime) && !"15:00".equals(lastTime);
     }
 
@@ -482,5 +483,12 @@ public class FenShiView extends StockView {
     public void stopBeat() {
         isBeat = false;
         beatHandler.removeCallbacks(beatRunnable);
+    }
+
+    /**
+     * 设置分时单位转换拦截器
+     */
+    public void setFenShiUnitInterceptor(FenShiUnitInterceptor fenShiUnitInterceptor) {
+        fenShiDataManager.setFenShiUnitInterceptor(fenShiUnitInterceptor);
     }
 }
