@@ -138,7 +138,7 @@ public class FiveDayFenShiDataManager {
         percent = decimalFormat.format(((maxPrice - lastClose) / lastClose * 100)) + "%";
 
         maxVolumeString = fenShiUnitInterceptor == null ? NumberUtils.getVolume((int) maxVolume) : fenShiUnitInterceptor.maxVolume(maxVolume);
-        centreVolumeString = fenShiUnitInterceptor == null ? NumberUtils.getVolume((int) maxVolume / 2) : fenShiUnitInterceptor.maxVolume(maxVolume / 2);
+        centreVolumeString = fenShiUnitInterceptor == null ? NumberUtils.getVolume((int) maxVolume / 2) : fenShiUnitInterceptor.centreVolume(maxVolume / 2);
     }
 
     public FenShiDataManager getLastDataManager() {
