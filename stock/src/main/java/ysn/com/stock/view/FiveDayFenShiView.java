@@ -248,9 +248,6 @@ public class FiveDayFenShiView extends StockView {
             }
         }
 
-        // 绘制价格曲线
-        drawPricePath(canvas);
-
         if (fiveDayFenShiSlideHelper != null) {
             fiveDayFenShiSlideHelper.draw(canvas);
         }
@@ -308,6 +305,9 @@ public class FiveDayFenShiView extends StockView {
             // 绘制后续柱形图
             drawPillar(canvas, dataManager, position, i);
         }
+
+        // 绘制价格曲线
+        drawPricePath(canvas);
     }
 
     /**
@@ -320,6 +320,9 @@ public class FiveDayFenShiView extends StockView {
             // 记录后续价格点
             lineToPrice(canvas, dataManager, position, i);
         }
+
+        // 绘制价格曲线
+        drawPricePath(canvas);
     }
 
     /**
