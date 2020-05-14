@@ -32,7 +32,7 @@ public class FenShiDataManager {
     public List<Float> avePriceList = new ArrayList<>();
 
     /**
-     * 时间集合
+     * 时间集合(用于滑动绘制)
      */
     public List<String> timeList = new ArrayList<>();
 
@@ -219,7 +219,8 @@ public class FenShiDataManager {
             for (int i = 0; i < fenShiData.size(); i++) {
                 addStockPrice(fenShiData.get(i).getFenShiPrice(), i);
                 avePriceList.add(fenShiData.get(i).getFenShiAvgPrice());
-                timeList.add(fenShiData.get(i).getFenShiTime().substring(8, 10) + ":" + fenShiData.get(i).getFenShiTime().substring(10));
+                timeList.add(fenShiUnitInterceptor == null ? fenShiData.get(i).getFenShiTime()
+                        : fenShiUnitInterceptor.slideTime(fenShiData.get(i).getFenShiTime()));
                 addVolume(fenShiData.get(i).getFenShiVolume(), i);
             }
             lastClose = fenShi.getFenShiLastClose();

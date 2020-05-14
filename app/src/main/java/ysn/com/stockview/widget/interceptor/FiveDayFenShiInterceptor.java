@@ -32,6 +32,11 @@ public class FiveDayFenShiInterceptor implements FenShiUnitInterceptor {
     }
 
     @Override
+    public String slideTime(String slideTime) {
+        return slideTime.substring(8, 10) + ":" + slideTime.substring(10);
+    }
+
+    @Override
     public String slipVolume(float slipVolume) {
         return NumberUtils.decimalFormat(slipVolume);
     }

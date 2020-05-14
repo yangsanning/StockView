@@ -41,6 +41,14 @@ public interface FenShiUnitInterceptor {
     String slipPrice(float slipPrice);
 
     /**
+     * 拦截处理滑动要显示的时间格式
+     *
+     * @param slideTime 滑动要显示的时间
+     * @return 转换格式后的时间
+     */
+    String slideTime(String slideTime);
+
+    /**
      * 拦截处理滑动点成交量值
      *
      * @param slipVolume 滑动点成交量
