@@ -27,10 +27,17 @@ public class FiveDayFenShiActivity extends AppCompatActivity {
 
         setTitle(R.string.text_five_day_fen_shi);
 
-        FiveDayFenShiView fiveDayFenShiView = findViewById(R.id.five_day_fen_shi_activity_view);
-        fiveDayFenShiView.setFenShiUnitInterceptor(new FiveDayFenShiInterceptor());
         List<FenShiTime> dataList = JsonUtils.getDataList((this), ("json/five_day_fen_shi_top_four.json"));
         dataList.add(JsonUtils.getData((this), ("json/five_day_fen_shi_last.json"), FenShiTime.class));
-        fiveDayFenShiView.setData(dataList);
+
+        FiveDayFenShiView fiveDayFenShiView1 = findViewById(R.id.five_day_fen_shi_activity_view1);
+        FiveDayFenShiView fiveDayFenShiView2 = findViewById(R.id.five_day_fen_shi_activity_view2);
+
+        fiveDayFenShiView1.setFenShiUnitInterceptor(new FiveDayFenShiInterceptor());
+        fiveDayFenShiView1.setData(dataList);
+
+        dataList.remove(0);
+        fiveDayFenShiView2.setFenShiUnitInterceptor(new FiveDayFenShiInterceptor());
+        fiveDayFenShiView2.setData(dataList);
     }
 }
