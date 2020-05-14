@@ -53,7 +53,6 @@ public class FiveDayFenShiSlideHelper {
     private Paint slideAreaPaint;
     private Path path;
 
-    private float minSlideArea, maxSlideArea;
     private int slidePosition;
     private float slideX, slideY;
     private float textRectHalfHeight;
@@ -92,22 +91,12 @@ public class FiveDayFenShiSlideHelper {
     }
 
     public void dispatchTouchEvent(MotionEvent ev) {
-        int dataSize = fiveDayFenShiDataManager.dataManagerMap.size();
-        float x = ev.getX();
-        for (int i = 0; i < dataSize; i++) {
-            if (i * dataWidth <= x && x < (i + 1) * dataWidth) {
-                minSlideArea = i * dataWidth;
-                maxSlideArea = minSlideArea + dataWidth;
-                slidePosition = i;
-                break;
-            }
-        }
-        fenShiDataManager = fiveDayFenShiDataManager.dataManagerMap.get(slidePosition);
         fiveDayFenShiView.getParent().requestDisallowInterceptTouchEvent(isLongPress);
     }
 
     public boolean onTouchEvent(MotionEvent event) {
         float x = event.getX();
+
         /**
          * 因圆点是(0,topTableHeight), 为了方便计算, 这里也以圆点为中心
          * 圆点坐标更改: {@link ysn.com.stock.view.StockView#onDraw(Canvas)}
@@ -145,13 +134,16 @@ public class FiveDayFenShiSlideHelper {
     }
 
     public void draw(Canvas canvas) {
-        if (isLongPress && fenShiDataManager.isPriceNoEmpty()) {
+        if (isLongPress) {
             // 初始化FenShiView相关参数
             initFenShiViewParam();
 
             // 初始化滑动数据
             initSlideData();
 
+            if (fenShiDataManager.isPriceEmpty()) {
+                return;
+            }
             // 绘制滑动线
             drawSlideLine(canvas);
 
@@ -163,6 +155,9 @@ public class FiveDayFenShiSlideHelper {
         }
     }
 
+    /**
+     * 初始化FenShiView相关参数
+     */
     private void initFenShiViewParam() {
         viewWidth = fiveDayFenShiView.getViewWidth();
         viewHeight = fiveDayFenShiView.getViewHeight();
@@ -182,22 +177,42 @@ public class FiveDayFenShiSlideHelper {
         totalCount = fiveDayFenShiView.getTotalCount();
         textPaint = fiveDayFenShiView.getTextPaint();
         textRect = fiveDayFenShiView.getTextRect();
+
+        // 滑动文本框一半高度
+        textRectHalfHeight = timeTableHeight / 2;
     }
 
     /**
      * 初始化滑动数据
      */
     private void initSlideData() {
-        // 文本框一半高度
-        textRectHalfHeight = timeTableHeight / 2;
+        int dataSize = fiveDayFenShiDataManager.dataManagerMap.size();
+
+        if (slideX <= tableMargin) {
+            slideX = 0;
+            slideNum = 0;
+            slidePosition = 0;
+        } else {
+            for (int i = 0; i < dataSize; i++) {
+                if (i * dataWidth <= slideX && slideX < (i + 1) * dataWidth) {
+                    slidePosition = i;
+                    break;
+                }
+            }
+        }
+
+        for (int i = slidePosition; i < dataSize; i++) {
+            fenShiDataManager = fiveDayFenShiDataManager.dataManagerMap.get(i);
+            if (fenShiDataManager.isPriceNoEmpty()) {
+                float minSlideArea = i * dataWidth;
+                slideX = (i - slidePosition) == 0 ? slideX : minSlideArea;
+                slideNum = (int) ((slideX - minSlideArea) / dataWidth * totalCount);
+                slidePosition = i;
+                break;
+            }
+        }
 
         int priceSize = fenShiDataManager.priceSize();
-
-        if (slideX > minSlideArea && slideX < maxSlideArea) {
-            slideNum = (int) ((slideX - minSlideArea) / dataWidth * totalCount);
-        } else if (slideX - tableMargin - 2 < 0) {
-            slideNum = 0;
-        }
 
         if (slideNum >= priceSize) {
             slideNum = priceSize - 1;
