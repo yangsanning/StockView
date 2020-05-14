@@ -62,7 +62,6 @@ public class FenShiView extends StockView {
      */
     private float bottomTableMaxY;
     private Paint pillarPaint;
-    private float pillarSpace;
     private float maxPillarHeight;
 
     /**
@@ -180,22 +179,17 @@ public class FenShiView extends StockView {
     }
 
     @Override
+    public int getTotalCount() {
+        return fenShiDataManager.totalCount == 0 ? super.getTotalCount() : fenShiDataManager.totalCount;
+    }
+
+    @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
 
         // 这里对柱形图最大高度进行限制, 避免顶到时间表格难看
         maxPillarHeight = (bottomTableHeight - 1) * 0.95f;
         bottomTableMaxY = getBottomTableMaxY();
-        initPillarSpace();
-    }
-
-    /**
-     * 初始化柱状图间距
-     */
-    private void initPillarSpace() {
-        // pillarSpace= 宽 - 边距 - 柱子间距(1f)
-        pillarSpace = (viewWidth - (tableMargin * 2) - (totalCount * 1f)) / totalCount;
-        pillarPaint.setStrokeWidth(pillarSpace);
     }
 
     /**
@@ -304,18 +298,22 @@ public class FenShiView extends StockView {
      * 相比于{@link #drawPriceLine}多了柱形图绘制, 之所以加多一个方法是为了减少循环耗时，以及避免没必要的判断
      */
     private void drawPriceLineAndPillar(Canvas canvas) {
+        // pillarSpace= 宽 - 边距 - 柱子间距(1f)
+        float pillarSpace = (viewWidth - (tableMargin * 2) - (getTotalCount() * 1f)) / getTotalCount();
+        pillarPaint.setStrokeWidth(pillarSpace);
+
         // 设置价格圆点（第一个点）
         moveToPrice();
 
         // 绘制第一个点柱状图（第一个点要跟昨收做对比）
-        drawFirstPillar(canvas);
+        drawFirstPillar(canvas, pillarSpace);
 
         for (int i = 1; i < fenShiDataManager.priceSize(); i++) {
             // 记录后续价格点
             lineToPrice(canvas, i);
 
             // 绘制后续柱形图
-            drawPillar(canvas, i);
+            drawPillar(canvas, i, pillarSpace);
         }
     }
 
@@ -347,8 +345,8 @@ public class FenShiView extends StockView {
     /**
      * 绘制第一个点柱状图（第一个点要跟昨收做对比）
      */
-    private void drawFirstPillar(Canvas canvas) {
-        float pillarX = getPillarX(0);
+    private void drawFirstPillar(Canvas canvas, float pillarSpace) {
+        float pillarX = getPillarX(0, pillarSpace);
         float pillarStopY = getPillarHeight(0);
         pillarPaint.setColor(getColor(fenShiDataManager.getPrice(0) >= fenShiDataManager.lastClose ? R.color.stock_red : R.color.stock_green));
         canvas.drawLine(pillarX, bottomTableMaxY, pillarX, pillarStopY, pillarPaint);
@@ -380,11 +378,11 @@ public class FenShiView extends StockView {
     /**
      * 绘制后续柱形图
      */
-    private void drawPillar(Canvas canvas, int i) {
+    private void drawPillar(Canvas canvas, int i, float pillarSpace) {
         float pillarX;
         float pillarStopY;
         pillarPaint.setColor(getColor(fenShiDataManager.getPrice(i) >= fenShiDataManager.getPrice(i - 1) ? R.color.stock_red : R.color.stock_green));
-        pillarX = getPillarX(i);
+        pillarX = getPillarX(i, pillarSpace);
         pillarStopY = getPillarHeight(i);
         canvas.drawLine(pillarX, bottomTableMaxY, pillarX, pillarStopY, pillarPaint);
     }
@@ -414,7 +412,7 @@ public class FenShiView extends StockView {
      * @param i 第几个
      * @return 第i个柱状图的绘制位置（x坐标）
      */
-    private float getPillarX(int i) {
+    private float getPillarX(int i, float pillarSpace) {
         return tableMargin + (pillarSpace * i) + (i * 1f) + 1;
     }
 

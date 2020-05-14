@@ -31,6 +31,8 @@ public class FenShiTime implements IFenShi {
     @SerializedName(value = "code", alternate = {"stockCode", "bkcode", "zscode"})
     private String code;
     private List<DataBean> data;
+    @SerializedName(value = "totalCount", alternate = {"nodeNumber"})
+    private int totalCount;
 
     public String getDate() {
         return date;
@@ -70,6 +72,15 @@ public class FenShiTime implements IFenShi {
 
     public void setSettlement(float settlement) {
         this.settlement = settlement;
+    }
+
+    public void setTotalCount(int totalCount) {
+        this.totalCount = totalCount;
+    }
+
+    @Override
+    public int getTotalCount() {
+        return totalCount;
     }
 
     @Override

@@ -1,6 +1,5 @@
 package ysn.com.stock.bean;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -10,6 +9,11 @@ import java.util.List;
  * @Date 2020/4/16
  */
 public interface IFenShi {
+
+    /**
+     * 数据总数(即表格需要绘制的点总数)
+     */
+    int getTotalCount();
 
     /**
      * 股票代码

@@ -87,6 +87,11 @@ public class FenShiDataManager {
     public long time;
 
     /**
+     * 数据总数(即表格需要绘制的点总数)
+     */
+    public int totalCount;
+
+    /**
      * 分时单位转换拦截器
      */
     private FenShiUnitInterceptor fenShiUnitInterceptor;
@@ -225,6 +230,7 @@ public class FenShiDataManager {
             }
             lastClose = fenShi.getFenShiLastClose();
             time = fenShi.getFenShiTime();
+            totalCount = fenShi.getTotalCount();
             if (isInit) {
                 initData();
             }

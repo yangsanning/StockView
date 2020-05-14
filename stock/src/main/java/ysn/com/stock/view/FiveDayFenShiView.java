@@ -86,11 +86,11 @@ public class FiveDayFenShiView extends StockView {
      */
     private float bottomTableMaxY;
     private Paint pillarPaint;
-    private float pillarSpace;
     private float maxPillarHeight;
 
     FiveDayFenShiDataManager fiveDayFenShiDataManager;
     FiveDayFenShiSlideHelper fiveDayFenShiSlideHelper;
+    FenShiDataManager fenShiDataManager;
 
     public FiveDayFenShiView(Context context) {
         super(context);
@@ -170,6 +170,12 @@ public class FiveDayFenShiView extends StockView {
     }
 
     @Override
+    public int getTotalCount() {
+        return fenShiDataManager == null || fenShiDataManager.totalCount == 0 ?
+                super.getTotalCount() : fenShiDataManager.totalCount;
+    }
+
+    @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (fiveDayFenShiSlideHelper != null) {
             fiveDayFenShiSlideHelper.dispatchTouchEvent(event);
@@ -197,16 +203,6 @@ public class FiveDayFenShiView extends StockView {
         // 这里对柱形图最大高度进行限制, 避免顶到时间表格难看
         maxPillarHeight = (bottomTableHeight - 1) * 0.95f;
         bottomTableMaxY = getBottomTableMaxY();
-        initPillarSpace();
-    }
-
-    /**
-     * 初始化柱状图间距
-     */
-    private void initPillarSpace() {
-        // pillarSpace= 宽  - 柱子间距(1f)
-        pillarSpace = (dataWidth - (totalCount * 1f)) / totalCount;
-        pillarPaint.setStrokeWidth(pillarSpace);
     }
 
     @Override
@@ -236,7 +232,8 @@ public class FiveDayFenShiView extends StockView {
         if (hasBottomTable()) {
             // 绘制柱形
             for (Map.Entry<Integer, FenShiDataManager> entry : fiveDayFenShiDataManager.dataManagerMap.entrySet()) {
-                drawPriceLineAndPillar(canvas, entry.getValue(), entry.getKey());
+                fenShiDataManager = entry.getValue();
+                drawPriceLineAndPillar(canvas, entry.getKey());
             }
 
             // 绘制下表格坐标
@@ -244,7 +241,8 @@ public class FiveDayFenShiView extends StockView {
         } else {
             // 绘制价格曲线、闪烁点
             for (Map.Entry<Integer, FenShiDataManager> entry : fiveDayFenShiDataManager.dataManagerMap.entrySet()) {
-                drawPriceLine(canvas, entry.getValue(), entry.getKey());
+                fenShiDataManager = entry.getValue();
+                drawPriceLine(canvas, entry.getKey());
             }
         }
 
@@ -291,19 +289,23 @@ public class FiveDayFenShiView extends StockView {
      * 绘制价格、价格区域、均线、闪烁点、柱形图
      * 相比于{@link #drawPriceLine}多了柱形图绘制, 之所以加多一个方法是为了减少循环耗时，以及避免没必要的判断
      */
-    private void drawPriceLineAndPillar(Canvas canvas, FenShiDataManager dataManager, int position) {
+    private void drawPriceLineAndPillar(Canvas canvas, int position) {
+        // pillarSpace= 宽  - 柱子间距(1f)
+        float pillarSpace = (dataWidth - (getTotalCount() * 1f)) / getTotalCount();
+        pillarPaint.setStrokeWidth(pillarSpace);
+
         // 设置价格圆点（第一个点）
-        moveToPrice(dataManager, position);
+        moveToPrice(fenShiDataManager, position);
 
         // 绘制第一个点柱状图（第一个点要跟昨收做对比）
-        drawFirstPillar(canvas, dataManager, position);
+        drawFirstPillar(canvas, fenShiDataManager, position, pillarSpace);
 
-        for (int i = 1; i < dataManager.priceSize(); i++) {
+        for (int i = 1; i < fenShiDataManager.priceSize(); i++) {
             // 记录后续价格点
-            lineToPrice(canvas, dataManager, position, i);
+            lineToPrice(canvas, fenShiDataManager, position, i);
 
             // 绘制后续柱形图
-            drawPillar(canvas, dataManager, position, i);
+            drawPillar(canvas, fenShiDataManager, position, i, pillarSpace);
         }
 
         // 绘制价格曲线
@@ -313,12 +315,12 @@ public class FiveDayFenShiView extends StockView {
     /**
      * 绘制价格曲线、闪烁点
      */
-    private void drawPriceLine(Canvas canvas, FenShiDataManager dataManager, int position) {
+    private void drawPriceLine(Canvas canvas, int position) {
         // 设置价格圆点（第一个点）
-        moveToPrice(dataManager, position);
-        for (int i = 1; i < dataManager.priceSize(); i++) {
+        moveToPrice(fenShiDataManager, position);
+        for (int i = 1; i < fenShiDataManager.priceSize(); i++) {
             // 记录后续价格点
-            lineToPrice(canvas, dataManager, position, i);
+            lineToPrice(canvas, fenShiDataManager, position, i);
         }
 
         // 绘制价格曲线
@@ -337,8 +339,8 @@ public class FiveDayFenShiView extends StockView {
     /**
      * 绘制第一个点柱状图（第一个点要跟昨收做对比）
      */
-    private void drawFirstPillar(Canvas canvas, FenShiDataManager dataManager, int position) {
-        float lineX = getPillarX(0, position);
+    private void drawFirstPillar(Canvas canvas, FenShiDataManager dataManager, int position, float pillarSpace) {
+        float lineX = getPillarX(0, position, pillarSpace);
         float stopY = getPillarHeight(dataManager, 0);
         pillarPaint.setColor(getColor(dataManager.getPrice(0) >= dataManager.lastClose ? R.color.stock_red : R.color.stock_green));
         canvas.drawLine(lineX, getBottomTableMaxY(), lineX, stopY, pillarPaint);
@@ -367,11 +369,11 @@ public class FiveDayFenShiView extends StockView {
     /**
      * 绘制后续柱形图
      */
-    private void drawPillar(Canvas canvas, FenShiDataManager dataManager, int position, int i) {
+    private void drawPillar(Canvas canvas, FenShiDataManager dataManager, int position, int i, float pillarSpace) {
         float lineX;
         float stopY;
         pillarPaint.setColor(getColor(dataManager.getPrice(i) >= dataManager.getPrice(i - 1) ? R.color.stock_red : R.color.stock_green));
-        lineX = getPillarX(i, position);
+        lineX = getPillarX(i, position, pillarSpace);
         stopY = getPillarHeight(dataManager, i);
         canvas.drawLine(lineX, getBottomTableMaxY(), lineX, stopY, pillarPaint);
     }
@@ -391,7 +393,7 @@ public class FiveDayFenShiView extends StockView {
      * @return x轴坐标
      */
     public float getPriceX(int i, int position) {
-        return getColumnX(((dataWidth) / (float) totalCount), i) + dataWidth * position;
+        return getColumnX(((dataWidth) / (float) getTotalCount()), i) + dataWidth * position;
     }
 
     /**
@@ -427,10 +429,11 @@ public class FiveDayFenShiView extends StockView {
     /**
      * 获取第i个柱状图的绘制位置（x坐标）
      *
-     * @param i 第几个
+     * @param i           第几个
+     * @param pillarSpace
      * @return 第position个数据
      */
-    private float getPillarX(int i, int position) {
+    private float getPillarX(int i, int position, float pillarSpace) {
         return tableMargin + (pillarSpace * i) + (i * 1f) + 1 + dataWidth * position;
     }
 

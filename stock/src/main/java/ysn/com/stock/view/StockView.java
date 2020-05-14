@@ -39,7 +39,7 @@ public class StockView extends View {
     /**
      * totalCount: 总点数
      */
-    protected int totalCount = COUNT_DEFAULT;
+    private int totalCount = COUNT_DEFAULT;
 
     /**
      * columnCount: 列数+1

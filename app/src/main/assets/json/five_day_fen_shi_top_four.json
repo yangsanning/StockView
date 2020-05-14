@@ -4083,6 +4083,7 @@
         "recordTime": null
       }],
     "date": "2020-05-06",
+    "nodeNumber": 240,
     "preSettlement": 3934.2
   },
   {
@@ -8169,6 +8170,7 @@
         "recordTime": null
       }],
     "date": "2020-05-07",
+    "nodeNumber": 240,
     "preSettlement": 3934.2
   },
   {
@@ -12255,6 +12257,7 @@
         "recordTime": null
       }],
     "date": "2020-05-08",
+    "nodeNumber": 240,
     "preSettlement": 3934.2
   },
   {
@@ -16341,6 +16344,7 @@
         "recordTime": null
       }],
     "date": "2020-05-11",
+    "nodeNumber": 240,
     "preSettlement":  3967.0
   }
 ]
