@@ -282,7 +282,7 @@ public class FiveDayFenShiSlideHelper {
         path.lineTo(slideRectRight, slideRectBottom);
         path.lineTo(slideRectLeft, slideRectBottom);
         path.lineTo(slideRectLeft, slipPriceTop);
-        canvas.drawPath(path, textPaint);
+        canvas.drawPath(path, slidePaint);
 
         canvas.drawText(timeText, (slideRectLeft + textMargin * 2), ((slideRectBottom + textRect.height()) / 2f), textPaint);
     }
@@ -314,7 +314,7 @@ public class FiveDayFenShiSlideHelper {
         path.lineTo(slideRectRight, slideRectBottom);
         path.lineTo(slideRectLeft, slideRectBottom);
         path.lineTo(slideRectLeft, slideRectTop);
-        canvas.drawPath(path, textPaint);
+        canvas.drawPath(path, slidePaint);
 
         // 绘制文本
         canvas.drawText(slideValue, (slideRectLeft + (tableMargin + 1) * 4), (slideLineY + textRect.height() / 2f), textPaint);
