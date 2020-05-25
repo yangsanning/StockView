@@ -105,10 +105,6 @@ public class FiveDayFenShiDataManager {
                 dataManagerList.add(dataManager);
             }
 
-            // 记录时间
-            if (dataManager.time == 0 && i + 1 < dataManagerMap.size()) {
-                dataManager.time = TimeUtils.reduceDay(dataManagerMap.get(i + 1).time, -1);
-            }
             dateList.add(dataManager.time);
         }
     }

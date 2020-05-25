@@ -29,16 +29,4 @@ public class TimeUtils {
     public static String formatDay(long timestamp) {
         return new SimpleDateFormat(FORMAT_DAY, Locale.getDefault()).format(new Date(timestamp));
     }
-
-    /**
-     * 当前日期减少天数后的日期
-     *
-     * @param num 减少的天数
-     */
-    public static long reduceDay(long time, int num) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(time);
-        calendar.add(Calendar.DAY_OF_MONTH, num);
-        return calendar.getTimeInMillis();
-    }
 }
