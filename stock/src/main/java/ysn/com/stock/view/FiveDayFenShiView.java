@@ -88,9 +88,8 @@ public class FiveDayFenShiView extends StockView {
     private Paint pillarPaint;
     private float maxPillarHeight;
 
-    FiveDayFenShiDataManager fiveDayFenShiDataManager;
+    public FiveDayFenShiDataManager fiveDayFenShiDataManager;
     FiveDayFenShiSlideHelper fiveDayFenShiSlideHelper;
-    FenShiDataManager fenShiDataManager;
 
     public FiveDayFenShiView(Context context) {
         super(context);
@@ -169,10 +168,8 @@ public class FiveDayFenShiView extends StockView {
         return 5;
     }
 
-    @Override
-    public int getTotalCount() {
-        return fenShiDataManager == null || fenShiDataManager.totalCount == 0 ?
-                super.getTotalCount() : fenShiDataManager.totalCount;
+    public int getTotalCount(FenShiDataManager fenShiDataManager) {
+        return fenShiDataManager == null || fenShiDataManager.totalCount == 0 ? getTotalCount() : fenShiDataManager.totalCount;
     }
 
     @Override
@@ -232,8 +229,7 @@ public class FiveDayFenShiView extends StockView {
         if (hasBottomTable()) {
             // 绘制柱形
             for (Map.Entry<Integer, FenShiDataManager> entry : fiveDayFenShiDataManager.dataManagerMap.entrySet()) {
-                fenShiDataManager = entry.getValue();
-                drawPriceLineAndPillar(canvas, entry.getKey());
+                drawPriceLineAndPillar(entry.getValue(), canvas, entry.getKey());
             }
 
             // 绘制下表格坐标
@@ -241,8 +237,7 @@ public class FiveDayFenShiView extends StockView {
         } else {
             // 绘制价格曲线、闪烁点
             for (Map.Entry<Integer, FenShiDataManager> entry : fiveDayFenShiDataManager.dataManagerMap.entrySet()) {
-                fenShiDataManager = entry.getValue();
-                drawPriceLine(canvas, entry.getKey());
+                drawPriceLine(entry.getValue(), canvas, entry.getKey());
             }
         }
 
@@ -289,23 +284,23 @@ public class FiveDayFenShiView extends StockView {
      * 绘制价格、价格区域、均线、闪烁点、柱形图
      * 相比于{@link #drawPriceLine}多了柱形图绘制, 之所以加多一个方法是为了减少循环耗时，以及避免没必要的判断
      */
-    private void drawPriceLineAndPillar(Canvas canvas, int position) {
+    private void drawPriceLineAndPillar(FenShiDataManager fenShiDataManager, Canvas canvas, int position) {
         // pillarSpace= 宽  - 柱子间距(1f)
-        float pillarSpace = (dataWidth - (getTotalCount() * 1f)) / getTotalCount();
+        float pillarSpace = (dataWidth - (getTotalCount(fenShiDataManager) * 1f)) / getTotalCount(fenShiDataManager);
         pillarPaint.setStrokeWidth(pillarSpace);
 
         // 设置价格圆点（第一个点）
         moveToPrice(fenShiDataManager, position);
 
         // 绘制第一个点柱状图（第一个点要跟昨收做对比）
-        drawFirstPillar(canvas, fenShiDataManager, position, pillarSpace);
+        drawFirstPillar(fenShiDataManager, canvas, position, pillarSpace);
 
         for (int i = 1; i < fenShiDataManager.priceSize(); i++) {
             // 记录后续价格点
-            lineToPrice(canvas, fenShiDataManager, position, i);
+            lineToPrice(fenShiDataManager, canvas, position, i);
 
             // 绘制后续柱形图
-            drawPillar(canvas, fenShiDataManager, position, i, pillarSpace);
+            drawPillar(fenShiDataManager, canvas, position, i, pillarSpace);
         }
 
         // 绘制价格曲线
@@ -315,12 +310,12 @@ public class FiveDayFenShiView extends StockView {
     /**
      * 绘制价格曲线、闪烁点
      */
-    private void drawPriceLine(Canvas canvas, int position) {
+    private void drawPriceLine(FenShiDataManager fenShiDataManager, Canvas canvas, int position) {
         // 设置价格圆点（第一个点）
         moveToPrice(fenShiDataManager, position);
         for (int i = 1; i < fenShiDataManager.priceSize(); i++) {
             // 记录后续价格点
-            lineToPrice(canvas, fenShiDataManager, position, i);
+            lineToPrice(fenShiDataManager, canvas, position, i);
         }
 
         // 绘制价格曲线
@@ -330,16 +325,16 @@ public class FiveDayFenShiView extends StockView {
     /**
      * 设置价格圆点（第一个点）
      */
-    private void moveToPrice(FenShiDataManager dataManager, int position) {
-        float priceX = getPriceX(0, position);
-        float priceY = getPriceY(dataManager.getPrice(0));
+    private void moveToPrice(FenShiDataManager fenShiDataManager, int position) {
+        float priceX = getPriceX(fenShiDataManager, 0, position);
+        float priceY = getPriceY(fenShiDataManager.getPrice(0));
         pricePath.moveTo(priceX, priceY);
     }
 
     /**
      * 绘制第一个点柱状图（第一个点要跟昨收做对比）
      */
-    private void drawFirstPillar(Canvas canvas, FenShiDataManager dataManager, int position, float pillarSpace) {
+    private void drawFirstPillar(FenShiDataManager dataManager, Canvas canvas, int position, float pillarSpace) {
         float lineX = getPillarX(0, position, pillarSpace);
         float stopY = getPillarHeight(dataManager, 0);
         pillarPaint.setColor(getColor(dataManager.getPrice(0) >= dataManager.lastClose ? R.color.stock_red : R.color.stock_green));
@@ -349,12 +344,12 @@ public class FiveDayFenShiView extends StockView {
     /**
      * 记录后续价格点
      */
-    private void lineToPrice(Canvas canvas, FenShiDataManager dataManager, int position, int i) {
-        float priceX = getPriceX(i, position);
-        float priceY = getPriceY(dataManager.getPrice(i));
+    private void lineToPrice(FenShiDataManager fenShiDataManager, Canvas canvas, int position, int i) {
+        float priceX = getPriceX(fenShiDataManager, i, position);
+        float priceY = getPriceY(fenShiDataManager.getPrice(i));
         pricePath.lineTo(priceX, priceY);
 
-        if (position == getColumnCount() - 1 && isBeat && dataManager.isLastPrice(i)) {
+        if (position == getColumnCount() - 1 && isBeat && fenShiDataManager.isLastPrice(i)) {
             //绘制扩散圆
             heartPaint.setColor(getColor(R.color.stock_price_line));
             heartPaint.setAlpha((int) (heartInitAlpha - heartInitAlpha * beatFraction));
@@ -369,7 +364,7 @@ public class FiveDayFenShiView extends StockView {
     /**
      * 绘制后续柱形图
      */
-    private void drawPillar(Canvas canvas, FenShiDataManager dataManager, int position, int i, float pillarSpace) {
+    private void drawPillar(FenShiDataManager dataManager, Canvas canvas, int position, int i, float pillarSpace) {
         float lineX;
         float stopY;
         pillarPaint.setColor(getColor(dataManager.getPrice(i) >= dataManager.getPrice(i - 1) ? R.color.stock_red : R.color.stock_green));
@@ -392,8 +387,8 @@ public class FiveDayFenShiView extends StockView {
      * @param i 当前position
      * @return x轴坐标
      */
-    public float getPriceX(int i, int position) {
-        return getColumnX(((dataWidth) / (float) getTotalCount()), i) + dataWidth * position;
+    public float getPriceX(FenShiDataManager fenShiDataManager, int i, int position) {
+        return getColumnX(((dataWidth) / (float) getTotalCount(fenShiDataManager)), i) + dataWidth * position;
     }
 
     /**

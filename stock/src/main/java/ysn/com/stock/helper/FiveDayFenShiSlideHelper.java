@@ -38,7 +38,6 @@ public class FiveDayFenShiSlideHelper {
     private float topTableHeight, topTableMaxY;
     private float bottomTableHeight, bottomTableMaxY, bottomTableMinY;
     private boolean hasBottomTable;
-    private int totalCount;
     private Paint textPaint;
     private Rect textRect;
     public float dataWidth;
@@ -174,7 +173,6 @@ public class FiveDayFenShiSlideHelper {
             bottomTableMinY = fiveDayFenShiView.getBottomTableMinY();
         }
 
-        totalCount = fiveDayFenShiView.getTotalCount();
         textPaint = fiveDayFenShiView.getTextPaint();
         textRect = fiveDayFenShiView.getTextRect();
 
@@ -206,7 +204,7 @@ public class FiveDayFenShiSlideHelper {
             if (fenShiDataManager.isPriceNoEmpty()) {
                 float minSlideArea = i * dataWidth;
                 slideX = (i - slidePosition) == 0 ? slideX : minSlideArea;
-                slideNum = (int) ((slideX - minSlideArea) / dataWidth * totalCount);
+                slideNum = (int) ((slideX - minSlideArea) / dataWidth * fiveDayFenShiView.getTotalCount(fenShiDataManager));
                 slidePosition = i;
                 break;
             }
@@ -362,7 +360,7 @@ public class FiveDayFenShiSlideHelper {
      * 根据点获取X坐标
      */
     private float getX(int slideNum) {
-        return fiveDayFenShiView.getPriceX(slideNum, slidePosition);
+        return fiveDayFenShiView.getPriceX(fenShiDataManager, slideNum, slidePosition);
     }
 
     /**
