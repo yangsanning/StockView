@@ -4,16 +4,15 @@
 
 ## 效果预览
 
-| [FenShiView] | [CapitalView] | [MiniFenShiView] | [FiveDayFenShiView] |
+| [FenShiView] | [FiveDayFenShiView] | [CapitalView] | [MiniFenShiView] |
 | ------------ | ------------- | ---------------- | ------------------- |
-| <img src="images/fenshiview.gif"/> | <img src="images/capitalview.gif"/> | <img src="images/minifenshiview.gif"/> | <img src="images/fivedayfenshiview.gif"/> |
-
+| <img src="images/fenshiview.gif"/> | <img src="images/fivedayfenshiview.gif"/> | <img src="images/capitalview.gif"/> | <img src="images/minifenshiview.gif"/> |
 
 ## 主要文件
 | 名字             | 摘要           |
 | ---------------- | -------------- |
 | [FenShiView] | 普通分时图  |
-| [FiveDayFenShiView] | 普通分时图  |
+| [FiveDayFenShiView] | 五日分时图  |
 | [CapitalView] | 资金趋势图  |
 | [MiniFenShiView] | 迷你分时图  |
 
