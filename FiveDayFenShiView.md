@@ -2,7 +2,7 @@
 
 ## 效果预览
 
-| [FenShiView]                    | 
+| [FiveDayFenShiView]                    | 
 | ------------------------------- | 
 | <img src="images/fivedayfenshiview.gif" height="512" /> |
 
