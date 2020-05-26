@@ -33,6 +33,11 @@
 public class FenShiTime implements IFenShi {
 
     @Override
+    public int getTotalCount() {
+        return totalCount;
+    }
+
+    @Override
     public String getFenShiCode() {
         return code;
     }
@@ -44,7 +49,12 @@ public class FenShiTime implements IFenShi {
 
     @Override
     public float getFenShiLastClose() {
-        return settlement;
+        return lastClose;
+    }
+
+    @Override
+    public long getFenShiTime() {
+        return time;
     }
 
     public static class DataBean implements IFenShiData {
