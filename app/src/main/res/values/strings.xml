@@ -5,6 +5,7 @@
     <string name="text_five_day_fen_shi">五日分时图</string>
     <string name="text_capital">资金趋势图</string>
     <string name="text_mini_fen_shi">迷你分时图</string>
+    <string name="text_profit_loss">盈亏额/盈亏率图</string>
 
     <string name="capital_left_title">股价(元)</string>
 </resources>

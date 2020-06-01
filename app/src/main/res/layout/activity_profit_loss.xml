@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:ysn="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <ysn.com.stock.view.ProfitLossView
+            android:id="@+id/profit_loss_activity_view1"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="#e6e6e6" />
+
+        <ysn.com.stock.view.ProfitLossView
+            android:id="@+id/profit_loss_activity_view2"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="20dp"
+            ysn:fsv_is_enabled_bottom_tab="true"
+            ysn:fsv_is_enabled_slide="true" />
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

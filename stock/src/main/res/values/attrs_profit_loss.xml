@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ProfitLossView">
+        <!-- 线颜色-->
+        <attr name="plv_line_color" format="color" />
+        <!-- 文本颜色-->
+        <attr name="plv_text_color" format="color" />
+        <!-- 价格线颜色-->
+        <attr name="plv_price_color" format="color" />
+    </declare-styleable>
+</resources>
