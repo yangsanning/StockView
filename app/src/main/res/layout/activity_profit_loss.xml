@@ -17,8 +17,7 @@
         <ysn.com.stock.view.ProfitLossView
             android:id="@+id/profit_loss_activity_view1"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="#e6e6e6" />
+            android:layout_height="200dp" />
 
         <ysn.com.stock.view.ProfitLossView
             android:id="@+id/profit_loss_activity_view2"

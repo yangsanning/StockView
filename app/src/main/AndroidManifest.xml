@@ -21,6 +21,7 @@
         <activity android:name=".page.FiveDayFenShiActivity" />
         <activity android:name=".page.CapitalActivity" />
         <activity android:name=".page.MiniFenShiActivity" />
+        <activity android:name=".page.ProfitLossActivity" />
     </application>
 
 </manifest>

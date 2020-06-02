@@ -10,6 +10,7 @@ import ysn.com.stockview.page.CapitalActivity;
 import ysn.com.stockview.page.FenShiActivity;
 import ysn.com.stockview.page.FiveDayFenShiActivity;
 import ysn.com.stockview.page.MiniFenShiActivity;
+import ysn.com.stockview.page.ProfitLossActivity;
 
 /**
  * @Author yangsanning
@@ -46,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.main_activity_mini_fen_shi:
                 startActivity(new Intent((this), MiniFenShiActivity.class));
+                break;
+            case R.id.main_activity_profit_loss:
+                startActivity(new Intent((this), ProfitLossActivity.class));
                 break;
             default:
                 break;

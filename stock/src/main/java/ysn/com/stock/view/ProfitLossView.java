@@ -147,7 +147,7 @@ public class ProfitLossView extends View {
      * 绘制曲线
      */
     protected void drawPriceLine(Canvas canvas) {
-        float xSpace = config.topTableWidth / (dataManager.priceList.size()-1);
+        float xSpace = config.topTableWidth / (dataManager.priceList.size() - 1);
 
         // 抽取第一个点确定Path的圆点
         moveToPrice(xSpace);
@@ -201,8 +201,8 @@ public class ProfitLossView extends View {
      * @return 当前索引的相应y轴坐标
      */
     private float getPriceY(int position) {
-        float topTableMaxY = config.titleTableHeight - config.topTableHeight;
-        return (topTableMaxY * (dataManager.getPrice(position) - dataManager.minValue)) / dataManager.peak;
+        // (当前价格 - 圆点坐标价格)/(y坐标) = 坐标极值/高度
+        return -(dataManager.getPrice(position) - dataManager.coordinateMinValue) / (dataManager.coordinatePeak / config.topTableHeight);
     }
 
     public void setData(List<Float> priceList, List<String> timesList) {

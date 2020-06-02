@@ -44,9 +44,11 @@ public class ProfitLossConfig {
     public float xYTextSize;
 
     /**
-     * 横线间距
+     * rowSpacing: 横线间距
+     * topTableMaxY: 上表格最大Y
      */
     public float rowSpacing;
+    public float topTableMaxY;
 
     public ProfitLossConfig(Context context, @Nullable AttributeSet attrs) {
         initAttr(context, attrs);
@@ -101,6 +103,7 @@ public class ProfitLossConfig {
         xYTextSize = timeTableHeight * 0.65f;
         textPaint.setTextSize(xYTextSize);
 
+        topTableMaxY = titleTableHeight - topTableHeight;
         rowSpacing = topTableHeight / ProfitLossConfig.TOP_ROW_COUNT;
     }
 }

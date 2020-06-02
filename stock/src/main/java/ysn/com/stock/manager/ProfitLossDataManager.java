@@ -16,9 +16,13 @@ public class ProfitLossDataManager {
 
     public List<Float> priceList = new ArrayList<>();
     public List<Float> yCoordinateList = new ArrayList<>();
-    public float maxValue;
-    public float minValue;
-    public float peak;
+
+    /**
+     * coordinateMinValue: 坐标最小值
+     * coordinatePeak: 坐标极差
+     */
+    public float coordinateMinValue;
+    public float coordinatePeak;
 
     public List<String> timesList = new ArrayList<>();
 
@@ -38,16 +42,16 @@ public class ProfitLossDataManager {
         this.priceList = priceList;
         this.timesList = timesList;
 
-        maxValue = Collections.max(priceList);
-        minValue = Collections.min(priceList);
+        float maxValue = Collections.max(priceList);
+        float minValue = Collections.min(priceList);
 
         // 中间坐标
         float median = (maxValue + minValue) / 2f;
         // 极差
-        peak = (maxValue - minValue);
+        float peak = Math.abs(minValue - maxValue);
         // 梯度
         float t1 = peak / 3.33f;
-        float t2 = peak / 6.66f;
+        float t2 = 2 * t1;
 
         yCoordinateList.clear();
         yCoordinateList.add(median - t2);
@@ -55,5 +59,8 @@ public class ProfitLossDataManager {
         yCoordinateList.add(median);
         yCoordinateList.add(median + t1);
         yCoordinateList.add(median + t2);
+
+        coordinateMinValue = yCoordinateList.get(0);
+        coordinatePeak = yCoordinateList.get(yCoordinateList.size() - 1) - coordinateMinValue;
     }
 }
