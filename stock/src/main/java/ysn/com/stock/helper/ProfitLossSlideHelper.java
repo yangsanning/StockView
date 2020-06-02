@@ -133,7 +133,7 @@ public class ProfitLossSlideHelper {
         config.slidePointPaint.setColor(Color.WHITE);
         canvas.drawCircle(point.x, point.y, (config.pointRadius + 3), config.slidePointPaint);
 
-        config.slidePointPaint.setColor(config.priceLineColor);
+        config.slidePointPaint.setColor(config.valueLineColor);
         canvas.drawCircle(point.x, point.y, config.pointRadius, config.slidePointPaint);
     }
 
@@ -143,16 +143,16 @@ public class ProfitLossSlideHelper {
      * @param canvas
      */
     private void drawSlideRectF(Canvas canvas) {
-        config.slidePointPaint.setColor(config.priceLineColor);
+        config.slidePointPaint.setColor(config.valueLineColor);
         Paint textPaint = config.textPaint;
         textPaint.setColor(config.slideTextColor);
 
         String time = dataManager.timesList.get(slideNum);
         String price;
         if (unitInterceptor == null) {
-            price = String.valueOf(dataManager.getPrice(slideNum));
+            price = String.valueOf(dataManager.getValue(slideNum));
         } else {
-            price = unitInterceptor.slidePrice(dataManager.getPrice(slideNum));
+            price = unitInterceptor.slideValue(dataManager.getValue(slideNum));
         }
 
         textPaint.getTextBounds(time, (0), time.length(), config.textRect);

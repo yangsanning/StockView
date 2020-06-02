@@ -1,5 +1,7 @@
 package ysn.com.stock.manager;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,7 +14,7 @@ import java.util.List;
  */
 public class ProfitLossDataManager {
 
-    public List<Float> priceList = new ArrayList<>();
+    public List<Float> valueList = new ArrayList<>();
     public List<Float> yCoordinateList = new ArrayList<>();
 
     /**
@@ -25,8 +27,8 @@ public class ProfitLossDataManager {
 
     public List<String> timesList = new ArrayList<>();
 
-    public Float getPrice(int position) {
-        return priceList.get(position);
+    public Float getValue(int position) {
+        return valueList.get(position);
     }
 
     public String getTime(int position) {
@@ -42,19 +44,19 @@ public class ProfitLossDataManager {
     }
 
     public boolean isNotEmpty() {
-        return !priceList.isEmpty();
+        return !valueList.isEmpty();
     }
 
     public int dataSize() {
-        return priceList.size();
+        return valueList.size();
     }
 
-    public void setData(List<Float> priceList, List<String> timesList) {
-        this.priceList = priceList;
+    public void setData(@NonNull List<Float> valueList,@NonNull List<String> timesList) {
+        this.valueList = valueList;
         this.timesList = timesList;
 
-        float maxValue = Collections.max(priceList);
-        float minValue = Collections.min(priceList);
+        float maxValue = Collections.max(valueList);
+        float minValue = Collections.min(valueList);
 
         // 中间坐标
         coordinateMedian = (maxValue + minValue) / 2f;

@@ -17,7 +17,7 @@ public class ProfitLossInterceptor implements ProfitLossUnitInterceptor {
     }
 
     @Override
-    public String slidePrice(float slidePrice) {
-        return slidePrice + "万";
+    public String slideValue(float slideValue) {
+        return slideValue + "万";
     }
 }

@@ -25,10 +25,10 @@ public class ProfitLossConfig {
      */
     public static final int TOP_ROW_COUNT = 4;
 
-    public int lineColor, textColor, priceLineColor, slideTextColor, slideBgColor;
+    public int lineColor, textColor, valueLineColor, slideTextColor, slideBgColor;
 
-    public Paint linePaint, textPaint, priceLinePaint, slidePointPaint,slideBgPaint;
-    public Path linePath, priceLinePath;
+    public Paint linePaint, textPaint, valueLinePaint, slidePointPaint,slideBgPaint;
+    public Path linePath, valueLinePath;
     public Rect textRect;
     public RectF slideRectF = new RectF();
 
@@ -60,9 +60,9 @@ public class ProfitLossConfig {
 
         lineColor = typedArray.getColor(R.styleable.ProfitLossView_plv_text_color, Color.parseColor("#aaaaaa"));
         textColor = typedArray.getColor(R.styleable.ProfitLossView_plv_text_color, Color.parseColor("#666666"));
-        priceLineColor = typedArray.getColor(R.styleable.ProfitLossView_plv_price_color, Color.parseColor("#f27100"));
-        slideTextColor = typedArray.getColor(R.styleable.ProfitLossView_plv_price_color, Color.parseColor("#ffffff"));
-        slideBgColor = typedArray.getColor(R.styleable.ProfitLossView_plv_price_color, Color.parseColor("#90000000"));
+        valueLineColor = typedArray.getColor(R.styleable.ProfitLossView_plv_value_line_color, Color.parseColor("#f27100"));
+        slideTextColor = typedArray.getColor(R.styleable.ProfitLossView_plv_value_line_color, Color.parseColor("#ffffff"));
+        slideBgColor = typedArray.getColor(R.styleable.ProfitLossView_plv_value_line_color, Color.parseColor("#90000000"));
 
         typedArray.recycle();
     }
@@ -80,12 +80,12 @@ public class ProfitLossConfig {
         textPaint.setTextAlign(Paint.Align.LEFT);
         textRect = new Rect();
 
-        priceLinePath = new Path();
-        priceLinePaint = new Paint();
-        priceLinePaint.setColor(priceLineColor);
-        priceLinePaint.setAntiAlias(true);
-        priceLinePaint.setStyle(Paint.Style.STROKE);
-        priceLinePaint.setStrokeWidth(2f);
+        valueLinePath = new Path();
+        valueLinePaint = new Paint();
+        valueLinePaint.setColor(valueLineColor);
+        valueLinePaint.setAntiAlias(true);
+        valueLinePaint.setStyle(Paint.Style.STROKE);
+        valueLinePaint.setStrokeWidth(2f);
 
         slidePointPaint = new Paint();
         slidePointPaint.setAntiAlias(true);

@@ -3,6 +3,7 @@ package ysn.com.stock.view;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
@@ -191,10 +192,10 @@ public class ProfitLossView extends View {
         }
 
         // 绘制曲线以及区域
-        canvas.drawPath(config.priceLinePath, config.priceLinePaint);
+        canvas.drawPath(config.valueLinePath, config.valueLinePaint);
 
         // 使用完后，重置画笔
-        config.priceLinePath.reset();
+        config.valueLinePath.reset();
     }
 
     /**
@@ -203,7 +204,7 @@ public class ProfitLossView extends View {
     private void moveToPrice() {
         float priceX = getX(0);
         float priceY = getY(0);
-        config.priceLinePath.moveTo(priceX, priceY);
+        config.valueLinePath.moveTo(priceX, priceY);
     }
 
     /**
@@ -212,7 +213,7 @@ public class ProfitLossView extends View {
     private void lineToPrice(int i) {
         float priceX = getX(i);
         float priceY = getY(i);
-        config.priceLinePath.lineTo(priceX, priceY);
+        config.valueLinePath.lineTo(priceX, priceY);
     }
 
     /**
@@ -236,7 +237,7 @@ public class ProfitLossView extends View {
      */
     public float getY(int position) {
         // (当前价格 - 圆点坐标价格)/(y坐标) = 坐标极值/高度
-        return -(dataManager.getPrice(position) - dataManager.coordinateMin) / (dataManager.coordinatePeak / config.topTableHeight);
+        return -(dataManager.getValue(position) - dataManager.coordinateMin) / (dataManager.coordinatePeak / config.topTableHeight);
     }
 
     /**
@@ -261,24 +262,24 @@ public class ProfitLossView extends View {
     }
 
     /**
-     * 设置数据
-     *
-     * @param priceList 价格集合
-     * @param timesList 时间集合
-     */
-    public void setData(List<Float> priceList, List<String> timesList) {
-        if (!priceList.isEmpty()) {
-            dataManager.setData(priceList, timesList);
-        }
-        invalidate();
-    }
-
-    /**
      * 设置单位拦截器
      */
     public ProfitLossView setUnitInterceptor(ProfitLossUnitInterceptor unitInterceptor) {
         this.unitInterceptor = unitInterceptor;
         this.slideHelper.setUnitInterceptor(unitInterceptor);
         return this;
+    }
+
+    /**
+     * 设置数据
+     *
+     * @param valueList 价格集合
+     * @param timesList 时间集合
+     */
+    public void setData(@NonNull List<Float> valueList,@NonNull List<String> timesList) {
+        if (!valueList.isEmpty()) {
+            dataManager.setData(valueList, timesList);
+        }
+        invalidate();
     }
 }

@@ -17,7 +17,7 @@ public class ProfitLossPercentInterceptor implements ProfitLossUnitInterceptor {
     }
 
     @Override
-    public String slidePrice(float slidePrice) {
-        return NumberUtils.numberFormat(slidePrice * 100, 2) + "%";
+    public String slideValue(float slideValue) {
+        return NumberUtils.numberFormat(slideValue * 100, 2) + "%";
     }
 }
