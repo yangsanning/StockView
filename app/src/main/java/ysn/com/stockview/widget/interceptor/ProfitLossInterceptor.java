@@ -12,7 +12,12 @@ import ysn.com.stock.utils.NumberUtils;
 public class ProfitLossInterceptor implements ProfitLossUnitInterceptor {
 
     @Override
-    public String yCoordinate(float value) {
-        return NumberUtils.numberFormat(value, 2) +"万";
+    public String yCoordinate(float yCoordinate) {
+        return NumberUtils.numberFormat(yCoordinate, 2) + "万";
+    }
+
+    @Override
+    public String slidePrice(float slidePrice) {
+        return slidePrice + "万";
     }
 }

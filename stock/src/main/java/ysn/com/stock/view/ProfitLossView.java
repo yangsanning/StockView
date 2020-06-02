@@ -6,12 +6,14 @@ import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 import java.util.List;
 
 import ysn.com.stock.R;
 import ysn.com.stock.config.ProfitLossConfig;
+import ysn.com.stock.helper.ProfitLossSlideHelper;
 import ysn.com.stock.interceptor.ProfitLossUnitInterceptor;
 import ysn.com.stock.manager.ProfitLossDataManager;
 import ysn.com.stock.utils.ResUtils;
@@ -25,10 +27,26 @@ import ysn.com.stock.utils.ResUtils;
 public class ProfitLossView extends View {
 
     protected Context context;
+
+    /**
+     * 参数配置
+     */
     protected ProfitLossConfig config;
+
+    /**
+     * 数据管理
+     */
     protected ProfitLossDataManager dataManager = new ProfitLossDataManager();
 
+    /**
+     * 单位转换拦截器
+     */
     protected ProfitLossUnitInterceptor unitInterceptor;
+
+    /**
+     * 滑动事件管理
+     */
+    protected ProfitLossSlideHelper slideHelper;
 
     public ProfitLossView(Context context) {
         this(context, null);
@@ -52,6 +70,23 @@ public class ProfitLossView extends View {
     protected void init(Context context, AttributeSet attrs) {
         this.context = context;
         config = new ProfitLossConfig(context, attrs);
+        slideHelper = new ProfitLossSlideHelper(this);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (slideHelper != null) {
+            slideHelper.dispatchTouchEvent(event);
+        }
+        return super.dispatchTouchEvent(event);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (slideHelper != null) {
+            return slideHelper.onTouchEvent(event);
+        }
+        return super.onTouchEvent(event);
     }
 
     @Override
@@ -71,12 +106,16 @@ public class ProfitLossView extends View {
         // 绘制横线
         drawRowLine(canvas);
 
-        if (!dataManager.priceList.isEmpty()) {
+        if (dataManager.isNotEmpty()) {
             // 绘制时间坐标
             drawTimeText(canvas);
 
             // 绘制曲线
             drawPriceLine(canvas);
+
+            if (slideHelper != null) {
+                slideHelper.draw(canvas);
+            }
         }
 
         canvas.restore();
@@ -87,16 +126,12 @@ public class ProfitLossView extends View {
      */
     protected void drawYCoordinate(Canvas canvas) {
         config.textPaint.setColor(config.textColor);
-
-        if (unitInterceptor == null) {
-            for (int i = 0; i < ProfitLossDataManager.DEFAULT_Y_COORDINATES.length; i++) {
-                drawYCoordinate(canvas, i, ProfitLossDataManager.DEFAULT_Y_COORDINATES[i]);
-            }
-        } else {
-            for (int i = 0; i < dataManager.yCoordinateList.size(); i++) {
-                drawYCoordinate(canvas, i, unitInterceptor.yCoordinate(dataManager.yCoordinateList.get(i)));
-            }
+        for (int i = 0; i < dataManager.yCoordinateList.size(); i++) {
+            Float yCoordinate = dataManager.yCoordinateList.get(i);
+            drawYCoordinate(canvas, i, unitInterceptor == null ?
+                    String.valueOf(yCoordinate) : unitInterceptor.yCoordinate(yCoordinate));
         }
+
     }
 
     /**
@@ -121,7 +156,7 @@ public class ProfitLossView extends View {
             // 横线y轴坐标
             float rowLineY = -config.rowSpacing * i;
             config.linePath.moveTo(0, rowLineY);
-            config.linePath.lineTo((config.viewWidth), rowLineY);
+            config.linePath.lineTo((config.topTableWidth), rowLineY);
             config.linePaint.setColor(ResUtils.getColor(context, R.color.stock_dotted_column_line));
             canvas.drawPath(config.linePath, config.linePaint);
         }
@@ -147,14 +182,12 @@ public class ProfitLossView extends View {
      * 绘制曲线
      */
     protected void drawPriceLine(Canvas canvas) {
-        float xSpace = config.topTableWidth / (dataManager.priceList.size() - 1);
-
         // 抽取第一个点确定Path的圆点
-        moveToPrice(xSpace);
+        moveToPrice();
 
         // 对后续点做处理
-        for (int i = 1; i < dataManager.priceList.size(); i++) {
-            lineToPrice(xSpace, i);
+        for (int i = 1; i < dataManager.dataSize(); i++) {
+            lineToPrice(i);
         }
 
         // 绘制曲线以及区域
@@ -167,29 +200,30 @@ public class ProfitLossView extends View {
     /**
      * 设置价格圆点（第一个点）
      */
-    private void moveToPrice(float xSpace) {
-        float priceX = getX(xSpace, 0);
-        float priceY = getPriceY(0);
+    private void moveToPrice() {
+        float priceX = getX(0);
+        float priceY = getY(0);
         config.priceLinePath.moveTo(priceX, priceY);
     }
 
     /**
      * 记录后续价格点
      */
-    private void lineToPrice(float xSpace, int i) {
-        float priceX = getX(xSpace, i);
-        float priceY = getPriceY(i);
+    private void lineToPrice(int i) {
+        float priceX = getX(i);
+        float priceY = getY(i);
         config.priceLinePath.lineTo(priceX, priceY);
     }
 
     /**
      * 获取x轴坐标
      *
-     * @param xSpace   点间距
      * @param position 当前position
      * @return x轴坐标
      */
-    private float getX(float xSpace, int position) {
+    public float getX(int position) {
+        // 点间距
+        float xSpace = config.topTableWidth / (dataManager.dataSize() - 1);
         return xSpace * position;
     }
 
@@ -200,11 +234,38 @@ public class ProfitLossView extends View {
      * @param position 索引
      * @return 当前索引的相应y轴坐标
      */
-    private float getPriceY(int position) {
+    public float getY(int position) {
         // (当前价格 - 圆点坐标价格)/(y坐标) = 坐标极值/高度
-        return -(dataManager.getPrice(position) - dataManager.coordinateMinValue) / (dataManager.coordinatePeak / config.topTableHeight);
+        return -(dataManager.getPrice(position) - dataManager.coordinateMin) / (dataManager.coordinatePeak / config.topTableHeight);
     }
 
+    /**
+     * 获取参数配置
+     */
+    public ProfitLossConfig getConfig() {
+        return config;
+    }
+
+    /**
+     * 获取数据管理器
+     */
+    public ProfitLossDataManager getDataManager() {
+        return dataManager;
+    }
+
+    /**
+     * 获取单位拦截器
+     */
+    public ProfitLossUnitInterceptor getUnitInterceptor() {
+        return unitInterceptor;
+    }
+
+    /**
+     * 设置数据
+     *
+     * @param priceList 价格集合
+     * @param timesList 时间集合
+     */
     public void setData(List<Float> priceList, List<String> timesList) {
         if (!priceList.isEmpty()) {
             dataManager.setData(priceList, timesList);
@@ -212,6 +273,9 @@ public class ProfitLossView extends View {
         invalidate();
     }
 
+    /**
+     * 设置单位拦截器
+     */
     public ProfitLossView setUnitInterceptor(ProfitLossUnitInterceptor unitInterceptor) {
         this.unitInterceptor = unitInterceptor;
         return this;

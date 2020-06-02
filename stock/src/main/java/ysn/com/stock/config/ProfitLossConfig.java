@@ -6,10 +6,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-
-import java.text.DecimalFormat;
 
 import ysn.com.stock.R;
 
@@ -26,13 +25,14 @@ public class ProfitLossConfig {
      */
     public static final int TOP_ROW_COUNT = 4;
 
-    public int lineColor, textColor, priceLineColor;
+    public int lineColor, textColor, priceLineColor, slideTextColor, slideBgColor;
 
-    public Paint linePaint, textPaint, priceLinePaint;
+    public Paint linePaint, textPaint, priceLinePaint, slidePointPaint,slideBgPaint;
     public Path linePath, priceLinePath;
     public Rect textRect;
-    public DecimalFormat decimalFormat;
+    public RectF slideRectF = new RectF();
 
+    public float pointRadius = 6.66f;
     public int viewWidth, viewHeight;
     public int circleX, circleY;
 
@@ -61,6 +61,8 @@ public class ProfitLossConfig {
         lineColor = typedArray.getColor(R.styleable.ProfitLossView_plv_text_color, Color.parseColor("#aaaaaa"));
         textColor = typedArray.getColor(R.styleable.ProfitLossView_plv_text_color, Color.parseColor("#666666"));
         priceLineColor = typedArray.getColor(R.styleable.ProfitLossView_plv_price_color, Color.parseColor("#f27100"));
+        slideTextColor = typedArray.getColor(R.styleable.ProfitLossView_plv_price_color, Color.parseColor("#ffffff"));
+        slideBgColor = typedArray.getColor(R.styleable.ProfitLossView_plv_price_color, Color.parseColor("#90000000"));
 
         typedArray.recycle();
     }
@@ -85,7 +87,12 @@ public class ProfitLossConfig {
         priceLinePaint.setStyle(Paint.Style.STROKE);
         priceLinePaint.setStrokeWidth(2f);
 
-        decimalFormat = new DecimalFormat("0.00");
+        slidePointPaint = new Paint();
+        slidePointPaint.setAntiAlias(true);
+
+        slideBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        slideBgPaint.setStyle(Paint.Style.FILL);
+        slideBgPaint.setColor(slideBgColor);
     }
 
     public void onSizeChanged(int witdh, int heigt, int oldWidth, int oldheight) {
@@ -94,7 +101,7 @@ public class ProfitLossConfig {
 
         leftTableWidth = viewWidth / 6f;
         titleTableHeight = timeTableHeight = viewHeight * 0.07f;
-        topTableWidth = viewWidth - leftTableWidth;
+        topTableWidth = viewWidth - leftTableWidth - pointRadius;
         topTableHeight = viewHeight - titleTableHeight - timeTableHeight;
 
         circleX = (int) leftTableWidth;

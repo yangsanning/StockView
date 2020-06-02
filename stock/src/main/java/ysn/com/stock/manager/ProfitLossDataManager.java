@@ -7,22 +7,21 @@ import java.util.List;
 /**
  * @Author yangsanning
  * @ClassName ProfitLossDataManager
- * @Description 一句话概括作用
+ * @Description {@link ysn.com.stock.view.ProfitLossView} 的数据管理
  * @Date 2020/6/1
  */
 public class ProfitLossDataManager {
-
-    public static final String[] DEFAULT_Y_COORDINATES = new String[]{"-100.00%", "-50.00%", "0.00%", "50.00%", "100.00%"};
 
     public List<Float> priceList = new ArrayList<>();
     public List<Float> yCoordinateList = new ArrayList<>();
 
     /**
-     * coordinateMinValue: 坐标最小值
+     * coordinateMax: 坐标最大值
+     * coordinateMedian: 坐标中间值
+     * coordinateMin: 坐标最小值
      * coordinatePeak: 坐标极差
      */
-    public float coordinateMinValue;
-    public float coordinatePeak;
+    public float coordinateMax, coordinateMedian, coordinateMin, coordinatePeak;
 
     public List<String> timesList = new ArrayList<>();
 
@@ -30,12 +29,24 @@ public class ProfitLossDataManager {
         return priceList.get(position);
     }
 
+    public String getTime(int position) {
+        return timesList.isEmpty() ? "" : timesList.get(position);
+    }
+
     public String getFistTime() {
-        return timesList.isEmpty() ? "" : timesList.get(0);
+        return getTime(0);
     }
 
     public String getLastTime() {
-        return timesList.isEmpty() ? "" : timesList.get(timesList.size() - 1);
+        return getTime(timesList.size() - 1);
+    }
+
+    public boolean isNotEmpty() {
+        return !priceList.isEmpty();
+    }
+
+    public int dataSize() {
+        return priceList.size();
     }
 
     public void setData(List<Float> priceList, List<String> timesList) {
@@ -46,7 +57,7 @@ public class ProfitLossDataManager {
         float minValue = Collections.min(priceList);
 
         // 中间坐标
-        float median = (maxValue + minValue) / 2f;
+        coordinateMedian = (maxValue + minValue) / 2f;
         // 极差
         float peak = Math.abs(minValue - maxValue);
         // 梯度
@@ -54,13 +65,14 @@ public class ProfitLossDataManager {
         float t2 = 2 * t1;
 
         yCoordinateList.clear();
-        yCoordinateList.add(median - t2);
-        yCoordinateList.add(median - t1);
-        yCoordinateList.add(median);
-        yCoordinateList.add(median + t1);
-        yCoordinateList.add(median + t2);
+        yCoordinateList.add(coordinateMedian - t2);
+        yCoordinateList.add(coordinateMedian - t1);
+        yCoordinateList.add(coordinateMedian);
+        yCoordinateList.add(coordinateMedian + t1);
+        yCoordinateList.add(coordinateMedian + t2);
 
-        coordinateMinValue = yCoordinateList.get(0);
-        coordinatePeak = yCoordinateList.get(yCoordinateList.size() - 1) - coordinateMinValue;
+        coordinateMax = yCoordinateList.get(yCoordinateList.size() - 1);
+        coordinateMin = yCoordinateList.get(0);
+        coordinatePeak = coordinateMax - coordinateMin;
     }
 }

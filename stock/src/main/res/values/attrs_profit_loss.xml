@@ -7,5 +7,9 @@
         <attr name="plv_text_color" format="color" />
         <!-- 价格线颜色-->
         <attr name="plv_price_color" format="color" />
+        <!-- 滑动区域文字颜色-->
+        <attr name="plv_slide_text_color" format="color" />
+        <!-- 滑动区域背景颜色-->
+        <attr name="plv_slide_bg_color" format="color" />
     </declare-styleable>
 </resources>
