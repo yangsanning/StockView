@@ -8,6 +8,7 @@ import ysn.com.stockview.R;
 import ysn.com.stockview.bean.ProfitLoss;
 import ysn.com.stockview.utils.JsonUtils;
 import ysn.com.stockview.widget.interceptor.ProfitLossInterceptor;
+import ysn.com.stockview.widget.interceptor.ProfitLossPercentInterceptor;
 
 /**
  * @Author yangsanning
@@ -31,6 +32,7 @@ public class ProfitLossActivity extends AppCompatActivity {
 
         ProfitLossView profitLossView2 = findViewById(R.id.profit_loss_activity_view2);
         profitLossView2
+                .setUnitInterceptor(new ProfitLossPercentInterceptor())
                 .setData(data.getRate(), data.getDate());
     }
 }

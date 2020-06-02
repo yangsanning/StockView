@@ -278,6 +278,7 @@ public class ProfitLossView extends View {
      */
     public ProfitLossView setUnitInterceptor(ProfitLossUnitInterceptor unitInterceptor) {
         this.unitInterceptor = unitInterceptor;
+        this.slideHelper.setUnitInterceptor(unitInterceptor);
         return this;
     }
 }

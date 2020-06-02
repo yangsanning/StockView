@@ -30,7 +30,7 @@ public class ProfitLossSlideHelper {
     private ProfitLossView profitLossView;
     protected ProfitLossConfig config;
     protected ProfitLossDataManager dataManager;
-    private final ProfitLossUnitInterceptor unitInterceptor;
+    protected  ProfitLossUnitInterceptor unitInterceptor;
 
     protected float slideX, slideY;
     protected int slideNum;
@@ -46,7 +46,6 @@ public class ProfitLossSlideHelper {
         this.config = profitLossView.getConfig();
         this.dataManager = profitLossView.getDataManager();
         this.profitLossView = profitLossView;
-        this.unitInterceptor = profitLossView.getUnitInterceptor();
     }
 
     public void dispatchTouchEvent(MotionEvent event) {
@@ -194,5 +193,9 @@ public class ProfitLossSlideHelper {
         canvas.drawRoundRect(slideRectF, 10, 10, config.slideBgPaint);
         canvas.drawText(time, textX, priceY, textPaint);
         canvas.drawText(price, textX, timeY, textPaint);
+    }
+
+    public void setUnitInterceptor(ProfitLossUnitInterceptor unitInterceptor) {
+        this.unitInterceptor = unitInterceptor;
     }
 }
