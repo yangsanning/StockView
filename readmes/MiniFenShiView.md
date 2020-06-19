@@ -80,14 +80,14 @@ public class FenShiTime implements IFenShi {
 #### FenShiView
 |name|format|description|
 |:---:|:---:|:---:|
-| mfsv_up_color | color | 涨颜色 |
-| mfsv_down_color | color | 跌颜色 |
-| mfsv_equal_color | color | 不涨不跌颜色 |
-| mfsv_gradient_bottom_color | color | 渐变底部颜色 |
-| mfsv_stroke_width | dimension | 实线宽 |
-| mfsv_area_alpha | integer | 价格区域透明度 |
-| mfsv_dotted_line_width | dimension | 虚线宽 |
-| mfsv_dotted_line_space | dimension | 虚线间距 |
+| upColor | color | 涨颜色 |
+| downColor | color | 跌颜色 |
+| equalColor | color | 不涨不跌颜色 |
+| gradientBottomColor | color | 渐变底部颜色 |
+| strokeWidth | dimension | 实线宽 |
+| areaAlpha | integer | 价格区域透明度 |
+| dottedLineWidth | dimension | 虚线宽 |
+| dottedLineSpace | dimension | 虚线间距 |
 
 [MiniFenShiView]:https://github.com/yangsanning/StockView/blob/master/stock/src/main/java/ysn/com/stock/view/MiniFenShiView.java
 [IFenShi]:https://github.com/yangsanning/StockView/blob/master/stock/src/main/java/ysn/com/stock/bean/IFenShi.java
