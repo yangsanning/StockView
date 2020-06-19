@@ -9,13 +9,9 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
 import ysn.com.stock.bean.IFenShi;
-import ysn.com.stock.bean.IFenShiData;
 import ysn.com.stock.config.MiniFenShiConfig;
+import ysn.com.stock.manager.MiniFenShiDataManager;
 
 /**
  * @Author yangsanning
@@ -26,12 +22,8 @@ import ysn.com.stock.config.MiniFenShiConfig;
  */
 public class MiniFenShiView extends StockView {
 
-    private List<Float> stockPriceList = new ArrayList<>();
-    private float lastClose = 0.0f;
-    private float maxStockPrice = Float.MIN_VALUE;
-    private float minStockPrice = Float.MAX_VALUE;
-
-    MiniFenShiConfig config;
+    private MiniFenShiConfig config;
+    private MiniFenShiDataManager dataManager;
 
     public MiniFenShiView(Context context) {
         super(context);
@@ -55,6 +47,7 @@ public class MiniFenShiView extends StockView {
         super.init(attrs);
         config = new MiniFenShiConfig(context, attrs);
         config.dottedLinePaint.setPathEffect(config.pathEffect);
+        dataManager = new MiniFenShiDataManager(config);
     }
 
     @Override
@@ -74,7 +67,7 @@ public class MiniFenShiView extends StockView {
     protected void onChildDraw(Canvas canvas) {
         super.onChildDraw(canvas);
 
-        if (stockPriceList.isEmpty()) {
+        if (dataManager.isPriceEmpty()) {
             // 绘制默认中线
             drawLastClose(canvas, getTopTableMaxY() / 2);
             return;
@@ -94,7 +87,7 @@ public class MiniFenShiView extends StockView {
         config.dottedLinePaint.setColor(config.currentColor);
 
         // 绘制昨日收盘价线
-        drawLastClose(canvas, getY(lastClose));
+        drawLastClose(canvas, getY(dataManager.lastClose));
 
         // 绘制价格曲线
         drawPriceLine(canvas);
@@ -117,16 +110,16 @@ public class MiniFenShiView extends StockView {
         config.pricePath.reset();
         config.priceAreaPath.reset();
 
-        float price = stockPriceList.get(0);
+        float price = dataManager.getPrice(0);
         config.pricePath.moveTo(tableMargin, getY(price));
         config.priceAreaPath.moveTo(tableMargin, getTopTableMinY());
         config.priceAreaPath.lineTo(tableMargin, getY(price));
-        for (int i = 1; i < stockPriceList.size(); i++) {
-            price = stockPriceList.get(i);
+        for (int i = 1; i < dataManager.priceSize(); i++) {
+            price = dataManager.getPrice(i);
             config.pricePath.lineTo(getX(i), getY(price));
             config.priceAreaPath.lineTo(getX(i), getY(price));
         }
-        config.priceAreaPath.lineTo(getX((stockPriceList.size() - 1)), getTopTableMinY());
+        config.priceAreaPath.lineTo(getX(dataManager.getLastPricePosition()), getTopTableMinY());
         config.priceAreaPath.close();
 
         canvas.drawPath(config.pricePath, config.pricePaint);
@@ -140,94 +133,31 @@ public class MiniFenShiView extends StockView {
      * @return 价格线的y轴坐标
      */
     private float getY(float price) {
-        return getY(price, minStockPrice, maxStockPrice);
+        return getY(price, dataManager.minStockPrice, dataManager.maxStockPrice);
     }
 
-    private void initData() {
-        stockPriceList.clear();
-        lastClose = 0.0f;
-        maxStockPrice = Float.MIN_VALUE;
-        minStockPrice = Float.MAX_VALUE;
-    }
-
-    private void initCurrentColor() {
-        if (stockPriceList.isEmpty()) {
+    /**
+     * 设置数据
+     */
+    public <T extends IFenShi> void setNewData(T fenShi) {
+        if (fenShi==null) {
             return;
         }
-        Float lastPrice = stockPriceList.get(stockPriceList.size() - 1);
-        if (lastPrice > lastClose) {
-            config.currentColor = config.upColor;
-        } else if (lastPrice < lastClose) {
-            config.currentColor = config.downColor;
-        } else {
-            config.currentColor = config.equalColor;
-        }
-    }
-
-    private void initPeakPrice() {
-        if (Objects.equals(maxStockPrice, minStockPrice)) {
-            minStockPrice = maxStockPrice / 2f;
-            maxStockPrice = maxStockPrice * 3f / 2f;
-        }
-    }
-
-    public <T extends IFenShi> void setNewData(T fenShi) {
-        initData();
-        if (fenShi != null) {
-            List<? extends IFenShiData> fenShiDataList = fenShi.getFenShiData();
-            for (IFenShiData fenShiData : fenShiDataList) {
-                float trade = fenShiData.getFenShiPrice();
-                stockPriceList.add(trade);
-                maxStockPrice = Math.max(trade, maxStockPrice);
-                minStockPrice = Math.min(trade, minStockPrice);
-            }
-            lastClose = fenShi.getFenShiLastClose();
-        }
-        initPeakPrice();
-        initCurrentColor();
+        dataManager.setNewData(fenShi);
         invalidate();
     }
 
-    public void setNewData(ArrayList<Float> stockPriceList, Float lastClose) {
-        initData();
-        this.stockPriceList = stockPriceList;
-        for (Float trade : stockPriceList) {
-            maxStockPrice = Math.max(trade, maxStockPrice);
-            minStockPrice = Math.min(trade, minStockPrice);
-        }
-        this.lastClose = lastClose;
-        initPeakPrice();
-        initCurrentColor();
-        invalidate();
-    }
-
-    public void setNewData(ArrayList<Float> stockPriceList, Float lastClose, Float maxStockPrice, Float minStockPrice) {
-        this.stockPriceList = stockPriceList;
-        this.lastClose = lastClose;
-        this.maxStockPrice = maxStockPrice;
-        this.minStockPrice = minStockPrice;
-        initPeakPrice();
-        initCurrentColor();
-        invalidate();
-    }
-
-    public List<Float> getStockPriceList() {
-        return stockPriceList;
-    }
-
-    public float getLastClose() {
-        return lastClose;
-    }
-
-    public float getMaxStockPrice() {
-        return maxStockPrice;
-    }
-
-    public float getMinStockPrice() {
-        return minStockPrice;
-    }
-
+    /**
+     * 获取迷你分时参数配置
+     */
     public MiniFenShiConfig getConfig() {
         return config;
+    }
+
+    /**
+     * 获取迷你分时数据管理
+     */
+    public MiniFenShiDataManager getDataManager() {
+        return dataManager;
     }
 }

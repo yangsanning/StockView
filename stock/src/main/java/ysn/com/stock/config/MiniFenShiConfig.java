@@ -15,7 +15,7 @@ import ysn.com.stock.utils.ResUtils;
 /**
  * @Author yangsanning
  * @ClassName MiniFenShiConfig
- * @Description 分时参数配置
+ * @Description 迷你分时参数配置
  * @Date 2020/6/18
  */
 public class MiniFenShiConfig {
