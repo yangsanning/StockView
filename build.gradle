@@ -28,8 +28,8 @@ allprojects {
         //未经测试，不要随意升级支持库的版本
         SUPPORT_LIBRARY_VERSION = '27.1.1'
 
-        VERSION_CODE = 10007
-        VERSION_NAME = "1.0.7"
+        VERSION_CODE = 10201
+        VERSION_NAME = "1.2.1"
     }
 }
 
