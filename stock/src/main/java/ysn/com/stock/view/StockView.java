@@ -371,7 +371,7 @@ public class StockView extends View {
      * @return x轴坐标
      */
     public float getX(int position) {
-        return getColumnX(((viewWidth - tableMargin * 2) / (float) totalCount), position);
+        return getColumnX(((viewWidth - tableMargin * 2) / (float) getTotalCount()), position);
     }
 
     /**

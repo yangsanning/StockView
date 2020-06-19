@@ -51,6 +51,11 @@ public class MiniFenShiView extends StockView {
     }
 
     @Override
+    public int getTotalCount() {
+        return dataManager.totalCount == 0 ? super.getTotalCount() : dataManager.totalCount;
+    }
+
+    @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         viewWidth = w;
@@ -140,7 +145,7 @@ public class MiniFenShiView extends StockView {
      * 设置数据
      */
     public <T extends IFenShi> void setNewData(T fenShi) {
-        if (fenShi==null) {
+        if (fenShi == null) {
             return;
         }
         dataManager.setNewData(fenShi);
