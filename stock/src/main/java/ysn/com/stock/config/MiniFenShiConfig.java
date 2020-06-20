@@ -36,6 +36,7 @@ public class MiniFenShiConfig {
     public int strokeWidth;
     public int areaAlpha;
     public PathEffect pathEffect;
+    public boolean alwaysShowDottedLine;
 
     /**
      * 当前颜色
@@ -64,6 +65,8 @@ public class MiniFenShiConfig {
         int dottedWidth = typedArray.getDimensionPixelSize(R.styleable.MiniFenShiView_dottedLineWidth, 20);
         int dottedSpace = typedArray.getDimensionPixelSize(R.styleable.MiniFenShiView_dottedLineSpace, 20);
         pathEffect = new DashPathEffect(new float[]{dottedWidth, dottedSpace}, 0);
+
+        alwaysShowDottedLine = typedArray.getBoolean(R.styleable.MiniFenShiView_alwaysShowDottedLine, false);
 
         typedArray.recycle();
     }

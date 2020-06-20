@@ -89,6 +89,14 @@ public class MiniFenShiDataManager {
         lastClose = fenShi.getFenShiLastClose();
         totalCount = fenShi.getTotalCount();
 
+        if (config.alwaysShowDottedLine) {
+            if (lastClose > maxStockPrice) {
+                maxStockPrice = lastClose;
+            } else if (lastClose < minStockPrice) {
+                minStockPrice = lastClose;
+            }
+        }
+
         // 重置最值
         resetPeakPrice();
 

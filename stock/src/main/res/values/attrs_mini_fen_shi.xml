@@ -18,5 +18,7 @@
         <attr name="dottedLineWidth" format="dimension" />
         <!-- 虚线间距-->
         <attr name="dottedLineSpace" format="dimension" />
+        <!-- 始终显示虚线-->
+        <attr name="alwaysShowDottedLine" format="boolean" />
     </declare-styleable>
 </resources>

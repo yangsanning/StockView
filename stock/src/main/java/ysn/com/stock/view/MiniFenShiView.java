@@ -56,15 +56,6 @@ public class MiniFenShiView extends StockView {
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        viewWidth = w;
-        viewHeight = h;
-
-        topTableHeight = viewHeight;
-    }
-
-    @Override
     protected void onBaseDraw(Canvas canvas) {
     }
 
@@ -103,8 +94,8 @@ public class MiniFenShiView extends StockView {
      */
     private void drawLastClose(Canvas canvas, float y) {
         config.pricePath.reset();
-        config.pricePath.moveTo(tableMargin, y);
-        config.pricePath.lineTo(viewWidth - tableMargin, y);
+        config.pricePath.moveTo(getTableMinX(), y);
+        config.pricePath.lineTo(getTableMaxX(), y);
         canvas.drawPath(config.pricePath, config.dottedLinePaint);
     }
 
@@ -115,16 +106,20 @@ public class MiniFenShiView extends StockView {
         config.pricePath.reset();
         config.priceAreaPath.reset();
 
+        float topTableMaxY = getTopTableMaxY();
         float price = dataManager.getPrice(0);
-        config.pricePath.moveTo(tableMargin, getY(price));
-        config.priceAreaPath.moveTo(tableMargin, getTopTableMaxY());
-        config.priceAreaPath.lineTo(tableMargin, getY(price));
+        float y = getY(price);
+        config.pricePath.moveTo(getCircleX(), y);
+        config.priceAreaPath.moveTo(getCircleX(), topTableMaxY);
+        config.priceAreaPath.lineTo(getCircleX(), y);
         for (int i = 1; i < dataManager.priceSize(); i++) {
             price = dataManager.getPrice(i);
-            config.pricePath.lineTo(getX(i), getY(price));
-            config.priceAreaPath.lineTo(getX(i), getY(price));
+            y = getY(price);
+            float x = getX(i);
+            config.pricePath.lineTo(x, y);
+            config.priceAreaPath.lineTo(x, y);
         }
-        config.priceAreaPath.lineTo(getX(dataManager.getLastPricePosition()), getTopTableMaxY());
+        config.priceAreaPath.lineTo(getX(dataManager.getLastPricePosition()), topTableMaxY);
         config.priceAreaPath.close();
 
         canvas.drawPath(config.pricePath, config.pricePaint);
