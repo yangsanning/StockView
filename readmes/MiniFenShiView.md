@@ -88,6 +88,7 @@ public class FenShiTime implements IFenShi {
 | areaAlpha | integer | 价格区域透明度 |
 | dottedLineWidth | dimension | 虚线宽 |
 | dottedLineSpace | dimension | 虚线间距 |
+| alwaysShowDottedLine | boolean | 显示始终显示中线 |
 
 [MiniFenShiView]:https://github.com/yangsanning/StockView/blob/master/stock/src/main/java/ysn/com/stock/view/MiniFenShiView.java
 [IFenShi]:https://github.com/yangsanning/StockView/blob/master/stock/src/main/java/ysn/com/stock/bean/IFenShi.java
