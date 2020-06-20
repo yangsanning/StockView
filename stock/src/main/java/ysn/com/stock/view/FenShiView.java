@@ -268,7 +268,7 @@ public class FenShiView extends StockView {
         textPaint.setColor(getColor(R.color.stock_red));
         textPaint.getTextBounds(text, (0), text.length(), textRect);
         float textMargin = getTextMargin();
-        float y = (getTopTableMaxY() + textRect.height() + textMargin);
+        float y = (getTopTableMinY() + textRect.height() + textMargin);
         canvas.drawText(text, textMargin, y, textPaint);
 
         // 增幅
@@ -278,7 +278,7 @@ public class FenShiView extends StockView {
 
         // 价格最小值
         textPaint.setColor(getColor(R.color.stock_green));
-        y = getTopTableMinY() - textMargin;
+        y = getTopTableMaxY() - textMargin;
         canvas.drawText(decimalFormat.format(fenShiDataManager.minPrice), textMargin, y, textPaint);
 
         // 减幅
@@ -337,7 +337,7 @@ public class FenShiView extends StockView {
         float priceX = getX(0);
         float priceY = getPriceY(fenShiDataManager.getPrice(0));
         pricePath.moveTo(priceX, priceY);
-        priceAreaPath.moveTo(priceX, getTopTableMinY());
+        priceAreaPath.moveTo(priceX, getTopTableMaxY());
         priceAreaPath.lineTo(priceX, priceY);
         avePricePath.moveTo(priceX, getPriceY(fenShiDataManager.getAvePrice(0)));
     }
@@ -392,7 +392,7 @@ public class FenShiView extends StockView {
      */
     private void drawPricePath(Canvas canvas) {
         // 价格颜色区域需要进行闭合处理
-        priceAreaPath.lineTo(getX(fenShiDataManager.getLastPricePosition()), getTopTableMinY());
+        priceAreaPath.lineTo(getX(fenShiDataManager.getLastPricePosition()), getTopTableMaxY());
         priceAreaPath.close();
 
         // 绘制曲线以及区域

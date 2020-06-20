@@ -150,7 +150,7 @@ public class FenShiSlideHelper {
         viewWidth = stockView.getViewWidth();
         viewHeight = stockView.getViewHeight();
         topTableHeight = stockView.getTopTableHeight();
-        topTableMaxY = stockView.getTopTableMaxY();
+        topTableMaxY = stockView.getTopTableMinY();
         timeTableHeight = stockView.getTimeTableHeight();
         tableMargin = stockView.getTableMargin();
         textMargin = stockView.getXYTextMargin();

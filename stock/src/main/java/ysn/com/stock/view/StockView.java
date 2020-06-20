@@ -133,16 +133,34 @@ public class StockView extends View {
         viewHeight = h;
 
         timeTableHeight = viewHeight * 0.06f;
-        if (hasBottomTable()) {
-            topTableHeight = viewHeight * 0.7f - titleTableHeight;
-            bottomTableHeight = viewHeight - titleTableHeight - topTableHeight - timeTableHeight - 1;
-        } else {
-            topTableHeight = viewHeight - timeTableHeight;
+        xYTextSize = timeTableHeight * 0.8f;
+
+        if (hasTitleTable()) {
+            titleTableHeight = getTitleTableHeight();
+            titleTextSize = getTitleTextSize();
         }
 
-        xYTextSize = timeTableHeight * 0.8f;
+        if (hasBottomTable()) {
+            topTableHeight = viewHeight * 0.7f - titleTableHeight - tableMargin;
+            bottomTableHeight = viewHeight - titleTableHeight - topTableHeight - timeTableHeight - tableMargin * 2;
+        } else {
+            topTableHeight = viewHeight - titleTableHeight - timeTableHeight - tableMargin * 2;
+        }
+
         xYTextMargin = xYTextSize / 5;
         textPaint.setTextSize(xYTextSize);
+    }
+
+    public boolean hasTitleTable() {
+        return false;
+    }
+
+    public float getTitleTableHeight() {
+        return timeTableHeight;
+    }
+
+    public float getTitleTextSize() {
+        return xYTextSize;
     }
 
     public boolean hasBottomTable() {
@@ -152,7 +170,7 @@ public class StockView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.save();
-        canvas.translate(0, topTableHeight);
+        canvas.translate(getCircleX(), getCircleY());
 
         // 基础绘制
         onBaseDraw(canvas);
@@ -161,6 +179,20 @@ public class StockView extends View {
         onChildDraw(canvas);
 
         canvas.restore();
+    }
+
+    /**
+     * 圆心X坐标
+     */
+    protected int getCircleX() {
+        return (int) tableMargin;
+    }
+
+    /**
+     * 圆心X坐标
+     */
+    protected int getCircleY() {
+        return (int) (topTableHeight + titleTableHeight + tableMargin);
     }
 
     /**
@@ -183,10 +215,10 @@ public class StockView extends View {
     protected void onBordersDraw(Canvas canvas) {
         // 上表边框
         linePath.reset();
-        linePath.moveTo(tableMargin, getTopTableMinY());
-        linePath.lineTo(tableMargin, getTopTableMaxY());
-        linePath.lineTo((viewWidth - tableMargin), getTopTableMaxY());
+        linePath.moveTo(tableMargin, getTopTableMaxY());
+        linePath.lineTo(tableMargin, getTopTableMinY());
         linePath.lineTo((viewWidth - tableMargin), getTopTableMinY());
+        linePath.lineTo((viewWidth - tableMargin), getTopTableMaxY());
         linePath.close();
         canvas.drawPath(linePath, linePaint);
 
@@ -203,17 +235,17 @@ public class StockView extends View {
     }
 
     /**
-     * 获取上表格最大Y
-     */
-    public float getTopTableMaxY() {
-        return (tableMargin + titleTableHeight - topTableHeight);
-    }
-
-    /**
      * 获取上表格最小Y
      */
     public float getTopTableMinY() {
-        return -tableMargin;
+        return -topTableHeight;
+    }
+
+    /**
+     * 获取上表格最大Y（圆点即上表格最大高度）
+     */
+    public float getTopTableMaxY() {
+        return 0;
     }
 
     /**
@@ -240,8 +272,8 @@ public class StockView extends View {
         for (int i = 1; i < getColumnCount(); i++) {
             linePath.reset();
             float x = getColumnX(xSpace, i);
-            linePath.moveTo(x, getTopTableMinY());
-            linePath.lineTo(x, getTopTableMaxY());
+            linePath.moveTo(x, getTopTableMaxY());
+            linePath.lineTo(x, getTopTableMinY());
             canvas.drawPath(linePath, dottedLinePaint);
         }
 
@@ -318,7 +350,7 @@ public class StockView extends View {
      * @return 横线y轴坐标
      */
     protected float getTopRowY(float ySpace, int position) {
-        return getTopTableMaxY() + ySpace * position;
+        return getTopTableMinY() + ySpace * position;
     }
 
     protected int getBottomRowCount() {
@@ -377,19 +409,61 @@ public class StockView extends View {
     /**
      * 获取y轴坐标
      *
-     * @param value 当前值
+     * @param value    当前值
      * @param minValue 最小值
      * @param maxValue 最大值
      * @return y轴坐标
      */
     protected float getY(float value, float minValue, float maxValue) {
-        return ((getTopTableMaxY()) * (value - minValue)) / (maxValue - minValue);
+        return ((getTopTableMinY()) * (value - minValue)) / (maxValue - minValue);
     }
 
     /**
      * 开放给子类自由绘制
      */
     protected void onChildDraw(Canvas canvas) {
+    }
+
+    /**
+     * 获取表格最大Y
+     */
+    protected float getTableMaxY() {
+        return timeTableHeight + bottomTableHeight;
+    }
+
+    /**
+     * 获取表格最小Y
+     */
+    protected float getTableMinY() {
+        return -(titleTableHeight + topTableHeight);
+    }
+
+    /**
+     * 获取表格最大X
+     */
+    protected float getTableMaxX() {
+        return viewWidth - tableMargin;
+    }
+
+    /**
+     * 获取表格最小X
+     */
+    protected float getTableMinX() {
+        return 0;
+    }
+
+    /**
+     * 获取上表格宽
+     */
+    protected float getTopTableWidth() {
+        return viewWidth - tableMargin * 2;
+    }
+
+    /**
+     * 获取上表格点间距
+     */
+    protected float getXSpace() {
+        return getTopTableWidth() / getColumnCount();
     }
 
     protected int getColor(@ColorRes int colorRes) {
@@ -402,10 +476,6 @@ public class StockView extends View {
 
     public int getViewHeight() {
         return viewHeight;
-    }
-
-    public float getTitleTableHeight() {
-        return titleTableHeight;
     }
 
     public float getTopTableHeight() {

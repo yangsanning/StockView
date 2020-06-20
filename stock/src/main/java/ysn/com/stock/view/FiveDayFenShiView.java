@@ -259,7 +259,7 @@ public class FiveDayFenShiView extends StockView {
         textPaint.setColor(getColor(R.color.stock_red));
         textPaint.getTextBounds(text, (0), text.length(), textRect);
         float textMargin = getTextMargin();
-        float y = (getTopTableMaxY() + textRect.height() + textMargin);
+        float y = (getTopTableMinY() + textRect.height() + textMargin);
         canvas.drawText(text, textMargin, y, textPaint);
 
         // 增幅
@@ -269,7 +269,7 @@ public class FiveDayFenShiView extends StockView {
 
         // 价格最小值
         textPaint.setColor(getColor(R.color.stock_green));
-        y = getTopTableMinY() - textMargin;
+        y = getTopTableMaxY() - textMargin;
         canvas.drawText(decimalFormat.format(fiveDayFenShiDataManager.minPrice), textMargin, y, textPaint);
 
         // 减幅

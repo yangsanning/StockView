@@ -74,16 +74,16 @@ public class MiniFenShiView extends StockView {
 
         if (dataManager.isPriceEmpty()) {
             // 绘制默认中线
-            drawLastClose(canvas, getTopTableMaxY() / 2);
+            drawLastClose(canvas, getTopTableMinY() / 2);
             return;
         }
 
         //渐变效果
         LinearGradient gradient = new LinearGradient(
                 0,
-                getTopTableMinY(),
-                0,
                 getTopTableMaxY(),
+                0,
+                getTopTableMinY(),
                 config.gradientBottomColor,
                 config.currentColor,
                 Shader.TileMode.CLAMP);
@@ -117,14 +117,14 @@ public class MiniFenShiView extends StockView {
 
         float price = dataManager.getPrice(0);
         config.pricePath.moveTo(tableMargin, getY(price));
-        config.priceAreaPath.moveTo(tableMargin, getTopTableMinY());
+        config.priceAreaPath.moveTo(tableMargin, getTopTableMaxY());
         config.priceAreaPath.lineTo(tableMargin, getY(price));
         for (int i = 1; i < dataManager.priceSize(); i++) {
             price = dataManager.getPrice(i);
             config.pricePath.lineTo(getX(i), getY(price));
             config.priceAreaPath.lineTo(getX(i), getY(price));
         }
-        config.priceAreaPath.lineTo(getX(dataManager.getLastPricePosition()), getTopTableMinY());
+        config.priceAreaPath.lineTo(getX(dataManager.getLastPricePosition()), getTopTableMaxY());
         config.priceAreaPath.close();
 
         canvas.drawPath(config.pricePath, config.pricePaint);

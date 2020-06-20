@@ -161,7 +161,7 @@ public class FiveDayFenShiSlideHelper {
         viewWidth = fiveDayFenShiView.getViewWidth();
         viewHeight = fiveDayFenShiView.getViewHeight();
         topTableHeight = fiveDayFenShiView.getTopTableHeight();
-        topTableMaxY = fiveDayFenShiView.getTopTableMaxY();
+        topTableMaxY = fiveDayFenShiView.getTopTableMinY();
         timeTableHeight = fiveDayFenShiView.getTimeTableHeight();
         tableMargin = fiveDayFenShiView.getTableMargin();
         textMargin = fiveDayFenShiView.getXYTextMargin();

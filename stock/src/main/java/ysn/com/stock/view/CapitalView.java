@@ -176,10 +176,18 @@ public class CapitalView extends StockView {
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        titleTableHeight = viewHeight * 0.108f;
-        titleTextSize = titleTableHeight * 0.534f;
+    public boolean hasTitleTable() {
+        return true;
+    }
+
+    @Override
+    public float getTitleTableHeight() {
+        return viewHeight * 0.108f;
+    }
+
+    @Override
+    public float getTitleTextSize() {
+        return titleTableHeight * 0.534f;
     }
 
     @Override
@@ -198,17 +206,13 @@ public class CapitalView extends StockView {
      */
     private void drawBackGround(Canvas canvas) {
         linePath.reset();
-        linePath.moveTo((0), getTopTableMinY());
-        linePath.lineTo((0), getTopTableMaxY());
-        linePath.lineTo(viewWidth, getTopTableMaxY());
+        linePath.moveTo((0), getTopTableMaxY());
+        linePath.lineTo((0), getTopTableMinY());
         linePath.lineTo(viewWidth, getTopTableMinY());
+        linePath.lineTo(viewWidth, getTopTableMaxY());
         linePath.close();
         canvas.drawPath(linePath, areaPaint);
         linePath.reset();
-    }
-
-    @Override
-    protected void onBordersDraw(Canvas canvas) {
     }
 
     /**
@@ -218,12 +222,12 @@ public class CapitalView extends StockView {
     protected void onColumnLineDraw(Canvas canvas) {
         // 绘制上表竖线
         dottedLinePaint.setColor(columnLineColor);
-        float xSpace = (viewWidth - 2 * tableMargin) / getColumnCount();
+        float xSpace = getXSpace();
         for (int i = 1; i < getColumnCount(); i++) {
             linePath.reset();
             float x = getColumnX(xSpace, i);
-            linePath.moveTo(x, getTopTableMinY());
-            linePath.lineTo(x, getTopTableMaxY());
+            linePath.moveTo(x, getTopTableMaxY());
+            linePath.lineTo(x, getTopTableMinY());
             canvas.drawPath(linePath, dottedLinePaint);
         }
     }
@@ -243,8 +247,8 @@ public class CapitalView extends StockView {
         for (int i = 1; i < getTopRowCount(); i++) {
             linePath.reset();
             float y = getTopRowY(rowSpacing, i);
-            linePath.moveTo(tableMargin, y);
-            linePath.lineTo((viewWidth - tableMargin), y);
+            linePath.moveTo(getTableMinX(), y);
+            linePath.lineTo(getTableMaxX(), y);
             canvas.drawPath(linePath, linePaint);
         }
     }
@@ -298,7 +302,7 @@ public class CapitalView extends StockView {
         textPaint.setTextSize(titleTextSize);
 
         textPaint.getTextBounds(leftTitle, (0), leftTitle.length(), textRect);
-        float titleTextY = getTopTableMaxY() - textRect.height();
+        float titleTextY = getTopTableMinY() - textRect.height();
         canvas.drawText(leftTitle, (0), titleTextY, textPaint);
 
         textPaint.getTextBounds(rightTitle, (0), rightTitle.length(), textRect);
