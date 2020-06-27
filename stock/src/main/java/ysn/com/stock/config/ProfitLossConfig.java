@@ -5,12 +5,12 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
 import ysn.com.stock.R;
+import ysn.com.stock.paint.QuickPaint;
 
 /**
  * @Author yangsanning
@@ -27,9 +27,9 @@ public class ProfitLossConfig {
 
     public int lineColor, textColor, valueLineColor, slideTextColor, slideBgColor;
 
-    public Paint linePaint, textPaint, valueLinePaint, slidePointPaint,slideBgPaint;
+    public Paint linePaint, valueLinePaint, slidePointPaint, slideBgPaint;
+    public QuickPaint quickPaint;
     public Path linePath, valueLinePath;
-    public Rect textRect;
     public RectF slideRectF = new RectF();
 
     public float pointRadius = 6.66f;
@@ -74,11 +74,7 @@ public class ProfitLossConfig {
 
         linePath = new Path();
 
-        textPaint = new Paint();
-        textPaint.setAntiAlias(true);
-        textPaint.setStyle(Paint.Style.STROKE);
-        textPaint.setTextAlign(Paint.Align.LEFT);
-        textRect = new Rect();
+        quickPaint = new QuickPaint();
 
         valueLinePath = new Path();
         valueLinePaint = new Paint();
@@ -108,7 +104,7 @@ public class ProfitLossConfig {
         circleY = (int) (viewHeight - timeTableHeight);
 
         xYTextSize = timeTableHeight * 0.65f;
-        textPaint.setTextSize(xYTextSize);
+        quickPaint.setTextSize(xYTextSize);
 
         topTableMaxY = titleTableHeight - topTableHeight;
         rowSpacing = topTableHeight / ProfitLossConfig.TOP_ROW_COUNT;

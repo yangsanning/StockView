@@ -2,7 +2,6 @@ package ysn.com.stock.helper;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.RectF;
 import android.support.annotation.NonNull;
@@ -11,6 +10,7 @@ import android.view.MotionEvent;
 import ysn.com.stock.config.ProfitLossConfig;
 import ysn.com.stock.interceptor.ProfitLossUnitInterceptor;
 import ysn.com.stock.manager.ProfitLossDataManager;
+import ysn.com.stock.paint.QuickPaint;
 import ysn.com.stock.utils.LogUtils;
 import ysn.com.stock.view.ProfitLossView;
 
@@ -30,7 +30,7 @@ public class ProfitLossSlideHelper {
     private ProfitLossView profitLossView;
     protected ProfitLossConfig config;
     protected ProfitLossDataManager dataManager;
-    protected  ProfitLossUnitInterceptor unitInterceptor;
+    protected ProfitLossUnitInterceptor unitInterceptor;
 
     protected float slideX, slideY;
     protected int slideNum;
@@ -144,8 +144,7 @@ public class ProfitLossSlideHelper {
      */
     private void drawSlideRectF(Canvas canvas) {
         config.slidePointPaint.setColor(config.valueLineColor);
-        Paint textPaint = config.textPaint;
-        textPaint.setColor(config.slideTextColor);
+        QuickPaint quickPaint = config.quickPaint.setColor(config.slideTextColor);
 
         String time = dataManager.timesList.get(slideNum);
         String price;
@@ -155,10 +154,7 @@ public class ProfitLossSlideHelper {
             price = unitInterceptor.slideValue(dataManager.getValue(slideNum));
         }
 
-        textPaint.getTextBounds(time, (0), time.length(), config.textRect);
-        int rectWidth = config.textRect.width();
-        textPaint.getTextBounds(price, (0), price.length(), config.textRect);
-        rectWidth = Math.max(rectWidth, config.textRect.width());
+        int rectWidth = Math.max(quickPaint.width(time), quickPaint.width(price));
 
         RectF slideRectF = config.slideRectF;
         float textSize = config.xYTextSize;
@@ -186,13 +182,13 @@ public class ProfitLossSlideHelper {
         } else {
             slideRectF.bottom = point.y + haftTextSize;
             slideRectF.top = slideRectF.bottom - textSize * 3.5f;
-            timeY  = slideRectF.bottom - haftTextSize;
-            priceY= slideRectF.bottom - 2 * textSize;
+            timeY = slideRectF.bottom - haftTextSize;
+            priceY = slideRectF.bottom - 2 * textSize;
         }
 
         canvas.drawRoundRect(slideRectF, 10, 10, config.slideBgPaint);
-        canvas.drawText(time, textX, priceY, textPaint);
-        canvas.drawText(price, textX, timeY, textPaint);
+        canvas.drawText(time, textX, priceY, quickPaint.textPaint);
+        canvas.drawText(price, textX, timeY, quickPaint.textPaint);
     }
 
     public void setUnitInterceptor(ProfitLossUnitInterceptor unitInterceptor) {

@@ -17,6 +17,7 @@ import ysn.com.stock.config.ProfitLossConfig;
 import ysn.com.stock.helper.ProfitLossSlideHelper;
 import ysn.com.stock.interceptor.ProfitLossUnitInterceptor;
 import ysn.com.stock.manager.ProfitLossDataManager;
+import ysn.com.stock.paint.QuickPaint;
 import ysn.com.stock.utils.ResUtils;
 
 /**
@@ -126,13 +127,12 @@ public class ProfitLossView extends View {
      * 绘制左侧坐标
      */
     protected void drawYCoordinate(Canvas canvas) {
-        config.textPaint.setColor(config.textColor);
+        config.quickPaint.setColor(config.textColor);
         for (int i = 0; i < dataManager.yCoordinateList.size(); i++) {
             Float yCoordinate = dataManager.yCoordinateList.get(i);
             drawYCoordinate(canvas, i, unitInterceptor == null ?
                     String.valueOf(yCoordinate) : unitInterceptor.yCoordinate(yCoordinate));
         }
-
     }
 
     /**
@@ -140,10 +140,8 @@ public class ProfitLossView extends View {
      */
     private void drawYCoordinate(Canvas canvas, int position, String value) {
         float rowLineY = -config.rowSpacing * position;
-        config.textPaint.getTextBounds(value, (0), value.length(), config.textRect);
-        config.textPaint.getTextBounds(value, 0, value.length(), config.textRect);
-        canvas.drawText(value, -((config.leftTableWidth + config.textRect.width()) / 2),
-                (rowLineY + config.textRect.height() / 2f), config.textPaint);
+        config.quickPaint.measure(value, measure ->
+                measure.drawText(canvas, (-(config.leftTableWidth + measure.width()) / 2), (rowLineY + measure.height() / 2f)));
     }
 
     /**
@@ -167,16 +165,15 @@ public class ProfitLossView extends View {
      * 绘制时间坐标
      */
     protected void drawTimeText(Canvas canvas) {
-        config.textPaint.setColor(config.textColor);
+        QuickPaint quickPaint = config.quickPaint.setColor(config.textColor);
 
-        String fistTime = dataManager.getFistTime();
-        config.textPaint.getTextBounds(fistTime, (0), fistTime.length(), config.textRect);
-        canvas.drawText(fistTime, 0, ((config.timeTableHeight + config.textRect.height()) / 2f), config.textPaint);
+        // 绘制起始时间坐标
+        quickPaint.measure(dataManager.getFistTime(),
+                measure -> measure.drawText(canvas, (0), ((config.timeTableHeight + measure.height()) / 2f)));
 
-        String lastTime = dataManager.getLastTime();
-        config.textPaint.getTextBounds(lastTime, (0), lastTime.length(), config.textRect);
-        canvas.drawText(lastTime, (config.topTableWidth - config.textRect.width()),
-                ((config.timeTableHeight + config.textRect.height()) / 2f), config.textPaint);
+        // 绘制结束时间坐标
+        quickPaint.measure(dataManager.getLastTime(), measure ->
+                measure.drawText(canvas, (config.topTableWidth - measure.width()), ((config.timeTableHeight + measure.height()) / 2f)));
     }
 
     /**
@@ -276,7 +273,7 @@ public class ProfitLossView extends View {
      * @param valueList 价格集合
      * @param timesList 时间集合
      */
-    public void setData(@NonNull List<Float> valueList,@NonNull List<String> timesList) {
+    public void setData(@NonNull List<Float> valueList, @NonNull List<String> timesList) {
         if (!valueList.isEmpty()) {
             dataManager.setData(valueList, timesList);
         }
