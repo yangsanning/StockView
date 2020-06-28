@@ -163,9 +163,9 @@ public class ProfitLossSlideHelper {
         float textX;
         // 当触摸点小于控件宽度中间值时，绘制区域在右边，反之同理
         if (Math.abs(point.x) > config.viewWidth / 2f) {
-            slideRectF.left = point.x - haftTextSize;
-            slideRectF.right = slideRectF.left - rectWidth - textSize * 1.5f;
-            textX = slideRectF.right + haftTextSize;
+            slideRectF.right = point.x - haftTextSize;
+            slideRectF.left = slideRectF.right - rectWidth - textSize * 1.5f;
+            textX = slideRectF.left + haftTextSize;
         } else {
             slideRectF.left = point.x + haftTextSize;
             slideRectF.right = slideRectF.left + rectWidth + textSize * 1.5f;
