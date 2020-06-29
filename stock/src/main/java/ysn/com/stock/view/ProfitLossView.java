@@ -12,13 +12,11 @@ import android.view.View;
 
 import java.util.List;
 
-import ysn.com.stock.R;
 import ysn.com.stock.config.ProfitLossConfig;
 import ysn.com.stock.helper.ProfitLossSlideHelper;
 import ysn.com.stock.interceptor.ProfitLossUnitInterceptor;
 import ysn.com.stock.manager.ProfitLossDataManager;
 import ysn.com.stock.paint.QuickPaint;
-import ysn.com.stock.utils.ResUtils;
 
 /**
  * @Author yangsanning
@@ -34,6 +32,7 @@ public class ProfitLossView extends View {
      * 参数配置
      */
     protected ProfitLossConfig config;
+    protected QuickPaint quickPaint;
 
     /**
      * 数据管理
@@ -72,6 +71,7 @@ public class ProfitLossView extends View {
     protected void init(Context context, AttributeSet attrs) {
         this.context = context;
         config = new ProfitLossConfig(context, attrs);
+        quickPaint = config.quickPaint;
         slideHelper = new ProfitLossSlideHelper(this);
     }
 
@@ -127,7 +127,7 @@ public class ProfitLossView extends View {
      * 绘制左侧坐标
      */
     protected void drawYCoordinate(Canvas canvas) {
-        config.quickPaint.setColor(config.textColor);
+        quickPaint.setTextColor(config.textColor);
         for (int i = 0; i < dataManager.yCoordinateList.size(); i++) {
             Float yCoordinate = dataManager.yCoordinateList.get(i);
             drawYCoordinate(canvas, i, unitInterceptor == null ?
@@ -140,7 +140,7 @@ public class ProfitLossView extends View {
      */
     private void drawYCoordinate(Canvas canvas, int position, String value) {
         float rowLineY = -config.rowSpacing * position;
-        config.quickPaint.measure(value, measure ->
+        quickPaint.measure(value, measure ->
                 measure.drawText(canvas, (-(config.leftTableWidth + measure.width()) / 2), (rowLineY + measure.height() / 2f)));
     }
 
@@ -148,16 +148,12 @@ public class ProfitLossView extends View {
      * 绘制横线
      */
     protected void drawRowLine(Canvas canvas) {
-        config.linePaint.setColor(config.lineColor);
+        quickPaint.setLineColor(config.lineColor);
         int rowLineCount = ProfitLossConfig.TOP_ROW_COUNT + 1;
         for (int i = 0; i < rowLineCount; i++) {
-            config.linePath.reset();
             // 横线y轴坐标
             float rowLineY = -config.rowSpacing * i;
-            config.linePath.moveTo(0, rowLineY);
-            config.linePath.lineTo((config.topTableWidth), rowLineY);
-            config.linePaint.setColor(ResUtils.getColor(context, R.color.stock_dotted_column_line));
-            canvas.drawPath(config.linePath, config.linePaint);
+            quickPaint.drawLine(canvas, (0), rowLineY, (config.topTableWidth), rowLineY);
         }
     }
 
@@ -165,7 +161,7 @@ public class ProfitLossView extends View {
      * 绘制时间坐标
      */
     protected void drawTimeText(Canvas canvas) {
-        QuickPaint quickPaint = config.quickPaint.setColor(config.textColor);
+        quickPaint.setTextColor(config.textColor);
 
         // 绘制起始时间坐标
         quickPaint.measure(dataManager.getFistTime(),

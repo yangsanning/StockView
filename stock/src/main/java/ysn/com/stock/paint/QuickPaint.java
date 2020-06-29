@@ -15,7 +15,7 @@ import ysn.com.stock.function.Call;
  */
 public class QuickPaint {
 
-    public Paint textPaint;
+    public Paint textPaint, linePaint;
     public Rect textRect;
     public String text;
 
@@ -30,8 +30,12 @@ public class QuickPaint {
         textPaint.setStyle(Paint.Style.FILL);
         // 设置字体居左
         textPaint.setTextAlign(Paint.Align.LEFT);
-
         measure = new Measure(textPaint, textRect);
+
+        linePaint = new Paint();
+        linePaint.setStrokeWidth(1f);
+        linePaint.setStyle(Paint.Style.STROKE);
+        linePaint.setAntiAlias(true);
     }
 
     /**
@@ -58,7 +62,7 @@ public class QuickPaint {
     /**
      * 设置字体颜色
      */
-    public QuickPaint setColor(@ColorInt int color) {
+    public QuickPaint setTextColor(@ColorInt int color) {
         textPaint.setColor(color);
         return this;
     }
@@ -68,6 +72,22 @@ public class QuickPaint {
      */
     public QuickPaint setTextSize(float textSize) {
         textPaint.setTextSize(textSize);
+        return this;
+    }
+
+    /**
+     * 设置线颜色
+     */
+    public QuickPaint setLineColor(@ColorInt int color) {
+        linePaint.setColor(color);
+        return this;
+    }
+
+    /**
+     * 绘制横线
+     */
+    public QuickPaint drawLine(Canvas canvas, float startX, float startY, float stopX, float stopY) {
+        canvas.drawLine(startX, startY, stopX, stopY, linePaint);
         return this;
     }
 

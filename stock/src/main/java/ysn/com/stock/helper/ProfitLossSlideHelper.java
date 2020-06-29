@@ -144,7 +144,7 @@ public class ProfitLossSlideHelper {
      */
     private void drawSlideRectF(Canvas canvas) {
         config.slidePointPaint.setColor(config.valueLineColor);
-        QuickPaint quickPaint = config.quickPaint.setColor(config.slideTextColor);
+        QuickPaint quickPaint = config.quickPaint.setTextColor(config.slideTextColor);
 
         String time = dataManager.timesList.get(slideNum);
         String price;

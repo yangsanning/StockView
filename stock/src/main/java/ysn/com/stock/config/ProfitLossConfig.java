@@ -27,9 +27,9 @@ public class ProfitLossConfig {
 
     public int lineColor, textColor, valueLineColor, slideTextColor, slideBgColor;
 
-    public Paint linePaint, valueLinePaint, slidePointPaint, slideBgPaint;
+    public Paint valueLinePaint, slidePointPaint, slideBgPaint;
     public QuickPaint quickPaint;
-    public Path linePath, valueLinePath;
+    public Path valueLinePath;
     public RectF slideRectF = new RectF();
 
     public float pointRadius = 6.66f;
@@ -68,12 +68,6 @@ public class ProfitLossConfig {
     }
 
     public void initPaint() {
-        linePaint = new Paint();
-        linePaint.setStrokeWidth(1f);
-        linePaint.setStyle(Paint.Style.STROKE);
-
-        linePath = new Path();
-
         quickPaint = new QuickPaint();
 
         valueLinePath = new Path();
