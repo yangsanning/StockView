@@ -2,6 +2,7 @@ package ysn.com.stock.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -149,7 +150,8 @@ public class ProfitLossView extends View {
      */
     protected void drawRowLine(Canvas canvas) {
         quickPaint.setLineColor(config.lineColor)
-                .setLineStrokeWidth(1f);
+                .setLineStrokeWidth(1f)
+                .setLineStyle(Paint.Style.STROKE);
         int rowLineCount = ProfitLossConfig.TOP_ROW_COUNT + 1;
         for (int i = 0; i < rowLineCount; i++) {
             // 横线y轴坐标
@@ -187,6 +189,7 @@ public class ProfitLossView extends View {
 
         // 绘制曲线以及区域
         canvas.drawPath(config.valueLinePath, quickPaint.setLineStrokeWidth(2f)
+                .setLineStyle(Paint.Style.STROKE)
                 .setLineColor(config.valueLineColor).linePaint);
 
         // 使用完后，重置画笔

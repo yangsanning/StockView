@@ -107,6 +107,15 @@ public class QuickPaint {
     }
 
     /**
+     * 画圆
+     */
+    public QuickPaint drawCircle(Canvas canvas, float cx, float cy, float radius, @ColorInt int color) {
+        linePaint.setColor(color);
+        canvas.drawCircle(cx, cy, radius, linePaint);
+        return this;
+    }
+
+    /**
      * 测量工具
      * 为保证调用 width()、height()时经过测量，创建了此类
      */
