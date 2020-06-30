@@ -27,7 +27,7 @@ public class ProfitLossConfig {
 
     public int lineColor, textColor, valueLineColor, slideTextColor, slideBgColor;
 
-    public Paint valueLinePaint, slidePointPaint, slideBgPaint;
+    public Paint slidePointPaint, slideBgPaint;
     public QuickPaint quickPaint;
     public Path valueLinePath;
     public RectF slideRectF = new RectF();
@@ -71,11 +71,6 @@ public class ProfitLossConfig {
         quickPaint = new QuickPaint();
 
         valueLinePath = new Path();
-        valueLinePaint = new Paint();
-        valueLinePaint.setColor(valueLineColor);
-        valueLinePaint.setAntiAlias(true);
-        valueLinePaint.setStyle(Paint.Style.STROKE);
-        valueLinePaint.setStrokeWidth(2f);
 
         slidePointPaint = new Paint();
         slidePointPaint.setAntiAlias(true);

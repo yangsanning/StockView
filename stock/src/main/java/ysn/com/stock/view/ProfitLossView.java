@@ -148,7 +148,8 @@ public class ProfitLossView extends View {
      * 绘制横线
      */
     protected void drawRowLine(Canvas canvas) {
-        quickPaint.setLineColor(config.lineColor);
+        quickPaint.setLineColor(config.lineColor)
+                .setLineStrokeWidth(1f);
         int rowLineCount = ProfitLossConfig.TOP_ROW_COUNT + 1;
         for (int i = 0; i < rowLineCount; i++) {
             // 横线y轴坐标
@@ -185,7 +186,8 @@ public class ProfitLossView extends View {
         }
 
         // 绘制曲线以及区域
-        canvas.drawPath(config.valueLinePath, config.valueLinePaint);
+        canvas.drawPath(config.valueLinePath, quickPaint.setLineStrokeWidth(2f)
+                .setLineColor(config.valueLineColor).linePaint);
 
         // 使用完后，重置画笔
         config.valueLinePath.reset();

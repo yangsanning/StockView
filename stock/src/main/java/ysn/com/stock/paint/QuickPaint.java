@@ -33,7 +33,6 @@ public class QuickPaint {
         measure = new Measure(textPaint, textRect);
 
         linePaint = new Paint();
-        linePaint.setStrokeWidth(1f);
         linePaint.setStyle(Paint.Style.STROKE);
         linePaint.setAntiAlias(true);
     }
@@ -80,6 +79,22 @@ public class QuickPaint {
      */
     public QuickPaint setLineColor(@ColorInt int color) {
         linePaint.setColor(color);
+        return this;
+    }
+
+    /**
+     * 设置线 Style
+     */
+    public QuickPaint setLineStyle(Paint.Style style) {
+        linePaint.setStyle(style);
+        return this;
+    }
+
+    /**
+     * 设置线宽
+     */
+    public QuickPaint setLineStrokeWidth(float width) {
+        linePaint.setStrokeWidth(width);
         return this;
     }
 
