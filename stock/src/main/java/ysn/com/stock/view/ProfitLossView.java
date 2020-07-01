@@ -180,39 +180,22 @@ public class ProfitLossView extends View {
      */
     protected void drawPriceLine(Canvas canvas) {
         // 抽取第一个点确定Path的圆点
-        moveToPrice();
+        quickPaint.moveTo(getX(0), getY(0));
 
         // 对后续点做处理
         for (int i = 1; i < dataManager.dataSize(); i++) {
-            lineToPrice(i);
+            quickPaint.lineTo(getX(i), getY(i));
         }
 
         // 绘制曲线以及区域
-        canvas.drawPath(config.valueLinePath, quickPaint.setLineStrokeWidth(2f)
+        quickPaint.setLineStrokeWidth(2f)
                 .setLineStyle(Paint.Style.STROKE)
-                .setLineColor(config.valueLineColor).linePaint);
-
-        // 使用完后，重置画笔
-        config.valueLinePath.reset();
+                .setLineColor(config.valueLineColor)
+                .drawPath(canvas)
+                // 使用完后，重置画笔
+                .resetPath();
     }
 
-    /**
-     * 设置价格圆点（第一个点）
-     */
-    private void moveToPrice() {
-        float priceX = getX(0);
-        float priceY = getY(0);
-        config.valueLinePath.moveTo(priceX, priceY);
-    }
-
-    /**
-     * 记录后续价格点
-     */
-    private void lineToPrice(int i) {
-        float priceX = getX(i);
-        float priceY = getY(i);
-        config.valueLinePath.lineTo(priceX, priceY);
-    }
 
     /**
      * 获取x轴坐标

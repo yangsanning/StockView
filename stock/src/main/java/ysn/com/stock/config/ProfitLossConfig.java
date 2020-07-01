@@ -29,7 +29,6 @@ public class ProfitLossConfig {
 
     public Paint slideBgPaint;
     public QuickPaint quickPaint;
-    public Path valueLinePath;
     public RectF slideRectF = new RectF();
 
     public float pointRadius = 6.66f;
@@ -69,8 +68,6 @@ public class ProfitLossConfig {
 
     public void initPaint() {
         quickPaint = new QuickPaint();
-
-        valueLinePath = new Path();
 
         slideBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         slideBgPaint.setStyle(Paint.Style.FILL);

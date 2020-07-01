@@ -2,6 +2,7 @@ package ysn.com.stock.paint;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Rect;
 import android.support.annotation.ColorInt;
 
@@ -16,6 +17,7 @@ import ysn.com.stock.function.Call;
 public class QuickPaint {
 
     public Paint textPaint, linePaint;
+    public Path path;
     public Rect textRect;
     public String text;
 
@@ -35,6 +37,8 @@ public class QuickPaint {
         linePaint = new Paint();
         linePaint.setStyle(Paint.Style.STROKE);
         linePaint.setAntiAlias(true);
+
+        path = new Path();
     }
 
     /**
@@ -98,6 +102,38 @@ public class QuickPaint {
         return this;
     }
 
+
+    /**
+     * 设置圆点为起点
+     */
+    public QuickPaint moreToCircle() {
+        return moveTo(0, 0);
+    }
+
+    /**
+     * 设置起点
+     */
+    public QuickPaint moveTo(float x, float y) {
+        path.moveTo(x, y);
+        return this;
+    }
+
+    /**
+     * 设置下一个点
+     */
+    public QuickPaint lineTo(float x, float y) {
+        path.lineTo(x, y);
+        return this;
+    }
+
+    /**
+     * 重置路径
+     */
+    public QuickPaint resetPath() {
+        path.reset();
+        return this;
+    }
+
     /**
      * 绘制横线
      */
@@ -112,6 +148,14 @@ public class QuickPaint {
     public QuickPaint drawCircle(Canvas canvas, float cx, float cy, float radius, @ColorInt int color) {
         linePaint.setColor(color);
         canvas.drawCircle(cx, cy, radius, linePaint);
+        return this;
+    }
+
+    /**
+     * 绘制路径
+     */
+    public QuickPaint drawPath(Canvas canvas) {
+        canvas.drawPath(path,linePaint);
         return this;
     }
 
