@@ -17,7 +17,7 @@ import ysn.com.stock.config.ProfitLossConfig;
 import ysn.com.stock.helper.ProfitLossSlideHelper;
 import ysn.com.stock.interceptor.ProfitLossUnitInterceptor;
 import ysn.com.stock.manager.ProfitLossDataManager;
-import ysn.com.stock.paint.QuickPaint;
+import ysn.com.stock.paint.LazyPaint;
 
 /**
  * @Author yangsanning
@@ -33,7 +33,7 @@ public class ProfitLossView extends View {
      * 参数配置
      */
     protected ProfitLossConfig config;
-    protected QuickPaint quickPaint;
+    protected LazyPaint lazyPaint;
 
     /**
      * 数据管理
@@ -72,7 +72,7 @@ public class ProfitLossView extends View {
     protected void init(Context context, AttributeSet attrs) {
         this.context = context;
         config = new ProfitLossConfig(context, attrs);
-        quickPaint = config.quickPaint;
+        lazyPaint = config.lazyPaint;
         slideHelper = new ProfitLossSlideHelper(this);
     }
 
@@ -128,7 +128,7 @@ public class ProfitLossView extends View {
      * 绘制左侧坐标
      */
     protected void drawYCoordinate(Canvas canvas) {
-        quickPaint.setTextColor(config.textColor);
+        lazyPaint.setTextColor(config.textColor);
         for (int i = 0; i < dataManager.yCoordinateList.size(); i++) {
             Float yCoordinate = dataManager.yCoordinateList.get(i);
             drawYCoordinate(canvas, i, unitInterceptor == null ?
@@ -141,7 +141,7 @@ public class ProfitLossView extends View {
      */
     private void drawYCoordinate(Canvas canvas, int position, String value) {
         float rowLineY = -config.rowSpacing * position;
-        quickPaint.measure(value, measure ->
+        lazyPaint.measure(value, measure ->
                 measure.drawText(canvas, (-(config.leftTableWidth + measure.width()) / 2), (rowLineY + measure.height() / 2f)));
     }
 
@@ -149,14 +149,14 @@ public class ProfitLossView extends View {
      * 绘制横线
      */
     protected void drawRowLine(Canvas canvas) {
-        quickPaint.setLineColor(config.lineColor)
+        lazyPaint.setLineColor(config.lineColor)
                 .setLineStrokeWidth(1f)
                 .setLineStyle(Paint.Style.STROKE);
         int rowLineCount = ProfitLossConfig.TOP_ROW_COUNT + 1;
         for (int i = 0; i < rowLineCount; i++) {
             // 横线y轴坐标
             float rowLineY = -config.rowSpacing * i;
-            quickPaint.drawLine(canvas, (0), rowLineY, (config.topTableWidth), rowLineY);
+            lazyPaint.drawLine(canvas, (0), rowLineY, (config.topTableWidth), rowLineY);
         }
     }
 
@@ -164,14 +164,14 @@ public class ProfitLossView extends View {
      * 绘制时间坐标
      */
     protected void drawTimeText(Canvas canvas) {
-        quickPaint.setTextColor(config.textColor);
+        lazyPaint.setTextColor(config.textColor);
 
         // 绘制起始时间坐标
-        quickPaint.measure(dataManager.getFistTime(),
+        lazyPaint.measure(dataManager.getFistTime(),
                 measure -> measure.drawText(canvas, (0), ((config.timeTableHeight + measure.height()) / 2f)));
 
         // 绘制结束时间坐标
-        quickPaint.measure(dataManager.getLastTime(), measure ->
+        lazyPaint.measure(dataManager.getLastTime(), measure ->
                 measure.drawText(canvas, (config.topTableWidth - measure.width()), ((config.timeTableHeight + measure.height()) / 2f)));
     }
 
@@ -180,15 +180,15 @@ public class ProfitLossView extends View {
      */
     protected void drawPriceLine(Canvas canvas) {
         // 抽取第一个点确定Path的圆点
-        quickPaint.moveTo(getX(0), getY(0));
+        lazyPaint.moveTo(getX(0), getY(0));
 
         // 对后续点做处理
         for (int i = 1; i < dataManager.dataSize(); i++) {
-            quickPaint.lineTo(getX(i), getY(i));
+            lazyPaint.lineTo(getX(i), getY(i));
         }
 
         // 绘制曲线以及区域
-        quickPaint.setLineStrokeWidth(2f)
+        lazyPaint.setLineStrokeWidth(2f)
                 .setLineStyle(Paint.Style.STROKE)
                 .setLineColor(config.valueLineColor)
                 .drawPath(canvas)

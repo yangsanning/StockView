@@ -4,13 +4,12 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
 import ysn.com.stock.R;
-import ysn.com.stock.paint.QuickPaint;
+import ysn.com.stock.paint.LazyPaint;
 
 /**
  * @Author yangsanning
@@ -28,7 +27,7 @@ public class ProfitLossConfig {
     public int lineColor, textColor, valueLineColor, slideTextColor, slideBgColor;
 
     public Paint slideBgPaint;
-    public QuickPaint quickPaint;
+    public LazyPaint lazyPaint;
     public RectF slideRectF = new RectF();
 
     public float pointRadius = 6.66f;
@@ -67,7 +66,7 @@ public class ProfitLossConfig {
     }
 
     public void initPaint() {
-        quickPaint = new QuickPaint();
+        lazyPaint = new LazyPaint();
 
         slideBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         slideBgPaint.setStyle(Paint.Style.FILL);
@@ -87,7 +86,7 @@ public class ProfitLossConfig {
         circleY = (int) (viewHeight - timeTableHeight);
 
         xYTextSize = timeTableHeight * 0.65f;
-        quickPaint.setTextSize(xYTextSize);
+        lazyPaint.setTextSize(xYTextSize);
 
         topTableMaxY = titleTableHeight - topTableHeight;
         rowSpacing = topTableHeight / ProfitLossConfig.TOP_ROW_COUNT;

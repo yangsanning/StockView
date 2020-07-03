@@ -11,7 +11,7 @@ import android.view.MotionEvent;
 import ysn.com.stock.config.ProfitLossConfig;
 import ysn.com.stock.interceptor.ProfitLossUnitInterceptor;
 import ysn.com.stock.manager.ProfitLossDataManager;
-import ysn.com.stock.paint.QuickPaint;
+import ysn.com.stock.paint.LazyPaint;
 import ysn.com.stock.utils.LogUtils;
 import ysn.com.stock.view.ProfitLossView;
 
@@ -131,7 +131,7 @@ public class ProfitLossSlideHelper {
      * 绘制点
      */
     private void drawPoint(Canvas canvas) {
-        config.quickPaint.setLineStyle(Paint.Style.FILL)
+        config.lazyPaint.setLineStyle(Paint.Style.FILL)
                 .drawCircle(canvas, point.x, point.y, (config.pointRadius + 3), Color.WHITE)
                 .drawCircle(canvas, point.x, point.y, (config.pointRadius), config.valueLineColor);
     }
@@ -142,7 +142,7 @@ public class ProfitLossSlideHelper {
      * @param canvas
      */
     private void drawSlideRectF(Canvas canvas) {
-        QuickPaint quickPaint = config.quickPaint.setTextColor(config.slideTextColor);
+        LazyPaint quickPaint = config.lazyPaint.setTextColor(config.slideTextColor);
 
         String time = dataManager.timesList.get(slideNum);
         String price;

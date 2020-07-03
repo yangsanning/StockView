@@ -10,11 +10,11 @@ import ysn.com.stock.function.Call;
 
 /**
  * @Author yangsanning
- * @ClassName QuickPaint
- * @Description 懒人封装画笔
+ * @ClassName LazyPaint
+ * @Description 懒人画笔
  * @Date 2020/6/23
  */
-public class QuickPaint {
+public class LazyPaint {
 
     public Paint textPaint, linePaint;
     public Path path;
@@ -23,7 +23,7 @@ public class QuickPaint {
 
     private Measure measure;
 
-    public QuickPaint() {
+    public LazyPaint() {
         textPaint = new Paint();
         textRect = new Rect();
         // 设置抗锯齿
@@ -34,7 +34,7 @@ public class QuickPaint {
         textPaint.setTextAlign(Paint.Align.LEFT);
         measure = new Measure(textPaint, textRect);
 
-        linePaint = new Paint();
+        linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         linePaint.setStyle(Paint.Style.STROKE);
         linePaint.setAntiAlias(true);
 
@@ -65,7 +65,7 @@ public class QuickPaint {
     /**
      * 设置字体颜色
      */
-    public QuickPaint setTextColor(@ColorInt int color) {
+    public LazyPaint setTextColor(@ColorInt int color) {
         textPaint.setColor(color);
         return this;
     }
@@ -73,7 +73,7 @@ public class QuickPaint {
     /**
      * 设置字体大小
      */
-    public QuickPaint setTextSize(float textSize) {
+    public LazyPaint setTextSize(float textSize) {
         textPaint.setTextSize(textSize);
         return this;
     }
@@ -81,7 +81,7 @@ public class QuickPaint {
     /**
      * 设置线颜色
      */
-    public QuickPaint setLineColor(@ColorInt int color) {
+    public LazyPaint setLineColor(@ColorInt int color) {
         linePaint.setColor(color);
         return this;
     }
@@ -89,7 +89,7 @@ public class QuickPaint {
     /**
      * 设置线 Style
      */
-    public QuickPaint setLineStyle(Paint.Style style) {
+    public LazyPaint setLineStyle(Paint.Style style) {
         linePaint.setStyle(style);
         return this;
     }
@@ -97,7 +97,7 @@ public class QuickPaint {
     /**
      * 设置线宽
      */
-    public QuickPaint setLineStrokeWidth(float width) {
+    public LazyPaint setLineStrokeWidth(float width) {
         linePaint.setStrokeWidth(width);
         return this;
     }
@@ -106,14 +106,14 @@ public class QuickPaint {
     /**
      * 设置圆点为起点
      */
-    public QuickPaint moreToCircle() {
+    public LazyPaint moreToCircle() {
         return moveTo(0, 0);
     }
 
     /**
      * 设置起点
      */
-    public QuickPaint moveTo(float x, float y) {
+    public LazyPaint moveTo(float x, float y) {
         path.moveTo(x, y);
         return this;
     }
@@ -121,7 +121,7 @@ public class QuickPaint {
     /**
      * 设置下一个点
      */
-    public QuickPaint lineTo(float x, float y) {
+    public LazyPaint lineTo(float x, float y) {
         path.lineTo(x, y);
         return this;
     }
@@ -129,7 +129,7 @@ public class QuickPaint {
     /**
      * 重置路径
      */
-    public QuickPaint resetPath() {
+    public LazyPaint resetPath() {
         path.reset();
         return this;
     }
@@ -137,7 +137,7 @@ public class QuickPaint {
     /**
      * 绘制横线
      */
-    public QuickPaint drawLine(Canvas canvas, float startX, float startY, float stopX, float stopY) {
+    public LazyPaint drawLine(Canvas canvas, float startX, float startY, float stopX, float stopY) {
         canvas.drawLine(startX, startY, stopX, stopY, linePaint);
         return this;
     }
@@ -145,7 +145,7 @@ public class QuickPaint {
     /**
      * 画圆
      */
-    public QuickPaint drawCircle(Canvas canvas, float cx, float cy, float radius, @ColorInt int color) {
+    public LazyPaint drawCircle(Canvas canvas, float cx, float cy, float radius, @ColorInt int color) {
         linePaint.setColor(color);
         canvas.drawCircle(cx, cy, radius, linePaint);
         return this;
@@ -154,7 +154,7 @@ public class QuickPaint {
     /**
      * 绘制路径
      */
-    public QuickPaint drawPath(Canvas canvas) {
+    public LazyPaint drawPath(Canvas canvas) {
         canvas.drawPath(path,linePaint);
         return this;
     }
