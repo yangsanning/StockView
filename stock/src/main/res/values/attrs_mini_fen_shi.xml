@@ -7,8 +7,11 @@
         <attr name="downColor" format="color" />
         <!-- 不涨不跌颜色-->
         <attr name="equalColor" format="color" />
+
         <!-- 渐变底部颜色-->
         <attr name="gradientBottomColor" format="color" />
+        <!-- 是否启用底部渐变-->
+        <attr name="enableGradientBottom" format="boolean" />
 
         <!-- 实线宽-->
         <attr name="strokeWidth" format="dimension" />

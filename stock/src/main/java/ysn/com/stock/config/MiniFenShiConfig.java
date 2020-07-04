@@ -33,6 +33,7 @@ public class MiniFenShiConfig {
     public int downColor;
     public int equalColor;
     public int gradientBottomColor;
+    public boolean enableGradientBottom;
     public int strokeWidth;
     public int areaAlpha;
     public PathEffect pathEffect;
@@ -57,7 +58,9 @@ public class MiniFenShiConfig {
         upColor = typedArray.getColor(R.styleable.MiniFenShiView_upColor, ResUtils.getColor(context, R.color.mini_fen_shi_up));
         downColor = typedArray.getColor(R.styleable.MiniFenShiView_downColor, ResUtils.getColor(context, R.color.mini_fen_shi_down));
         equalColor = typedArray.getColor(R.styleable.MiniFenShiView_equalColor, ResUtils.getColor(context, R.color.mini_fen_shi_equal));
+
         gradientBottomColor = typedArray.getColor(R.styleable.MiniFenShiView_gradientBottomColor, ResUtils.getColor(context, R.color.mini_fen_shi_gradient_bottom));
+        enableGradientBottom = typedArray.getBoolean(R.styleable.MiniFenShiView_enableGradientBottom, true);
 
         strokeWidth = typedArray.getDimensionPixelSize(R.styleable.MiniFenShiView_strokeWidth, 4);
         areaAlpha = typedArray.getDimensionPixelSize(R.styleable.MiniFenShiView_areaAlpha, 150);
