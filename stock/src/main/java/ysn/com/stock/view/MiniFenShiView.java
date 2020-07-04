@@ -93,37 +93,34 @@ public class MiniFenShiView extends StockView {
      * 绘制昨日收盘价线
      */
     private void drawLastClose(Canvas canvas, float y) {
-        config.pricePath.reset();
         config.pricePath.moveTo(getTableMinX(), y);
         config.pricePath.lineTo(getTableMaxX(), y);
         canvas.drawPath(config.pricePath, config.dottedLinePaint);
+        config.pricePath.reset();
     }
 
     /**
      * 绘制价格曲线
      */
     private void drawPriceLine(Canvas canvas) {
-        config.pricePath.reset();
-        config.priceAreaPath.reset();
-
         float topTableMaxY = getTopTableMaxY();
         float price = dataManager.getPrice(0);
         float y = getY(price);
         config.pricePath.moveTo(getCircleX(), y);
-        config.priceAreaPath.moveTo(getCircleX(), topTableMaxY);
-        config.priceAreaPath.lineTo(getCircleX(), y);
         for (int i = 1; i < dataManager.priceSize(); i++) {
             price = dataManager.getPrice(i);
             y = getY(price);
             float x = getX(i);
             config.pricePath.lineTo(x, y);
-            config.priceAreaPath.lineTo(x, y);
         }
-        config.priceAreaPath.lineTo(getX(dataManager.getLastPricePosition()), topTableMaxY);
-        config.priceAreaPath.close();
-
         canvas.drawPath(config.pricePath, config.pricePaint);
-        canvas.drawPath(config.priceAreaPath, config.priceAreaPaint);
+
+        config.pricePath.lineTo(getX(dataManager.getLastPricePosition()), topTableMaxY);
+        config.pricePath.lineTo(getCircleX(), topTableMaxY);
+        config.pricePath.close();
+        canvas.drawPath(config.pricePath, config.priceAreaPaint);
+
+        config.pricePath.reset();
     }
 
     /**

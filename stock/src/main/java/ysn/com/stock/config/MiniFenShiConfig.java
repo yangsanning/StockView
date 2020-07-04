@@ -43,7 +43,7 @@ public class MiniFenShiConfig {
      */
     public int currentColor;
 
-    public Path pricePath, priceAreaPath;
+    public Path pricePath;
     public Paint pricePaint, priceAreaPaint, dottedLinePaint;
 
     public MiniFenShiConfig(Context context, @Nullable AttributeSet attrs) {
@@ -80,7 +80,6 @@ public class MiniFenShiConfig {
         pricePaint.setStrokeJoin(Paint.Join.ROUND);
         pricePaint.setStrokeCap(Paint.Cap.ROUND);
 
-        priceAreaPath = new Path();
         priceAreaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         priceAreaPaint.setStyle(Paint.Style.FILL);
         priceAreaPaint.setAlpha(areaAlpha);
