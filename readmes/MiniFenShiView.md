@@ -84,6 +84,7 @@ public class FenShiTime implements IFenShi {
 | downColor | color | 跌颜色 |
 | equalColor | color | 不涨不跌颜色 |
 | gradientBottomColor | color | 渐变底部颜色 |
+| enableGradientBottom | boolean | 是否启用底部渐变 |
 | strokeWidth | dimension | 实线宽 |
 | areaAlpha | integer | 价格区域透明度 |
 | dottedLineWidth | dimension | 虚线宽 |
