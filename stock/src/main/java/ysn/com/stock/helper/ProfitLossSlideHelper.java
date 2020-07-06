@@ -142,7 +142,7 @@ public class ProfitLossSlideHelper {
      * @param canvas
      */
     private void drawSlideRectF(Canvas canvas) {
-        LazyPaint quickPaint = config.lazyPaint.setTextColor(config.slideTextColor);
+        LazyPaint lazyPaint = config.lazyPaint.setTextColor(config.slideTextColor);
 
         String time = dataManager.timesList.get(slideNum);
         String price;
@@ -152,7 +152,7 @@ public class ProfitLossSlideHelper {
             price = unitInterceptor.slideValue(dataManager.getValue(slideNum));
         }
 
-        int rectWidth = Math.max(quickPaint.width(time), quickPaint.width(price));
+        int rectWidth = Math.max(lazyPaint.width(time), lazyPaint.width(price));
 
         RectF slideRectF = config.slideRectF;
         float textSize = config.xYTextSize;
@@ -185,8 +185,8 @@ public class ProfitLossSlideHelper {
         }
 
         canvas.drawRoundRect(slideRectF, 10, 10, config.slideBgPaint);
-        canvas.drawText(time, textX, priceY, quickPaint.textPaint);
-        canvas.drawText(price, textX, timeY, quickPaint.textPaint);
+        canvas.drawText(time, textX, priceY, lazyPaint.textPaint);
+        canvas.drawText(price, textX, timeY, lazyPaint.textPaint);
     }
 
     public void setUnitInterceptor(ProfitLossUnitInterceptor unitInterceptor) {

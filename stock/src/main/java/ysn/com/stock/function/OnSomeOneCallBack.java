@@ -2,11 +2,11 @@ package ysn.com.stock.function;
 
 /**
  * @Author yangsanning
- * @ClassName Call
+ * @ClassName OnSomeOneCallBack
  * @Description 一句话概括作用
  * @Date 2020/6/24
  */
-public interface Call<T> {
+public interface OnSomeOneCallBack<T> {
 
-    T call(T t);
+    void onCallBack(T t);
 }

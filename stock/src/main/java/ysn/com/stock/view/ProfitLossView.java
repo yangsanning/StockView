@@ -141,8 +141,8 @@ public class ProfitLossView extends View {
      */
     private void drawYCoordinate(Canvas canvas, int position, String value) {
         float rowLineY = -config.rowSpacing * position;
-        lazyPaint.measure(value, measure ->
-                measure.drawText(canvas, (-(config.leftTableWidth + measure.width()) / 2), (rowLineY + measure.height() / 2f)));
+        lazyPaint.measure(value, lazyTextPaint ->
+                lazyTextPaint.drawText(canvas, (-(config.leftTableWidth + lazyTextPaint.width()) / 2), (rowLineY + lazyTextPaint.height() / 2f)));
     }
 
     /**
@@ -167,12 +167,12 @@ public class ProfitLossView extends View {
         lazyPaint.setTextColor(config.textColor);
 
         // 绘制起始时间坐标
-        lazyPaint.measure(dataManager.getFistTime(),
-                measure -> measure.drawText(canvas, (0), ((config.timeTableHeight + measure.height()) / 2f)));
+        lazyPaint.measure(dataManager.getFistTime(), lazyTextPaint ->
+                lazyTextPaint.drawText(canvas, (0), ((config.timeTableHeight + lazyTextPaint.height()) / 2f)));
 
         // 绘制结束时间坐标
-        lazyPaint.measure(dataManager.getLastTime(), measure ->
-                measure.drawText(canvas, (config.topTableWidth - measure.width()), ((config.timeTableHeight + measure.height()) / 2f)));
+        lazyPaint.measure(dataManager.getLastTime(), lazyTextPaint ->
+                lazyTextPaint.drawText(canvas, (config.topTableWidth - lazyTextPaint.width()), ((config.timeTableHeight + lazyTextPaint.height()) / 2f)));
     }
 
     /**

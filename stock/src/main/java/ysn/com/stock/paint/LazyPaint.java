@@ -6,7 +6,7 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.support.annotation.ColorInt;
 
-import ysn.com.stock.function.Call;
+import ysn.com.stock.function.OnSomeOneCallBack;
 
 /**
  * @Author yangsanning
@@ -21,7 +21,7 @@ public class LazyPaint {
     public Rect textRect;
     public String text;
 
-    private Measure measure;
+    private LazyTextPaint lazyTextHelper;
 
     public LazyPaint() {
         textPaint = new Paint();
@@ -32,7 +32,7 @@ public class LazyPaint {
         textPaint.setStyle(Paint.Style.FILL);
         // 设置字体居左
         textPaint.setTextAlign(Paint.Align.LEFT);
-        measure = new Measure(textPaint, textRect);
+        lazyTextHelper = new LazyTextPaint(textPaint, textRect);
 
         linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         linePaint.setStyle(Paint.Style.STROKE);
@@ -45,21 +45,21 @@ public class LazyPaint {
      * 获取测量后的文本宽度
      */
     public int width(String text) {
-        return measure.measure(text).width();
+        return lazyTextHelper.measure(text).width();
     }
 
     /**
      * 获取测量后的文本高度
      */
     public int height(String text) {
-        return measure.measure(text).height();
+        return lazyTextHelper.measure(text).height();
     }
 
     /**
      * 测量文本
      */
-    public void measure(String text, Call<Measure> call) {
-        call.call(measure.measure(text));
+    public void measure(String text, OnSomeOneCallBack<LazyTextPaint> callBack) {
+        callBack.onCallBack(lazyTextHelper.measure(text));
     }
 
     /**
@@ -155,55 +155,7 @@ public class LazyPaint {
      * 绘制路径
      */
     public LazyPaint drawPath(Canvas canvas) {
-        canvas.drawPath(path,linePaint);
+        canvas.drawPath(path, linePaint);
         return this;
-    }
-
-    /**
-     * 测量工具
-     * 为保证调用 width()、height()时经过测量，创建了此类
-     */
-    public static class Measure {
-
-        public Paint textPaint;
-        public Rect textRect;
-        public String text;
-
-        public Measure(Paint textPaint, Rect textRect) {
-            this.textPaint = textPaint;
-            this.textRect = textRect;
-        }
-
-        /**
-         * 测量文本
-         * 实际调用 {@link Paint#getTextBounds(String, int, int, Rect)}
-         */
-        public Measure measure(String text) {
-            this.text = text;
-            textPaint.getTextBounds(text, 0, text.length(), textRect);
-            return this;
-        }
-
-        /**
-         * 获取测量后的文本宽度
-         */
-        public int width() {
-            return textRect.width();
-        }
-
-        /**
-         * 获取测量后的文本高度
-         */
-        public int height() {
-            return textRect.height();
-        }
-
-        /**
-         * 绘制文本
-         */
-        public Measure drawText(Canvas canvas, float x, float y) {
-            canvas.drawText(text, x, y, textPaint);
-            return this;
-        }
     }
 }
