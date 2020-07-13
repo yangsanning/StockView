@@ -185,8 +185,8 @@ public class ProfitLossSlideHelper {
         }
 
         canvas.drawRoundRect(slideRectF, 10, 10, config.slideBgPaint);
-        canvas.drawText(time, textX, priceY, lazyPaint.textPaint);
-        canvas.drawText(price, textX, timeY, lazyPaint.textPaint);
+        canvas.drawText(time, textX, priceY, lazyPaint.getTextPaint());
+        canvas.drawText(price, textX, timeY, lazyPaint.getTextPaint());
     }
 
     public void setUnitInterceptor(ProfitLossUnitInterceptor unitInterceptor) {

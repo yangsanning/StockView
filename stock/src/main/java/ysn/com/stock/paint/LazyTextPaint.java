@@ -3,11 +3,12 @@ package ysn.com.stock.paint;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.support.annotation.ColorInt;
 
 /**
  * @Author yangsanning
  * @ClassName LazyTextPaint
- * @Description 文本测量工具, 为保证调用 width()、height()时经过测量，创建了此类
+ * @Description 懒人文本画笔
  * @Date 2020/7/6
  */
 public class LazyTextPaint {
@@ -16,9 +17,30 @@ public class LazyTextPaint {
     public Rect textRect;
     public String text;
 
-    public LazyTextPaint(Paint textPaint, Rect textRect) {
-        this.textPaint = textPaint;
-        this.textRect = textRect;
+    public LazyTextPaint() {
+        textPaint = new Paint();
+        // 设置抗锯齿
+        textPaint.setAntiAlias(true);
+        // 设置画笔模式为填充
+        textPaint.setStyle(Paint.Style.FILL);
+        // 设置字体居左
+        textPaint.setTextAlign(Paint.Align.LEFT);
+
+        textRect = new Rect();
+    }
+
+    /**
+     * 设置字体颜色
+     */
+    public void setTextColor(@ColorInt int color) {
+        textPaint.setColor(color);
+    }
+
+    /**
+     * 设置字体大小
+     */
+    public void setTextSize(float textSize) {
+        textPaint.setTextSize(textSize);
     }
 
     /**
@@ -48,8 +70,7 @@ public class LazyTextPaint {
     /**
      * 绘制文本
      */
-    public LazyTextPaint drawText(Canvas canvas, float x, float y) {
+    public void drawText(Canvas canvas, float x, float y) {
         canvas.drawText(text, x, y, textPaint);
-        return this;
     }
 }

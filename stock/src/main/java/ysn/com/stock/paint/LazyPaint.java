@@ -16,23 +16,14 @@ import ysn.com.stock.function.OnSomeOneCallBack;
  */
 public class LazyPaint {
 
-    public Paint textPaint, linePaint;
+    public Paint linePaint;
     public Path path;
-    public Rect textRect;
     public String text;
 
-    private LazyTextPaint lazyTextHelper;
+    private LazyTextPaint lazyTextPaint;
 
     public LazyPaint() {
-        textPaint = new Paint();
-        textRect = new Rect();
-        // 设置抗锯齿
-        textPaint.setAntiAlias(true);
-        // 设置画笔模式为填充
-        textPaint.setStyle(Paint.Style.FILL);
-        // 设置字体居左
-        textPaint.setTextAlign(Paint.Align.LEFT);
-        lazyTextHelper = new LazyTextPaint(textPaint, textRect);
+        lazyTextPaint = new LazyTextPaint();
 
         linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         linePaint.setStyle(Paint.Style.STROKE);
@@ -45,28 +36,28 @@ public class LazyPaint {
      * 获取测量后的文本宽度
      */
     public int width(String text) {
-        return lazyTextHelper.measure(text).width();
+        return lazyTextPaint.measure(text).width();
     }
 
     /**
      * 获取测量后的文本高度
      */
     public int height(String text) {
-        return lazyTextHelper.measure(text).height();
+        return lazyTextPaint.measure(text).height();
     }
 
     /**
      * 测量文本
      */
     public void measure(String text, OnSomeOneCallBack<LazyTextPaint> callBack) {
-        callBack.onCallBack(lazyTextHelper.measure(text));
+        callBack.onCallBack(lazyTextPaint.measure(text));
     }
 
     /**
      * 设置字体颜色
      */
     public LazyPaint setTextColor(@ColorInt int color) {
-        textPaint.setColor(color);
+        lazyTextPaint.setTextColor(color);
         return this;
     }
 
@@ -74,7 +65,7 @@ public class LazyPaint {
      * 设置字体大小
      */
     public LazyPaint setTextSize(float textSize) {
-        textPaint.setTextSize(textSize);
+        lazyTextPaint.setTextSize(textSize);
         return this;
     }
 
@@ -157,5 +148,9 @@ public class LazyPaint {
     public LazyPaint drawPath(Canvas canvas) {
         canvas.drawPath(path, linePaint);
         return this;
+    }
+
+    public Paint getTextPaint() {
+        return lazyTextPaint.textPaint;
     }
 }
