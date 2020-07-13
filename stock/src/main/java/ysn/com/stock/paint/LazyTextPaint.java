@@ -15,7 +15,7 @@ public class LazyTextPaint {
 
     public Paint textPaint;
     public Rect textRect;
-    public String text;
+    public String latestMeasureText;
 
     public LazyTextPaint() {
         textPaint = new Paint();
@@ -32,7 +32,7 @@ public class LazyTextPaint {
     /**
      * 设置字体颜色
      */
-    public void setTextColor(@ColorInt int color) {
+    public void setColor(@ColorInt int color) {
         textPaint.setColor(color);
     }
 
@@ -48,7 +48,7 @@ public class LazyTextPaint {
      * 实际调用 {@link Paint#getTextBounds(String, int, int, Rect)}
      */
     public LazyTextPaint measure(String text) {
-        this.text = text;
+        this.latestMeasureText = text;
         textPaint.getTextBounds(text, 0, text.length(), textRect);
         return this;
     }
@@ -71,6 +71,6 @@ public class LazyTextPaint {
      * 绘制文本
      */
     public void drawText(Canvas canvas, float x, float y) {
-        canvas.drawText(text, x, y, textPaint);
+        canvas.drawText(latestMeasureText, x, y, textPaint);
     }
 }

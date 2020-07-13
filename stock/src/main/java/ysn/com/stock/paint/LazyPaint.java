@@ -2,8 +2,6 @@ package ysn.com.stock.paint;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.Rect;
 import android.support.annotation.ColorInt;
 
 import ysn.com.stock.function.OnSomeOneCallBack;
@@ -16,21 +14,8 @@ import ysn.com.stock.function.OnSomeOneCallBack;
  */
 public class LazyPaint {
 
-    public Paint linePaint;
-    public Path path;
-    public String text;
-
-    private LazyTextPaint lazyTextPaint;
-
-    public LazyPaint() {
-        lazyTextPaint = new LazyTextPaint();
-
-        linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        linePaint.setStyle(Paint.Style.STROKE);
-        linePaint.setAntiAlias(true);
-
-        path = new Path();
-    }
+    private LazyTextPaint lazyTextPaint = new LazyTextPaint();
+    private LazyLinePaint lazyLinePaint = new LazyLinePaint();
 
     /**
      * 获取测量后的文本宽度
@@ -57,7 +42,7 @@ public class LazyPaint {
      * 设置字体颜色
      */
     public LazyPaint setTextColor(@ColorInt int color) {
-        lazyTextPaint.setTextColor(color);
+        lazyTextPaint.setColor(color);
         return this;
     }
 
@@ -73,7 +58,7 @@ public class LazyPaint {
      * 设置线颜色
      */
     public LazyPaint setLineColor(@ColorInt int color) {
-        linePaint.setColor(color);
+        lazyLinePaint.setColor(color);
         return this;
     }
 
@@ -81,7 +66,7 @@ public class LazyPaint {
      * 设置线 Style
      */
     public LazyPaint setLineStyle(Paint.Style style) {
-        linePaint.setStyle(style);
+        lazyLinePaint.setStyle(style);
         return this;
     }
 
@@ -89,7 +74,7 @@ public class LazyPaint {
      * 设置线宽
      */
     public LazyPaint setLineStrokeWidth(float width) {
-        linePaint.setStrokeWidth(width);
+        lazyLinePaint.setStrokeWidth(width);
         return this;
     }
 
@@ -105,7 +90,7 @@ public class LazyPaint {
      * 设置起点
      */
     public LazyPaint moveTo(float x, float y) {
-        path.moveTo(x, y);
+        lazyLinePaint.moveTo(x, y);
         return this;
     }
 
@@ -113,7 +98,7 @@ public class LazyPaint {
      * 设置下一个点
      */
     public LazyPaint lineTo(float x, float y) {
-        path.lineTo(x, y);
+        lazyLinePaint.lineTo(x, y);
         return this;
     }
 
@@ -121,7 +106,7 @@ public class LazyPaint {
      * 重置路径
      */
     public LazyPaint resetPath() {
-        path.reset();
+        lazyLinePaint.resetPath();
         return this;
     }
 
@@ -129,7 +114,7 @@ public class LazyPaint {
      * 绘制横线
      */
     public LazyPaint drawLine(Canvas canvas, float startX, float startY, float stopX, float stopY) {
-        canvas.drawLine(startX, startY, stopX, stopY, linePaint);
+        lazyLinePaint.drawLine(canvas, startX, startY, stopX, stopY);
         return this;
     }
 
@@ -137,8 +122,7 @@ public class LazyPaint {
      * 画圆
      */
     public LazyPaint drawCircle(Canvas canvas, float cx, float cy, float radius, @ColorInt int color) {
-        linePaint.setColor(color);
-        canvas.drawCircle(cx, cy, radius, linePaint);
+        lazyLinePaint.drawCircle(canvas, cx, cy, radius, color);
         return this;
     }
 
@@ -146,11 +130,15 @@ public class LazyPaint {
      * 绘制路径
      */
     public LazyPaint drawPath(Canvas canvas) {
-        canvas.drawPath(path, linePaint);
+        lazyLinePaint.drawPath(canvas);
         return this;
     }
 
     public Paint getTextPaint() {
         return lazyTextPaint.textPaint;
+    }
+
+    public LazyLinePaint getLazyLinePaint() {
+        return lazyLinePaint;
     }
 }
