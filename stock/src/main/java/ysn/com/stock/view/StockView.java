@@ -17,6 +17,7 @@ import android.view.View;
 import java.text.DecimalFormat;
 
 import ysn.com.stock.R;
+import ysn.com.stock.paint.LazyPaint;
 
 /**
  * @Author yangsanning
@@ -35,6 +36,8 @@ public class StockView extends View {
     private static final PathEffect DEFAULT_DASH_EFFECT = new DashPathEffect(new float[]{2, 2, 2, 2}, 1);
 
     protected Context context;
+
+    protected LazyPaint lazyPaint = new LazyPaint();
 
     /**
      * totalCount: 总点数
@@ -59,7 +62,7 @@ public class StockView extends View {
 
     protected float titleTableHeight;
     protected float timeTableHeight;
-    protected float topTableWidth, topTableHeight;
+    protected float topTableHeight;
     protected float bottomTableHeight;
 
     protected float xYTextSize, xYTextMargin, titleTextSize;
@@ -175,7 +178,7 @@ public class StockView extends View {
         // 基础绘制
         onBaseDraw(canvas);
 
-        //开放给子类自由绘制
+        // 开放给子类自由绘制
         onChildDraw(canvas);
 
         canvas.restore();
@@ -214,24 +217,36 @@ public class StockView extends View {
      */
     protected void onBordersDraw(Canvas canvas) {
         // 上表边框
-        linePath.reset();
-        linePath.moveTo(tableMargin, getTopTableMaxY());
-        linePath.lineTo(tableMargin, getTopTableMinY());
-        linePath.lineTo((viewWidth - tableMargin), getTopTableMinY());
-        linePath.lineTo((viewWidth - tableMargin), getTopTableMaxY());
-        linePath.close();
-        canvas.drawPath(linePath, linePaint);
+        lazyPaint.setLineColor(getColor(R.color.stock_line))
+                .setLineStrokeWidth(1f)
+                .moveTo(getTopTableMinX(), getTopTableMaxY())
+                .lineTo(getTopTableMinX(), getTopTableMinY())
+                .lineTo(getTableMaxX(), getTopTableMinY())
+                .lineTo(getTableMaxX(), getTopTableMaxY())
+                .finishPath(canvas);
 
         // 下表边框
         if (hasBottomTable()) {
-            linePath.reset();
-            linePath.moveTo(tableMargin, getBottomTableMinY());
-            linePath.lineTo(tableMargin, getBottomTableMaxY());
-            linePath.lineTo((viewWidth - tableMargin), getBottomTableMaxY());
-            linePath.lineTo((viewWidth - tableMargin), getBottomTableMinY());
-            linePath.close();
-            canvas.drawPath(linePath, linePaint);
+            lazyPaint.moveTo(getBottomTableMinX(), getBottomTableMinY())
+                    .lineTo(getBottomTableMinX(), getBottomTableMaxY())
+                    .lineTo(getBottomTableMaxX(), getBottomTableMaxY())
+                    .lineTo(getBottomTableMaxX(), getBottomTableMinY())
+                    .finishPath(canvas);
         }
+    }
+
+    /**
+     * 获取上表格最小X
+     */
+    public float getTopTableMinX() {
+        return getCircleX();
+    }
+
+    /**
+     * 获取上表格最大X
+     */
+    public float getTopTableMaxX() {
+        return getTableMaxX() - getCircleX();
     }
 
     /**
@@ -249,10 +264,17 @@ public class StockView extends View {
     }
 
     /**
-     * 获取上表格最大Y
+     * 获取上表格最小X
      */
-    public float getBottomTableMaxY() {
-        return bottomTableHeight + timeTableHeight;
+    public float getBottomTableMinX() {
+        return getCircleX();
+    }
+
+    /**
+     * 获取上表格最大X
+     */
+    public float getBottomTableMaxX() {
+        return getTableMaxX() - getBottomTableMinX();
     }
 
     /**
@@ -260,6 +282,13 @@ public class StockView extends View {
      */
     public float getBottomTableMinY() {
         return timeTableHeight;
+    }
+
+    /**
+     * 获取上表格最大Y
+     */
+    public float getBottomTableMaxY() {
+        return bottomTableHeight + timeTableHeight;
     }
 
     /**
@@ -449,7 +478,7 @@ public class StockView extends View {
      * 获取表格最小X
      */
     protected float getTableMinX() {
-        return 0;
+        return tableMargin;
     }
 
     /**
@@ -462,7 +491,7 @@ public class StockView extends View {
     /**
      * 获取上表格点间距
      */
-    protected float getXSpace() {
+    protected float getTopXSpace() {
         return getTopTableWidth() / getColumnCount();
     }
 

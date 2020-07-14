@@ -103,6 +103,30 @@ public class LazyPaint {
     }
 
     /**
+     * 闭合并绘制路径，绘制完毕重置路径
+     */
+    public LazyPaint finishPath(Canvas canvas) {
+        lazyLinePaint.finishPath(canvas);
+        return this;
+    }
+
+    /**
+     * 闭合路径
+     */
+    public LazyPaint closePath() {
+        lazyLinePaint.closePath();
+        return this;
+    }
+
+    /**
+     * 绘制路径
+     */
+    public LazyPaint drawPath(Canvas canvas) {
+        lazyLinePaint.drawPath(canvas);
+        return this;
+    }
+
+    /**
      * 重置路径
      */
     public LazyPaint resetPath() {
@@ -123,14 +147,6 @@ public class LazyPaint {
      */
     public LazyPaint drawCircle(Canvas canvas, float cx, float cy, float radius, @ColorInt int color) {
         lazyLinePaint.drawCircle(canvas, cx, cy, radius, color);
-        return this;
-    }
-
-    /**
-     * 绘制路径
-     */
-    public LazyPaint drawPath(Canvas canvas) {
-        lazyLinePaint.drawPath(canvas);
         return this;
     }
 

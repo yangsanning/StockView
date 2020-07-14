@@ -50,7 +50,7 @@ public class LazyLinePaint {
      * 设置圆点为起点
      */
     public void moreToCircle() {
-         moveTo(0, 0);
+        moveTo(0, 0);
     }
 
     /**
@@ -65,6 +65,29 @@ public class LazyLinePaint {
      */
     public void lineTo(float x, float y) {
         path.lineTo(x, y);
+    }
+
+    /**
+     * 闭合并绘制路径，绘制完毕重置路径
+     */
+    public void finishPath(Canvas canvas) {
+        closePath();
+        drawPath(canvas);
+        resetPath();
+    }
+
+    /**
+     * 闭合路径
+     */
+    public void closePath() {
+        path.close();
+    }
+
+    /**
+     * 绘制路径
+     */
+    public void drawPath(Canvas canvas) {
+        canvas.drawPath(path, linePaint);
     }
 
     /**
@@ -87,12 +110,5 @@ public class LazyLinePaint {
     public void drawCircle(Canvas canvas, float cx, float cy, float radius, @ColorInt int color) {
         linePaint.setColor(color);
         canvas.drawCircle(cx, cy, radius, linePaint);
-    }
-
-    /**
-     * 绘制路径
-     */
-    public void drawPath(Canvas canvas) {
-        canvas.drawPath(path, linePaint);
     }
 }

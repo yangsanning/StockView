@@ -222,10 +222,10 @@ public class CapitalView extends StockView {
     protected void onColumnLineDraw(Canvas canvas) {
         // 绘制上表竖线
         dottedLinePaint.setColor(columnLineColor);
-        float xSpace = getXSpace();
+        float topXSpace = getTopXSpace();
         for (int i = 1; i < getColumnCount(); i++) {
             linePath.reset();
-            float x = getColumnX(xSpace, i);
+            float x = getColumnX(topXSpace, i);
             linePath.moveTo(x, getTopTableMaxY());
             linePath.lineTo(x, getTopTableMinY());
             canvas.drawPath(linePath, dottedLinePaint);
