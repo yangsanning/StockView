@@ -82,7 +82,6 @@ public class FenShiView extends StockView {
         }
     };
 
-    private boolean isEnabledBottomTable;
     private boolean isEnabledSlide;
 
     private FenShiDataManager fenShiDataManager;
@@ -127,7 +126,6 @@ public class FenShiView extends StockView {
         heartBeatRate = typedArray.getInteger(R.styleable.FenShiView_fsv_heart_beat_rate, 2000);
         heartBeatFractionRate = typedArray.getInteger(R.styleable.FenShiView_fsv_heart_beat_fraction_rate, 2000);
 
-        isEnabledBottomTable = typedArray.getBoolean(R.styleable.FenShiView_fsv_is_enabled_bottom_tab, Boolean.FALSE);
         isEnabledSlide = typedArray.getBoolean(R.styleable.FenShiView_fsv_is_enabled_slide, Boolean.FALSE);
 
         typedArray.recycle();
@@ -171,11 +169,6 @@ public class FenShiView extends StockView {
 
         // 初始化柱形图
         pillarPaint = new Paint();
-    }
-
-    @Override
-    public boolean hasBottomTable() {
-        return isEnabledBottomTable;
     }
 
     @Override
@@ -240,7 +233,7 @@ public class FenShiView extends StockView {
         // 绘制上表格坐标
         drawTopTableCoordinate(canvas);
 
-        if (hasBottomTable()) {
+        if (isEnabledBottomTable()) {
             // 绘制价格、价格区域、均线、闪烁点、柱形图
             drawPriceLineAndPillar(canvas);
 

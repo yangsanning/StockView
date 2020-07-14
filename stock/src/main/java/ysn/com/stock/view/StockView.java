@@ -1,6 +1,7 @@
 package ysn.com.stock.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
@@ -38,6 +39,11 @@ public class StockView extends View {
     protected Context context;
 
     protected LazyPaint lazyPaint = new LazyPaint();
+
+    /**
+     * 是否启用下表格
+     */
+    protected boolean enabledBottomTable;
 
     /**
      * totalCount: 总点数
@@ -105,7 +111,11 @@ public class StockView extends View {
     }
 
     protected void initAttr(AttributeSet attrs) {
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.StockView);
 
+        enabledBottomTable = typedArray.getBoolean(R.styleable.StockView_enabledBottomTable, Boolean.FALSE);
+
+        typedArray.recycle();
     }
 
     protected void initPaint() {
@@ -143,7 +153,7 @@ public class StockView extends View {
             titleTextSize = getTitleTextSize();
         }
 
-        if (hasBottomTable()) {
+        if (isEnabledBottomTable()) {
             topTableHeight = viewHeight * 0.7f - titleTableHeight - tableMargin;
             bottomTableHeight = viewHeight - titleTableHeight - topTableHeight - timeTableHeight - tableMargin * 2;
         } else {
@@ -166,8 +176,8 @@ public class StockView extends View {
         return xYTextSize;
     }
 
-    public boolean hasBottomTable() {
-        return false;
+    public boolean isEnabledBottomTable() {
+        return enabledBottomTable;
     }
 
     @Override
@@ -226,7 +236,7 @@ public class StockView extends View {
                 .finishPath(canvas);
 
         // 下表边框
-        if (hasBottomTable()) {
+        if (isEnabledBottomTable()) {
             lazyPaint.moveTo(getBottomTableMinX(), getBottomTableMinY())
                     .lineTo(getBottomTableMinX(), getBottomTableMaxY())
                     .lineTo(getBottomTableMaxX(), getBottomTableMaxY())
@@ -307,7 +317,7 @@ public class StockView extends View {
         }
 
         // 绘制下表竖线
-        if (hasBottomTable()) {
+        if (isEnabledBottomTable()) {
             for (int i = 1; i < getColumnCount(); i++) {
                 linePath.reset();
                 float x = getColumnX(xSpace, i);
@@ -350,7 +360,7 @@ public class StockView extends View {
         }
 
         // 绘制下表横线
-        if (hasBottomTable()) {
+        if (isEnabledBottomTable()) {
             rowSpacing = getBottomRowSpacing();
             dottedLinePaint.setColor(getColor(R.color.stock_dotted_column_line));
             for (int i = 1; i < getBottomRowCount(); i++) {

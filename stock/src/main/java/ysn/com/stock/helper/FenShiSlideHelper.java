@@ -155,7 +155,7 @@ public class FenShiSlideHelper {
         tableMargin = stockView.getTableMargin();
         textMargin = stockView.getXYTextMargin();
 
-        hasBottomTable = stockView.hasBottomTable();
+        hasBottomTable = stockView.isEnabledBottomTable();
         if (hasBottomTable) {
             bottomTableHeight = stockView.getBottomTableHeight();
             bottomTableMaxY = stockView.getBottomTableMaxY();

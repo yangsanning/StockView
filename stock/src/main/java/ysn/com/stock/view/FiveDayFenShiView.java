@@ -68,7 +68,6 @@ public class FiveDayFenShiView extends StockView {
         }
     };
 
-    private boolean isEnabledBottomTable;
     private boolean isEnabledSlide;
 
     private Path pricePath;
@@ -131,7 +130,6 @@ public class FiveDayFenShiView extends StockView {
         heartBeatRate = typedArray.getInteger(R.styleable.FiveDayFenShiView_fdfsv_heart_beat_rate, 2000);
         heartBeatFractionRate = typedArray.getInteger(R.styleable.FiveDayFenShiView_fdfsv_heart_beat_fraction_rate, 2000);
 
-        isEnabledBottomTable = typedArray.getBoolean(R.styleable.FiveDayFenShiView_fdfsv_is_enabled_bottom_tab, Boolean.FALSE);
         isEnabledSlide = typedArray.getBoolean(R.styleable.FiveDayFenShiView_fdfsv_is_enabled_slide, Boolean.FALSE);
 
         typedArray.recycle();
@@ -159,8 +157,8 @@ public class FiveDayFenShiView extends StockView {
     }
 
     @Override
-    public boolean hasBottomTable() {
-        return isEnabledBottomTable;
+    public boolean isEnabledBottomTable() {
+        return Boolean.TRUE;
     }
 
     @Override
@@ -230,20 +228,13 @@ public class FiveDayFenShiView extends StockView {
         // 绘制坐标峰值
         drawXYText(canvas);
 
-        if (hasBottomTable()) {
-            // 绘制柱形
-            for (Map.Entry<Integer, FenShiDataManager> entry : fiveDayFenShiDataManager.dataManagerMap.entrySet()) {
-                drawPriceLineAndPillar(entry.getValue(), canvas, entry.getKey());
-            }
-
-            // 绘制下表格坐标
-            drawBottomTableCoordinate(canvas);
-        } else {
-            // 绘制价格曲线、闪烁点
-            for (Map.Entry<Integer, FenShiDataManager> entry : fiveDayFenShiDataManager.dataManagerMap.entrySet()) {
-                drawPriceLine(entry.getValue(), canvas, entry.getKey());
-            }
+        // 绘制柱形
+        for (Map.Entry<Integer, FenShiDataManager> entry : fiveDayFenShiDataManager.dataManagerMap.entrySet()) {
+            drawPriceLineAndPillar(entry.getValue(), canvas, entry.getKey());
         }
+
+        // 绘制下表格坐标
+        drawBottomTableCoordinate(canvas);
 
         if (fiveDayFenShiSlideHelper != null) {
             fiveDayFenShiSlideHelper.draw(canvas);
@@ -286,7 +277,6 @@ public class FiveDayFenShiView extends StockView {
 
     /**
      * 绘制价格、价格区域、均线、闪烁点、柱形图
-     * 相比于{@link #drawPriceLine}多了柱形图绘制, 之所以加多一个方法是为了减少循环耗时，以及避免没必要的判断
      */
     private void drawPriceLineAndPillar(FenShiDataManager fenShiDataManager, Canvas canvas, int position) {
         // pillarSpace= 宽  - 柱子间距(1f)
@@ -305,21 +295,6 @@ public class FiveDayFenShiView extends StockView {
 
             // 绘制后续柱形图
             drawPillar(fenShiDataManager, canvas, position, i, pillarSpace);
-        }
-
-        // 绘制价格曲线
-        drawPricePath(canvas);
-    }
-
-    /**
-     * 绘制价格曲线、闪烁点
-     */
-    private void drawPriceLine(FenShiDataManager fenShiDataManager, Canvas canvas, int position) {
-        // 设置价格圆点（第一个点）
-        moveToPrice(fenShiDataManager, position);
-        for (int i = 1; i < fenShiDataManager.priceSize(); i++) {
-            // 记录后续价格点
-            lineToPrice(fenShiDataManager, canvas, position, i);
         }
 
         // 绘制价格曲线
