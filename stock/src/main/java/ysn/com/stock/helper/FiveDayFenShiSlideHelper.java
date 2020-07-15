@@ -13,6 +13,7 @@ import ysn.com.stock.manager.FenShiDataManager;
 import ysn.com.stock.manager.FiveDayFenShiDataManager;
 import ysn.com.stock.utils.NumberUtils;
 import ysn.com.stock.view.FiveDayFenShiView;
+import ysn.com.stock.view.base.StockView;
 
 /**
  * @Author yangsanning
@@ -98,7 +99,7 @@ public class FiveDayFenShiSlideHelper {
 
         /**
          * 因圆点是(0,topTableHeight), 为了方便计算, 这里也以圆点为中心
-         * 圆点坐标更改: {@link ysn.com.stock.view.StockView#onDraw(Canvas)}
+         * 圆点坐标更改: {@link StockView#onDraw(Canvas)}
          */
         float y = event.getY() - fiveDayFenShiView.getTopTableHeight();
         switch (event.getAction()) {

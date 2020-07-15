@@ -11,7 +11,7 @@ import ysn.com.stock.R;
 import ysn.com.stock.interceptor.FenShiUnitInterceptor;
 import ysn.com.stock.manager.FenShiDataManager;
 import ysn.com.stock.utils.NumberUtils;
-import ysn.com.stock.view.StockView;
+import ysn.com.stock.view.base.StockView;
 
 /**
  * @Author yangsanning
@@ -93,7 +93,7 @@ public class FenShiSlideHelper {
         float x = event.getX();
         /**
          * 因圆点是(0,topTableHeight), 为了方便计算, 这里也以圆点为中心
-         * 圆点坐标更改: {@link ysn.com.stock.view.StockView#onDraw(Canvas)}
+         * 圆点坐标更改: {@link StockView#onDraw(Canvas)}
          */
         float y = event.getY() - stockView.getTopTableHeight();
         switch (event.getAction()) {

@@ -9,7 +9,6 @@ import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 
 import ysn.com.stock.R;
-import ysn.com.stock.view.StockView;
 
 /**
  * @Author yangsanning

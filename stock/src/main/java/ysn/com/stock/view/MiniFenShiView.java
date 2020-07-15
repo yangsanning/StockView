@@ -12,6 +12,7 @@ import android.util.AttributeSet;
 import ysn.com.stock.bean.IFenShi;
 import ysn.com.stock.config.MiniFenShiConfig;
 import ysn.com.stock.manager.MiniFenShiDataManager;
+import ysn.com.stock.view.base.StockView;
 
 /**
  * @Author yangsanning

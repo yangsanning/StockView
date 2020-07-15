@@ -1,4 +1,4 @@
-package ysn.com.stock.view;
+package ysn.com.stock.view.base;
 
 import android.content.Context;
 import android.content.res.TypedArray;
