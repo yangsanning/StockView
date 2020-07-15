@@ -23,6 +23,7 @@ import ysn.com.stock.interceptor.FenShiUnitInterceptor;
 import ysn.com.stock.manager.FenShiDataManager;
 import ysn.com.stock.manager.FiveDayFenShiDataManager;
 import ysn.com.stock.utils.TimeUtils;
+import ysn.com.stock.view.base.GridView;
 
 /**
  * @Author yangsanning
@@ -30,7 +31,7 @@ import ysn.com.stock.utils.TimeUtils;
  * @Description 五日分时
  * @Date 2020/5/7
  */
-public class FiveDayFenShiView extends StockView {
+public class FiveDayFenShiView extends GridView {
 
     /**
      * 价格线宽度

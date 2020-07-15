@@ -18,6 +18,7 @@ import ysn.com.stock.bean.IFenShi;
 import ysn.com.stock.helper.FenShiSlideHelper;
 import ysn.com.stock.interceptor.FenShiUnitInterceptor;
 import ysn.com.stock.manager.FenShiDataManager;
+import ysn.com.stock.view.base.GridView;
 
 /**
  * @Author yangsanning
@@ -26,7 +27,7 @@ import ysn.com.stock.manager.FenShiDataManager;
  * @Date 2019/5/4
  * @History 2019/5/4 author: description:
  */
-public class FenShiView extends StockView {
+public class FenShiView extends GridView {
 
     private static final String[] TIME_TEXT = new String[]{"09:30", "11:30/13:00", "15:00"};
 

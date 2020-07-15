@@ -3,6 +3,7 @@ package ysn.com.stock.paint;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PathEffect;
 import android.support.annotation.ColorInt;
 
 /**
@@ -45,6 +46,19 @@ public class LazyLinePaint {
         linePaint.setStrokeWidth(width);
     }
 
+    /**
+     * 设置PathEffect
+     */
+    public void setPathEffect(PathEffect pathEffect) {
+        linePaint.setPathEffect(pathEffect);
+    }
+
+    /**
+     * 重置PathEffect
+     */
+    public void resetPathEffect() {
+        linePaint.setPathEffect(null);
+    }
 
     /**
      * 设置圆点为起点
@@ -68,10 +82,42 @@ public class LazyLinePaint {
     }
 
     /**
+     * 绘制曲线（横线）
+     */
+    public void drawPath(Canvas canvas, float startX, float startY, float stopX, float stopY) {
+        moveTo(startX, startY);
+        lineToEnd(canvas, stopX, stopY);
+    }
+
+    /**
+     * 设置最后一个点并闭合曲线，设置完毕后进行绘制，绘制完成后进行路径重置
+     */
+    public void lineToClose(Canvas canvas, float x, float y) {
+        path.lineTo(x, y);
+        finishPath(canvas);
+    }
+
+    /**
+     * 设置最后一个点，设置完毕后进行绘制，绘制完成后进行路径重置
+     */
+    public void lineToEnd(Canvas canvas, float x, float y) {
+        path.lineTo(x, y);
+        drawAndResetPath(canvas);
+    }
+
+    /**
      * 闭合并绘制路径，绘制完毕重置路径
      */
     public void finishPath(Canvas canvas) {
         closePath();
+        drawPath(canvas);
+        resetPath();
+    }
+
+    /**
+     * 绘制路径，绘制完毕重置路径
+     */
+    public void drawAndResetPath(Canvas canvas) {
         drawPath(canvas);
         resetPath();
     }

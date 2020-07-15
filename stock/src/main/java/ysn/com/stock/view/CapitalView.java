@@ -17,6 +17,7 @@ import ysn.com.stock.R;
 import ysn.com.stock.bean.Capital;
 import ysn.com.stock.bean.CapitalData;
 import ysn.com.stock.utils.NumberUtils;
+import ysn.com.stock.view.base.GridView;
 
 /**
  * @Author yangsanning
@@ -25,7 +26,7 @@ import ysn.com.stock.utils.NumberUtils;
  * @Date 2019/5/23
  * @History 2019/5/23 author: description:
  */
-public class CapitalView extends StockView {
+public class CapitalView extends GridView {
 
     private static final String[] TIME_TEXT = new String[]{"09:30", "11:30/13:00", "15:00"};
     private static final float DEFAULT_PRICE_STROKE_WIDTH = 2.5f;
@@ -221,14 +222,11 @@ public class CapitalView extends StockView {
     @Override
     protected void onColumnLineDraw(Canvas canvas) {
         // 绘制上表竖线
-        dottedLinePaint.setColor(columnLineColor);
+        lazyPaint.setLineColor(columnLineColor);
         float topXSpace = getTopXSpace();
         for (int i = 1; i < getColumnCount(); i++) {
-            linePath.reset();
             float x = getColumnX(topXSpace, i);
-            linePath.moveTo(x, getTopTableMaxY());
-            linePath.lineTo(x, getTopTableMinY());
-            canvas.drawPath(linePath, dottedLinePaint);
+            lazyPaint.drawPath(canvas, x, getTopTableMaxY(), x, getTopTableMinY());
         }
     }
 
