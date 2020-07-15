@@ -1,6 +1,7 @@
 package ysn.com.stock.view.base;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
 import android.os.Build;
@@ -19,19 +20,19 @@ import ysn.com.stock.R;
 public class GridView extends StockView {
 
     /**
-     * 列数+1
+     * 垂直方向分成几部分（竖虚线+1）
      */
-    private int columnCount = 4;
+    private int tableVerticalPart;
 
     /**
-     * 上表横数+1
+     * 上表格水平方向分成几部分（上表格横虚线+1）
      */
-    private int topRowCount = 4;
+    private int topTableHorizontalPart;
 
     /**
-     * 下表横数+1
+     * 下表格水平方向分成几部分（下表格横虚线+1）
      */
-    private int bottomRowCount = 2;
+    private int bottomTableHorizontalPart;
 
     /**
      * 虚线效果
@@ -53,6 +54,18 @@ public class GridView extends StockView {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public GridView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+    }
+
+    @Override
+    protected void initAttr(AttributeSet attrs) {
+        super.initAttr(attrs);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.GridView);
+
+        tableVerticalPart = typedArray.getInt(R.styleable.GridView_tableVerticalPart, 4);
+        topTableHorizontalPart = typedArray.getInt(R.styleable.GridView_topTableHorizontalPart, 4);
+        bottomTableHorizontalPart = typedArray.getInt(R.styleable.GridView_bottomTableHorizontalPart, 2);
+
+        typedArray.recycle();
     }
 
     @Override
@@ -102,15 +115,15 @@ public class GridView extends StockView {
     protected void onColumnLineDraw(Canvas canvas) {
         // 绘制上表竖线
         lazyPaint.setLineColor(getColor(R.color.stock_dotted_column_line));
-        float xSpace = (viewWidth - 2 * tableMargin) / getColumnCount();
-        for (int i = 1; i < getColumnCount(); i++) {
+        float xSpace = (viewWidth - 2 * tableMargin) / getTableVerticalPart();
+        for (int i = 1; i < getTableVerticalPart(); i++) {
             float x = getColumnX(xSpace, i);
             lazyPaint.drawPath(canvas, x, getTopTableMaxY(), x, getTopTableMinY());
         }
 
         // 绘制下表竖线
         if (isEnabledBottomTable()) {
-            for (int i = 1; i < getColumnCount(); i++) {
+            for (int i = 1; i < getTableVerticalPart(); i++) {
                 float x = getColumnX(xSpace, i);
                 lazyPaint.drawPath(canvas, x, getBottomTableMinY(), x, getBottomTableMaxY());
             }
@@ -123,9 +136,9 @@ public class GridView extends StockView {
     protected void onRowLineDraw(Canvas canvas) {
         // 绘制上表横线
         float rowSpacing = getTopRowSpacing();
-        for (int i = 1; i < getTopRowCount(); i++) {
+        for (int i = 1; i < getTopTableHorizontalPart(); i++) {
             float y = getTopRowY(rowSpacing, i);
-            int color = getColor(i != getTopRowCount() / 2 ? R.color.stock_dotted_column_line : R.color.stock_dotted_row_line);
+            int color = getColor(i != getTopTableHorizontalPart() / 2 ? R.color.stock_dotted_column_line : R.color.stock_dotted_row_line);
             lazyPaint.setLineColor(color)
                     .drawPath(canvas, tableMargin, y, (viewWidth - tableMargin), y);
         }
@@ -134,37 +147,37 @@ public class GridView extends StockView {
         if (isEnabledBottomTable()) {
             rowSpacing = getBottomRowSpacing();
             lazyPaint.setLineColor(getColor(R.color.stock_dotted_column_line));
-            for (int i = 1; i < getBottomRowCount(); i++) {
+            for (int i = 1; i < getBottomTableHorizontalPart(); i++) {
                 float y = getBottomRowY(rowSpacing, i);
                 lazyPaint.drawPath(canvas, tableMargin, y, (viewWidth - tableMargin), y);
             }
         }
     }
 
-    protected int getColumnCount() {
-        return columnCount;
+    protected int getTableVerticalPart() {
+        return tableVerticalPart;
     }
 
-    protected int getTopRowCount() {
-        return topRowCount;
+    protected int getTopTableHorizontalPart() {
+        return topTableHorizontalPart;
     }
 
     protected float getTopRowSpacing() {
-        return topTableHeight / getTopRowCount();
+        return topTableHeight / getTopTableHorizontalPart();
     }
 
-    protected int getBottomRowCount() {
-        return bottomRowCount;
+    protected int getBottomTableHorizontalPart() {
+        return bottomTableHorizontalPart;
     }
 
     protected float getBottomRowSpacing() {
-        return bottomTableHeight / getBottomRowCount();
+        return bottomTableHeight / getBottomTableHorizontalPart();
     }
 
     /**
      * 获取上表格点间距
      */
     protected float getTopXSpace() {
-        return getTopTableWidth() / getColumnCount();
+        return getTopTableWidth() / getTableVerticalPart();
     }
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="GridView">
+        <!-- 垂直方向分成几部分（竖虚线+1）-->
+        <attr name="tableVerticalPart" format="integer" />
+
+        <!-- 上表格水平方向分成几部分（上表格横虚线+1）-->
+        <attr name="topTableHorizontalPart" format="integer" />
+
+        <!-- 下表格水平方向分成几部分（下表格横虚线+1）-->
+        <attr name="bottomTableHorizontalPart" format="integer" />
+    </declare-styleable>
+</resources>

@@ -192,11 +192,6 @@ public class CapitalView extends GridView {
     }
 
     @Override
-    protected int getTopRowCount() {
-        return 4;
-    }
-
-    @Override
     protected void onBaseDraw(Canvas canvas) {
         drawBackGround(canvas);
         super.onBaseDraw(canvas);
@@ -217,32 +212,13 @@ public class CapitalView extends GridView {
     }
 
     /**
-     * 绘制竖线
-     */
-    @Override
-    protected void onColumnLineDraw(Canvas canvas) {
-        // 绘制上表竖线
-        lazyPaint.setLineColor(columnLineColor);
-        float topXSpace = getTopXSpace();
-        for (int i = 1; i < getColumnCount(); i++) {
-            float x = getColumnX(topXSpace, i);
-            lazyPaint.drawPath(canvas, x, getTopTableMaxY(), x, getTopTableMinY());
-        }
-    }
-
-    @Override
-    protected int getColumnCount() {
-        return 2;
-    }
-
-    /**
      * 绘制横线
      */
     @Override
     protected void onRowLineDraw(Canvas canvas) {
         linePaint.setColor(rowLineColor);
         float rowSpacing = getTopRowSpacing();
-        for (int i = 1; i < getTopRowCount(); i++) {
+        for (int i = 1; i < getTopTableHorizontalPart(); i++) {
             linePath.reset();
             float y = getTopRowY(rowSpacing, i);
             linePath.moveTo(getTableMinX(), y);
@@ -314,7 +290,7 @@ public class CapitalView extends GridView {
         textPaint.setTextSize(xYTextSize);
 
         float rowSpacing = getTopRowSpacing();
-        int topRowCount = getTopRowCount();
+        int topRowCount = getTopTableHorizontalPart();
         for (int i = 0; i < (topRowCount + 1); i++) {
             float defaultY = getTopRowY(rowSpacing, topRowCount - i);
 

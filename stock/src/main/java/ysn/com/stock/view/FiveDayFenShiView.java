@@ -111,7 +111,7 @@ public class FiveDayFenShiView extends GridView {
     @Override
     protected void init(AttributeSet attrs) {
         super.init(attrs);
-        fiveDayFenShiDataManager = new FiveDayFenShiDataManager(getColumnCount(), decimalFormat);
+        fiveDayFenShiDataManager = new FiveDayFenShiDataManager(getTableVerticalPart(), decimalFormat);
 
         if (isEnabledSlide) {
             fiveDayFenShiSlideHelper = new FiveDayFenShiSlideHelper(this, fiveDayFenShiDataManager);
@@ -163,7 +163,7 @@ public class FiveDayFenShiView extends GridView {
     }
 
     @Override
-    protected int getColumnCount() {
+    protected int getTableVerticalPart() {
         return 5;
     }
 
@@ -190,7 +190,7 @@ public class FiveDayFenShiView extends GridView {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        dataWidth = getViewWidth() / getColumnCount();
+        dataWidth = getViewWidth() / getTableVerticalPart();
 
         if (fiveDayFenShiSlideHelper != null) {
             fiveDayFenShiSlideHelper.dataWidth = dataWidth;
@@ -329,7 +329,7 @@ public class FiveDayFenShiView extends GridView {
         float priceY = getPriceY(fenShiDataManager.getPrice(i));
         pricePath.lineTo(priceX, priceY);
 
-        if (position == getColumnCount() - 1 && isBeat && fenShiDataManager.isLastPrice(i)) {
+        if (position == getTableVerticalPart() - 1 && isBeat && fenShiDataManager.isLastPrice(i)) {
             //绘制扩散圆
             heartPaint.setColor(getColor(R.color.stock_price_line));
             heartPaint.setAlpha((int) (heartInitAlpha - heartInitAlpha * beatFraction));
