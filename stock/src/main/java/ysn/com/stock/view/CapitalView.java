@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import ysn.com.stock.R;
 import ysn.com.stock.bean.Capital;
 import ysn.com.stock.bean.CapitalData;
+import ysn.com.stock.paint.LazyTextPaint;
 import ysn.com.stock.utils.NumberUtils;
 import ysn.com.stock.view.base.GridView;
 
@@ -188,23 +189,31 @@ public class CapitalView extends GridView {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
-        drawBackGround(canvas);
-        super.onDraw(canvas);
+    protected void onBaseDraw(Canvas canvas) {
+        // 绘制背景
+        lazyPaint.moveTo((0), getTopTableMaxY())
+                .lineTo((0), getTopTableMinY())
+                .lineTo(viewWidth, getTopTableMinY())
+                .lineToClose(canvas, viewWidth, getTopTableMaxY(), areaPaint)
+                // 为后续操作统一设置字体大小以及文字颜色
+                .setTextSize(xYTextSize)
+                .setTextColor(textColor);
+        super.onBaseDraw(canvas);
     }
 
-    /**
-     * 绘制背景
-     */
-    private void drawBackGround(Canvas canvas) {
-        linePath.reset();
-        linePath.moveTo((0), getTopTableMaxY());
-        linePath.lineTo((0), getTopTableMinY());
-        linePath.lineTo(viewWidth, getTopTableMinY());
-        linePath.lineTo(viewWidth, getTopTableMaxY());
-        linePath.close();
-        canvas.drawPath(linePath, areaPaint);
-        linePath.reset();
+    @Override
+    protected void onTitleTextDraw(Canvas canvas) {
+        super.onTitleTextDraw(canvas);
+        lazyPaint.measure(leftTitle, lazyTextPaint -> {
+            // 绘制左上角标题
+            float y = getTopTableMinY() - lazyTextPaint.height();
+            lazyTextPaint.drawText(canvas, getTopTableMinX(), y);
+        }).measure(rightTitle, lazyTextPaint -> {
+            // 绘制右上角标题
+            float x = getTopTableMaxX() - lazyTextPaint.width();
+            float y = getTopTableMinY() - lazyTextPaint.height();
+            lazyTextPaint.drawText(canvas, x, y);
+        });
     }
 
     /**
@@ -213,28 +222,26 @@ public class CapitalView extends GridView {
     @Override
     protected void onTimeTextDraw(Canvas canvas) {
         super.onTimeTextDraw(canvas);
-        textPaint.setColor(textColor);
-        textPaint.setTextSize(xYTextSize);
-
-        // 绘制开始区域时间值
-        textPaint.getTextBounds(TIME_TEXT[0], (0), TIME_TEXT[0].length(), textRect);
-        canvas.drawText(TIME_TEXT[0], tableMargin, getTimeTextY(), textPaint);
-
-        // 绘制中间区域时间值
-        textPaint.getTextBounds(TIME_TEXT[1], (0), TIME_TEXT[1].length(), textRect);
-        canvas.drawText(TIME_TEXT[1], (((viewWidth - textRect.right) >> 1) - tableMargin), getTimeTextY(), textPaint);
-
-        // 绘制结束区域时间值
-        textPaint.getTextBounds(TIME_TEXT[2], (0), TIME_TEXT[2].length(), textRect);
-        canvas.drawText(TIME_TEXT[2], (viewWidth - textRect.right - tableMargin), getTimeTextY(), textPaint);
+        lazyPaint.measure(TIME_TEXT[0], lazyTextPaint -> {
+            // 绘制开始区域时间值
+            float y = getTimeTableMinY() + (lazyTextPaint.height() + getTimeTableHeight()) / 2f;
+            lazyTextPaint.drawText(canvas, getTableMargin(), y);
+        }).measure(TIME_TEXT[1], lazyTextPaint -> {
+            // 绘制中间区域时间值
+            float x = getTimeTableMinX() + ((getTopTableWidth() - lazyTextPaint.width()) / 2f);
+            float y = getTimeTableMinY() + (lazyTextPaint.height() + getTimeTableHeight()) / 2f;
+            lazyTextPaint.drawText(canvas, x, y);
+        }).measure(TIME_TEXT[2], lazyTextPaint -> {
+            // 绘制结束区域时间值
+            float x = getTopTableMaxX() - lazyTextPaint.width();
+            float y = getTimeTableMinY() + (lazyTextPaint.height() + getTimeTableHeight()) / 2f;
+            lazyTextPaint.drawText(canvas, x, y);
+        });
     }
 
     @Override
     protected void onChildDraw(Canvas canvas) {
         super.onChildDraw(canvas);
-
-        // 绘制头部文本
-        drawTitleText(canvas);
 
         if (capital == null) {
             return;
@@ -248,45 +255,25 @@ public class CapitalView extends GridView {
     }
 
     /**
-     * 绘制头部文本
-     *
-     * @param canvas
-     */
-    private void drawTitleText(Canvas canvas) {
-        textPaint.setTextSize(titleTextSize);
-
-        textPaint.getTextBounds(leftTitle, (0), leftTitle.length(), textRect);
-        float titleTextY = getTopTableMinY() - textRect.height();
-        canvas.drawText(leftTitle, (0), titleTextY, textPaint);
-
-        textPaint.getTextBounds(rightTitle, (0), rightTitle.length(), textRect);
-        canvas.drawText(rightTitle, (viewWidth - textRect.width()), titleTextY, textPaint);
-    }
-
-    /**
      * 绘制坐标值
      */
     private void drawCoordinate(Canvas canvas) {
-        textPaint.setTextSize(xYTextSize);
-
         float rowSpacing = getTopRowSpacing();
         int topRowCount = getPartTopHorizontal();
         for (int i = 0; i < (topRowCount + 1); i++) {
             float defaultY = getTopRowY(rowSpacing, topRowCount - i);
-
-            // 价格坐标
-            String text = NumberUtils.numberFormat(getPriceCoordinate(((float) i / topRowCount)), priceDigits);
-            textPaint.getTextBounds(text, (0), text.length(), textRect);
-            float textMargin = getTextMargin();
-            canvas.drawText(text, textMargin,
-                    getCoordinateY(i, topRowCount, defaultY, textMargin), textPaint);
-
-            // inFlow坐标
-            text = NumberUtils.numberFormat(getInfoFlowCoordinate(((float) i / topRowCount)), inFlowDigits);
-            textPaint.getTextBounds(text, (0), text.length(), textRect);
-            textMargin = getTextMargin();
-            canvas.drawText(text, (viewWidth - textRect.width() - textMargin),
-                    getCoordinateY(i, topRowCount, defaultY, textMargin), textPaint);
+            int position = i;
+            lazyPaint.measure(NumberUtils.numberFormat(getPriceCoordinate(((float) i / topRowCount)), priceDigits), lazyTextPaint -> {
+                // 价格坐标
+                float x = getTableMargin() + xYTextMargin;
+                float y = getCoordinateY(position, topRowCount, defaultY, lazyTextPaint);
+                lazyTextPaint.drawText(canvas, x, y);
+            }).measure(NumberUtils.numberFormat(getInfoFlowCoordinate(((float) i / topRowCount)), inFlowDigits), lazyTextPaint -> {
+                // inFlow坐标
+                float x = getTopTableMaxX() - lazyTextPaint.width() - xYTextMargin;
+                float y = getCoordinateY(position, topRowCount, defaultY, lazyTextPaint);
+                lazyTextPaint.drawText(canvas, x, y);
+            });
         }
     }
 
@@ -302,14 +289,14 @@ public class CapitalView extends GridView {
         return mixValue + (maxValue - mixValue) * ratio;
     }
 
-    private float getCoordinateY(int position, int topRowCount, float defaultY, float textMargin) {
+    private float getCoordinateY(int position, int topRowCount, float defaultY, LazyTextPaint lazyTextPaint) {
         float coordinateY;
         if (position == 0) {
-            coordinateY = -textMargin;
+            coordinateY = -xYTextMargin;
         } else if (position == topRowCount) {
-            coordinateY = defaultY + textRect.height() + textMargin;
+            coordinateY = defaultY + lazyTextPaint.height() + xYTextMargin;
         } else {
-            coordinateY = defaultY + textRect.height() / 2f;
+            coordinateY = defaultY + lazyTextPaint.height() / 2f;
         }
         return coordinateY;
     }

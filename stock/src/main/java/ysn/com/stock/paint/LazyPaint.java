@@ -35,8 +35,9 @@ public class LazyPaint {
     /**
      * 测量文本
      */
-    public void measure(String text, OnSomeOneCallBack<LazyTextPaint> callBack) {
+    public LazyPaint measure(String text, OnSomeOneCallBack<LazyTextPaint> callBack) {
         callBack.onCallBack(lazyTextPaint.measure(text));
+        return this;
     }
 
     /**
@@ -135,6 +136,14 @@ public class LazyPaint {
     }
 
     /**
+     * 设置最后一个点并闭合曲线，设置完毕后进行绘制，绘制完成后进行路径重置
+     */
+    public LazyPaint lineToClose(Canvas canvas, float x, float y, Paint linePaint) {
+        lazyLinePaint.lineToClose(canvas, x, y, linePaint);
+        return this;
+    }
+
+    /**
      * 设置最后一个点，设置完毕后进行绘制，绘制完成后进行路径重置
      */
     public LazyPaint lineToEnd(Canvas canvas, float x, float y) {
@@ -145,8 +154,8 @@ public class LazyPaint {
     /**
      * 闭合并绘制路径，绘制完毕重置路径
      */
-    public LazyPaint finishPath(Canvas canvas) {
-        lazyLinePaint.finishPath(canvas);
+    public LazyPaint finishLinePath(Canvas canvas) {
+        lazyLinePaint.finishLinePath(canvas);
         return this;
     }
 
@@ -154,7 +163,7 @@ public class LazyPaint {
      * 绘制路径，绘制完毕重置路径
      */
     public LazyPaint drawAndRestPath(Canvas canvas) {
-        lazyLinePaint.drawAndResetPath(canvas);
+        lazyLinePaint.drawPathAndReset(canvas);
         return this;
     }
 

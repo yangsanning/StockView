@@ -93,8 +93,15 @@ public class LazyLinePaint {
      * 设置最后一个点并闭合曲线，设置完毕后进行绘制，绘制完成后进行路径重置
      */
     public void lineToClose(Canvas canvas, float x, float y) {
+        lineToClose(canvas, x, y, linePaint);
+    }
+
+    /**
+     * 设置最后一个点并闭合曲线，设置完毕后进行绘制，绘制完成后进行路径重置
+     */
+    public void lineToClose(Canvas canvas, float x, float y, Paint linePaint) {
         path.lineTo(x, y);
-        finishPath(canvas);
+        finishLinePath(canvas, linePaint);
     }
 
     /**
@@ -102,22 +109,31 @@ public class LazyLinePaint {
      */
     public void lineToEnd(Canvas canvas, float x, float y) {
         path.lineTo(x, y);
-        drawAndResetPath(canvas);
+        drawPathAndReset(canvas);
     }
 
     /**
      * 闭合并绘制路径，绘制完毕重置路径
      */
-    public void finishPath(Canvas canvas) {
+    public void finishLinePath(Canvas canvas) {
         closePath();
         drawPath(canvas);
         resetPath();
     }
 
     /**
+     * 闭合并绘制路径，绘制完毕重置路径
+     */
+    public void finishLinePath(Canvas canvas, Paint linePaint) {
+        closePath();
+        drawPath(canvas, linePaint);
+        resetPath();
+    }
+
+    /**
      * 绘制路径，绘制完毕重置路径
      */
-    public void drawAndResetPath(Canvas canvas) {
+    public void drawPathAndReset(Canvas canvas) {
         drawPath(canvas);
         resetPath();
     }
@@ -133,6 +149,13 @@ public class LazyLinePaint {
      * 绘制路径
      */
     public void drawPath(Canvas canvas) {
+        drawPath(canvas, linePaint);
+    }
+
+    /**
+     * 绘制路径
+     */
+    public void drawPath(Canvas canvas, Paint linePaint) {
         canvas.drawPath(path, linePaint);
     }
 

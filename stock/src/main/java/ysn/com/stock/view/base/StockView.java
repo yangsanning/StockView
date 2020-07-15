@@ -3,10 +3,8 @@ package ysn.com.stock.view.base;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PathEffect;
 import android.graphics.Rect;
 import android.os.Build;
 import android.support.annotation.ColorRes;
@@ -161,8 +159,8 @@ public class StockView extends View {
         canvas.save();
         canvas.translate(getCircleX(), getCircleY());
 
-        // 绘制时间坐标
-        onTimeTextDraw(canvas);
+        // 基础绘制
+        onBaseDraw(canvas);
 
         // 开放给子类自由绘制
         onChildDraw(canvas);
@@ -185,7 +183,24 @@ public class StockView extends View {
     }
 
     /**
-     * 绘制时间坐标
+     * 基础绘制
+     */
+    protected void onBaseDraw(Canvas canvas) {
+        // 绘制标题文本
+        onTitleTextDraw(canvas);
+
+        // 绘制时间文本
+        onTimeTextDraw(canvas);
+    }
+
+    /**
+     * 绘制标题文本
+     */
+    protected void onTitleTextDraw(Canvas canvas) {
+    }
+
+    /**
+     * 绘制时间文本
      */
     protected void onTimeTextDraw(Canvas canvas) {
     }
@@ -200,7 +215,7 @@ public class StockView extends View {
      * 获取上表格最小X
      */
     public float getTopTableMinX() {
-        return getCircleX();
+        return 0;
     }
 
     /**
@@ -228,7 +243,7 @@ public class StockView extends View {
      * 获取上表格最小X
      */
     public float getBottomTableMinX() {
-        return getCircleX();
+        return 0;
     }
 
     /**
@@ -250,6 +265,27 @@ public class StockView extends View {
      */
     public float getBottomTableMaxY() {
         return bottomTableHeight + timeTableHeight;
+    }
+
+    /**
+     * 获取时间表格最小Y
+     */
+    public float getTimeTableMinY() {
+        return 0;
+    }
+
+    /**
+     * 获取时间表格最大Y
+     */
+    public float getTimeTableMaxY() {
+        return timeTableHeight;
+    }
+
+    /**
+     * 获取时间表格最小X
+     */
+    public float getTimeTableMinX() {
+        return 0;
     }
 
     /**

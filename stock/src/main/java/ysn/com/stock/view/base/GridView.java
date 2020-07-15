@@ -100,7 +100,7 @@ public class GridView extends StockView {
                 .lineTo(getTopTableMinX(), getTopTableMinY())
                 .lineTo(getTableMaxX(), getTopTableMinY())
                 .lineTo(getTableMaxX(), getTopTableMaxY())
-                .finishPath(canvas);
+                .finishLinePath(canvas);
 
         // 下表边框
         if (isEnabledBottomTable()) {
@@ -108,7 +108,7 @@ public class GridView extends StockView {
                     .lineTo(getBottomTableMinX(), getBottomTableMaxY())
                     .lineTo(getBottomTableMaxX(), getBottomTableMaxY())
                     .lineTo(getBottomTableMaxX(), getBottomTableMinY())
-                    .finishPath(canvas);
+                    .finishLinePath(canvas);
         }
     }
 
