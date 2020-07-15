@@ -161,8 +161,8 @@ public class StockView extends View {
         canvas.save();
         canvas.translate(getCircleX(), getCircleY());
 
-        // 基础绘制
-        onBaseDraw(canvas);
+        // 绘制时间坐标
+        onTimeTextDraw(canvas);
 
         // 开放给子类自由绘制
         onChildDraw(canvas);
@@ -185,14 +185,16 @@ public class StockView extends View {
     }
 
     /**
-     * 基础绘制
+     * 绘制时间坐标
      */
-    protected void onBaseDraw(Canvas canvas) {
-
-        // 绘制时间坐标
-        onTimeTextDraw(canvas);
+    protected void onTimeTextDraw(Canvas canvas) {
     }
 
+    /**
+     * 开放给子类自由绘制
+     */
+    protected void onChildDraw(Canvas canvas) {
+    }
 
     /**
      * 获取上表格最小X
@@ -261,7 +263,6 @@ public class StockView extends View {
         return tableMargin + xSpace * position;
     }
 
-
     /**
      * 获取横线y轴坐标
      *
@@ -282,12 +283,6 @@ public class StockView extends View {
      */
     protected float getBottomRowY(float ySpace, int position) {
         return timeTableHeight + ySpace * position;
-    }
-
-    /**
-     * 绘制时间坐标
-     */
-    protected void onTimeTextDraw(Canvas canvas) {
     }
 
     /**
@@ -328,12 +323,6 @@ public class StockView extends View {
      */
     protected float getY(float value, float minValue, float maxValue) {
         return ((getTopTableMinY()) * (value - minValue)) / (maxValue - minValue);
-    }
-
-    /**
-     * 开放给子类自由绘制
-     */
-    protected void onChildDraw(Canvas canvas) {
     }
 
     /**

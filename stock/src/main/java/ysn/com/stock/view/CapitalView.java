@@ -192,9 +192,9 @@ public class CapitalView extends GridView {
     }
 
     @Override
-    protected void onBaseDraw(Canvas canvas) {
+    protected void onDraw(Canvas canvas) {
         drawBackGround(canvas);
-        super.onBaseDraw(canvas);
+        super.onDraw(canvas);
     }
 
     /**
@@ -209,22 +209,6 @@ public class CapitalView extends GridView {
         linePath.close();
         canvas.drawPath(linePath, areaPaint);
         linePath.reset();
-    }
-
-    /**
-     * 绘制横线
-     */
-    @Override
-    protected void onRowLineDraw(Canvas canvas) {
-        linePaint.setColor(rowLineColor);
-        float rowSpacing = getTopRowSpacing();
-        for (int i = 1; i < getTopTableHorizontalPart(); i++) {
-            linePath.reset();
-            float y = getTopRowY(rowSpacing, i);
-            linePath.moveTo(getTableMinX(), y);
-            linePath.lineTo(getTableMaxX(), y);
-            canvas.drawPath(linePath, linePaint);
-        }
     }
 
     /**

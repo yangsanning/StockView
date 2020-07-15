@@ -69,8 +69,8 @@ public class GridView extends StockView {
     }
 
     @Override
-    protected void onBaseDraw(Canvas canvas) {
-        super.onBaseDraw(canvas);
+    protected void onChildDraw(Canvas canvas) {
+        super.onChildDraw(canvas);
         // 绘制边框
         onBordersDraw(canvas);
 

@@ -57,10 +57,6 @@ public class MiniFenShiView extends StockView {
     }
 
     @Override
-    protected void onBaseDraw(Canvas canvas) {
-    }
-
-    @Override
     protected void onChildDraw(Canvas canvas) {
         super.onChildDraw(canvas);
 
