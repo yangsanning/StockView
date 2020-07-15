@@ -81,8 +81,6 @@ public class CapitalView extends GridView {
      */
     private int textColor;
     private int bgColor;
-    private int columnLineColor;
-    private int rowLineColor;
 
     private boolean isDrawMainInFlow;
     private boolean isDrawRetailInFlow;
@@ -125,8 +123,6 @@ public class CapitalView extends GridView {
 
         textColor = typedArray.getColor(R.styleable.CapitalView_cv_text_color, getColor(R.color.capital_text));
         bgColor = typedArray.getColor(R.styleable.CapitalView_cv_bg_color, getColor(R.color.capital_bg));
-        columnLineColor = typedArray.getColor(R.styleable.CapitalView_cv_column_line_color, getColor(R.color.capital_column_line));
-        rowLineColor = typedArray.getColor(R.styleable.CapitalView_cv_row_line_color, getColor(R.color.capital_row_line));
 
         typedArray.recycle();
 
@@ -274,7 +270,7 @@ public class CapitalView extends GridView {
         textPaint.setTextSize(xYTextSize);
 
         float rowSpacing = getTopRowSpacing();
-        int topRowCount = getTopTableHorizontalPart();
+        int topRowCount = getPartTopHorizontal();
         for (int i = 0; i < (topRowCount + 1); i++) {
             float defaultY = getTopRowY(rowSpacing, topRowCount - i);
 

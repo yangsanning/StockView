@@ -24,8 +24,10 @@
             android:layout_width="match_parent"
             android:layout_height="210dp"
             android:layout_marginTop="50dp"
+            ysn:colorHorizontalDotted="@color/capital_column_line"
+            ysn:colorHorizontalDottedDeepen="@color/capital_column_line"
+            ysn:colorVerticalDotted="@color/capital_column_line"
             ysn:cv_bg_color="@color/capital_bg"
-            ysn:cv_column_line_color="@color/capital_column_line"
             ysn:cv_finance_in_flow_color="@color/capital_finance_in_flow"
             ysn:cv_in_flow_digits="3"
             ysn:cv_in_flow_unit="1000"
@@ -35,9 +37,8 @@
             ysn:cv_price_digits="2"
             ysn:cv_retail_in_flow_color="@color/capital_retail_in_flow"
             ysn:cv_right_title="今日资金净流入(千元)"
-            ysn:cv_row_line_color="@color/capital_row_line"
             ysn:cv_text_color="@color/capital_text"
-            ysn:tableVerticalPart="2" />
+            ysn:partVertical="2" />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -2,12 +2,17 @@
 <resources>
     <declare-styleable name="GridView">
         <!-- 垂直方向分成几部分（竖虚线+1）-->
-        <attr name="tableVerticalPart" format="integer" />
-
+        <attr name="partVertical" format="integer" />
         <!-- 上表格水平方向分成几部分（上表格横虚线+1）-->
-        <attr name="topTableHorizontalPart" format="integer" />
-
+        <attr name="partTopHorizontal" format="integer" />
         <!-- 下表格水平方向分成几部分（下表格横虚线+1）-->
-        <attr name="bottomTableHorizontalPart" format="integer" />
+        <attr name="partBottomHorizontal" format="integer" />
+
+        <!--表格垂直方向虚线颜色-->
+        <attr name="colorVerticalDotted" format="color" />
+        <!--表格水平方向虚线颜色-->
+        <attr name="colorHorizontalDotted" format="color" />
+        <!--表格水平方向虚线加深颜色-->
+        <attr name="colorHorizontalDottedDeepen" format="color" />
     </declare-styleable>
 </resources>

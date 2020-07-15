@@ -25,9 +25,5 @@
         <attr name="cv_text_color" format="color" />
         <!--背景颜色-->
         <attr name="cv_bg_color" format="color" />
-        <!--竖线颜色-->
-        <attr name="cv_column_line_color" format="color" />
-        <!--横线颜色-->
-        <attr name="cv_row_line_color" format="color" />
     </declare-styleable>
 </resources>
