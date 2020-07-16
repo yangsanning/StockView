@@ -11,11 +11,11 @@ import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import ysn.com.stock.R;
-import ysn.com.stock.bean.Capital;
-import ysn.com.stock.bean.CapitalData;
+import ysn.com.stock.bean.ICapitalData;
+import ysn.com.stock.manager.CapitalDataManager;
 import ysn.com.stock.paint.LazyTextPaint;
 import ysn.com.stock.utils.NumberUtils;
 import ysn.com.stock.view.base.GridView;
@@ -86,8 +86,7 @@ public class CapitalView extends GridView {
     private boolean isDrawMainInFlow;
     private boolean isDrawRetailInFlow;
 
-    private Capital capital;
-    private ArrayList<CapitalData> data;
+    private CapitalDataManager dataManager = new CapitalDataManager();
 
     public CapitalView(Context context) {
         super(context);
@@ -243,7 +242,7 @@ public class CapitalView extends GridView {
     protected void onChildDraw(Canvas canvas) {
         super.onChildDraw(canvas);
 
-        if (capital == null) {
+        if (dataManager.isEmpty()) {
             return;
         }
 
@@ -278,11 +277,11 @@ public class CapitalView extends GridView {
     }
 
     private Float getPriceCoordinate(float ratio) {
-        return getCoordinateValue(capital.getMaxPrice(), capital.getMixPrice(), ratio);
+        return getCoordinateValue(dataManager.getPriceMaximum(), dataManager.getPriceMinimum(), ratio);
     }
 
     private Float getInfoFlowCoordinate(float ratio) {
-        return getCoordinateValue(capital.getMaxInFlow(), capital.getMixInFlow(), ratio) / inFlowUnit;
+        return getCoordinateValue(dataManager.getInFlowMaximum(), dataManager.getInFlowMinimum(), ratio) / inFlowUnit;
     }
 
     private Float getCoordinateValue(float maxValue, float mixValue, float ratio) {
@@ -322,15 +321,15 @@ public class CapitalView extends GridView {
      * 绘制趋势线
      */
     private void drawAllLine(Canvas canvas) {
-        financeInFlowPath.moveTo(tableMargin, getInFlowY(data.get(0).getFinanceInFlow()));
-        mainInFlowPath.moveTo(tableMargin, getInFlowY(data.get(0).getMainInFlow()));
-        retailInFlowPath.moveTo(tableMargin, getInFlowY(data.get(0).getRetailInFlow()));
-        pricePath.moveTo(tableMargin, getPriceY(data.get(0).getPrice()));
-        for (int i = 1; i < data.size(); i++) {
-            financeInFlowPath.lineTo(getX(i), getInFlowY(data.get(i).getFinanceInFlow()));
-            mainInFlowPath.lineTo(getX(i), getInFlowY(data.get(i).getMainInFlow()));
-            retailInFlowPath.lineTo(getX(i), getInFlowY(data.get(i).getRetailInFlow()));
-            pricePath.lineTo(getX(i), getPriceY(data.get(i).getPrice()));
+        financeInFlowPath.moveTo(tableMargin, getInFlowY(dataManager.getFinanceInFlow(0)));
+        mainInFlowPath.moveTo(tableMargin, getInFlowY(dataManager.getMainInFlow(0)));
+        retailInFlowPath.moveTo(tableMargin, getInFlowY(dataManager.getRetailInFlow(0)));
+        pricePath.moveTo(tableMargin, getPriceY(dataManager.getPrice(0)));
+        for (int i = 1; i < dataManager.size(); i++) {
+            financeInFlowPath.lineTo(getX(i), getInFlowY(dataManager.getFinanceInFlow(i)));
+            mainInFlowPath.lineTo(getX(i), getInFlowY(dataManager.getMainInFlow(i)));
+            retailInFlowPath.lineTo(getX(i), getInFlowY(dataManager.getRetailInFlow(i)));
+            pricePath.lineTo(getX(i), getPriceY(dataManager.getPrice(i)));
         }
         canvas.drawPath(financeInFlowPath, financeInFlowPaint);
         canvas.drawPath(mainInFlowPath, mainInFlowPaint);
@@ -347,13 +346,13 @@ public class CapitalView extends GridView {
      * 不绘制 RetailInFlow
      */
     private void drawMainInflowLine(Canvas canvas) {
-        financeInFlowPath.moveTo(tableMargin, getInFlowY(data.get(0).getFinanceInFlow()));
-        mainInFlowPath.moveTo(tableMargin, getInFlowY(data.get(0).getMainInFlow()));
-        pricePath.moveTo(tableMargin, getPriceY(data.get(0).getPrice()));
-        for (int i = 1; i < data.size(); i++) {
-            financeInFlowPath.lineTo(getX(i), getInFlowY(data.get(i).getFinanceInFlow()));
-            mainInFlowPath.lineTo(getX(i), getInFlowY(data.get(i).getMainInFlow()));
-            pricePath.lineTo(getX(i), getPriceY(data.get(i).getPrice()));
+        financeInFlowPath.moveTo(tableMargin, getInFlowY(dataManager.getFinanceInFlow(0)));
+        mainInFlowPath.moveTo(tableMargin, getInFlowY(dataManager.getMainInFlow(0)));
+        pricePath.moveTo(tableMargin, getPriceY(dataManager.getPrice(0)));
+        for (int i = 1; i < dataManager.size(); i++) {
+            financeInFlowPath.lineTo(getX(i), getInFlowY(dataManager.getFinanceInFlow(i)));
+            mainInFlowPath.lineTo(getX(i), getInFlowY(dataManager.getMainInFlow(i)));
+            pricePath.lineTo(getX(i), getPriceY(dataManager.getPrice(i)));
         }
         canvas.drawPath(financeInFlowPath, financeInFlowPaint);
         canvas.drawPath(mainInFlowPath, mainInFlowPaint);
@@ -368,13 +367,13 @@ public class CapitalView extends GridView {
      * 不绘制 MainInFlow
      */
     private void drawRetailInFlowLine(Canvas canvas) {
-        financeInFlowPath.moveTo(tableMargin, getInFlowY(data.get(0).getFinanceInFlow()));
-        retailInFlowPath.moveTo(tableMargin, getInFlowY(data.get(0).getRetailInFlow()));
-        pricePath.moveTo(tableMargin, getPriceY(data.get(0).getPrice()));
-        for (int i = 1; i < data.size(); i++) {
-            financeInFlowPath.lineTo(getX(i), getInFlowY(data.get(i).getFinanceInFlow()));
-            retailInFlowPath.lineTo(getX(i), getInFlowY(data.get(i).getRetailInFlow()));
-            pricePath.lineTo(getX(i), getPriceY(data.get(i).getPrice()));
+        financeInFlowPath.moveTo(tableMargin, getInFlowY(dataManager.getFinanceInFlow(0)));
+        retailInFlowPath.moveTo(tableMargin, getInFlowY(dataManager.getRetailInFlow(0)));
+        pricePath.moveTo(tableMargin, getPriceY(dataManager.getPrice(0)));
+        for (int i = 1; i < dataManager.size(); i++) {
+            financeInFlowPath.lineTo(getX(i), getInFlowY(dataManager.getFinanceInFlow(i)));
+            retailInFlowPath.lineTo(getX(i), getInFlowY(dataManager.getRetailInFlow(i)));
+            pricePath.lineTo(getX(i), getPriceY(dataManager.getPrice(i)));
         }
         canvas.drawPath(financeInFlowPath, financeInFlowPaint);
         canvas.drawPath(retailInFlowPath, retailInFlowPaint);
@@ -389,11 +388,11 @@ public class CapitalView extends GridView {
      * 绘制基础趋势线
      */
     private void drawBaseLine(Canvas canvas) {
-        financeInFlowPath.moveTo(tableMargin, getInFlowY(data.get(0).getFinanceInFlow()));
-        pricePath.moveTo(tableMargin, getPriceY(data.get(0).getPrice()));
-        for (int i = 1; i < data.size(); i++) {
-            financeInFlowPath.lineTo(getX(i), getInFlowY(data.get(i).getFinanceInFlow()));
-            pricePath.lineTo(getX(i), getPriceY(data.get(i).getPrice()));
+        financeInFlowPath.moveTo(tableMargin, getInFlowY(dataManager.getFinanceInFlow(0)));
+        pricePath.moveTo(tableMargin, getPriceY(dataManager.getPrice(0)));
+        for (int i = 1; i < dataManager.size(); i++) {
+            financeInFlowPath.lineTo(getX(i), getInFlowY(dataManager.getFinanceInFlow(i)));
+            pricePath.lineTo(getX(i), getPriceY(dataManager.getPrice(i)));
         }
         canvas.drawPath(financeInFlowPath, financeInFlowPaint);
         canvas.drawPath(pricePath, pricePaint);
@@ -409,7 +408,7 @@ public class CapitalView extends GridView {
      * @return y轴坐标
      */
     private float getInFlowY(float inFlowValue) {
-        return getY(inFlowValue, capital.getMixInFlow(), capital.getMaxInFlow());
+        return getY(inFlowValue, dataManager.getInFlowMinimum(), dataManager.getInFlowMaximum());
     }
 
     /**
@@ -419,17 +418,14 @@ public class CapitalView extends GridView {
      * @return 价格的y轴坐标
      */
     private float getPriceY(float price) {
-        return getY(price, capital.getMixPrice(), capital.getMaxPrice());
+        return getY(price, dataManager.getPriceMinimum(), dataManager.getPriceMaximum());
     }
 
     /**
-     * 直接设置 capital
-     *
-     * @see Capital
+     * 设置数据
      */
-    public void setNewData(Capital capital) {
-        this.capital = capital;
-        this.data = capital.getData();
+    public <T extends ICapitalData> void setNewData(List<T> dataList) {
+        dataManager.setNewData(dataList);
         invalidate();
     }
 

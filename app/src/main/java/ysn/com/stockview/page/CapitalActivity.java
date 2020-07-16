@@ -5,10 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
-import java.util.ArrayList;
-
-import ysn.com.stock.bean.Capital;
-import ysn.com.stock.bean.CapitalData;
 import ysn.com.stock.view.CapitalView;
 import ysn.com.stockview.R;
 import ysn.com.stockview.bean.CapitalTime;
@@ -32,41 +28,21 @@ public class CapitalActivity extends AppCompatActivity implements CompoundButton
 
         setTitle(R.string.text_capital);
 
-        Capital newData = convert(JsonUtils.getData((this), ("json/capital1.json"), CapitalTime.class));
+        CapitalTime newData = JsonUtils.getData((this), ("json/capital1.json"), CapitalTime.class);
 
         CapitalView capitalView1 = findViewById(R.id.capital_activity_view1);
         capitalView1.setDrawMainInFlow(true)
                 .setDrawRetailInFlow(true)
-                .setNewData(newData);
+                .setNewData(newData.getData());
 
         capitalView2 = findViewById(R.id.capital_activity_view2);
-        capitalView2.setNewData(newData);
+        capitalView2.setNewData(newData.getData());
 
         CheckBox checkBox1 = findViewById(R.id.capital_activity_check_box1);
         checkBox1.setOnCheckedChangeListener(this);
 
         CheckBox checkBox2 = findViewById(R.id.capital_activity_check_box2);
         checkBox2.setOnCheckedChangeListener(this);
-    }
-
-    private Capital convert(CapitalTime capitalTime) {
-        if (capitalTime == null) {
-            return null;
-        }
-        Capital capital = new Capital();
-        ArrayList<CapitalData> capitalDataList = new ArrayList<>();
-        for (CapitalTime.DataBean dataBean : capitalTime.getData()) {
-            CapitalData data = new CapitalData(
-                    dataBean.getPrice(),
-                    dataBean.getFinanceInFlow(),
-                    dataBean.getMainInFlow(),
-                    dataBean.getRetailInFlow());
-            capitalDataList.add(data);
-            capital.findPriceExtremum(dataBean.getPrice())
-                    .checkInFlowExtremum(data.getFinanceInFlow(), data.getMainInFlow(), data.getRetailInFlow());
-        }
-        capital.setData(capitalDataList);
-        return capital;
     }
 
     @Override
