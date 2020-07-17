@@ -6,22 +6,22 @@ package ysn.com.stock.bean;
  * @Description 极值(最大值 、 最小值 、 极差)
  * @Date 2020/7/9
  */
-public class Extremum {
+public class Extremum implements IExtremum{
 
     /**
      * 最大值
      */
-    public float maximum;
+    private float maximum;
 
     /**
      * 最小值
      */
-    public float minimum;
+    private float minimum;
 
     /**
      * 极差
      */
-    public float peek;
+    private float peek;
 
     /**
      * 初始化最大值以及最小值
@@ -57,5 +57,20 @@ public class Extremum {
                 minimum = value;
             }
         }
+    }
+
+    @Override
+    public float getMaximum() {
+        return maximum;
+    }
+
+    @Override
+    public float getMinimum() {
+        return minimum;
+    }
+
+    @Override
+    public float getPeek() {
+        return peek;
     }
 }

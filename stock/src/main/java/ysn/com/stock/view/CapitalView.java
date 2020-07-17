@@ -14,10 +14,12 @@ import android.util.AttributeSet;
 import java.util.List;
 
 import ysn.com.stock.R;
+import ysn.com.stock.bean.Extremum;
 import ysn.com.stock.bean.ICapitalData;
+import ysn.com.stock.bean.IExtremum;
+import ysn.com.stock.interceptor.CapitalUnitInterceptor;
 import ysn.com.stock.manager.CapitalDataManager;
 import ysn.com.stock.paint.LazyTextPaint;
-import ysn.com.stock.utils.NumberUtils;
 import ysn.com.stock.view.base.GridView;
 
 /**
@@ -31,11 +33,8 @@ public class CapitalView extends GridView {
 
     private static final String[] TIME_TEXT = new String[]{"09:30", "11:30/13:00", "15:00"};
     private static final float DEFAULT_PRICE_STROKE_WIDTH = 2.5f;
-    private static final int DEFAULT_IN_FLOW_UNIT = 10000;
-    private static final int DEFAULT_PRICE_DIGITS = 3;
-    private static final int DEFAULT_IN_FLOW_DIGITS = 2;
     private static final String DEFAULT_LEFT_TITLE = "股价(元)";
-    private static final String DEFAULT_RIGHT_TITLE = "今日资金净流入(万元)";
+    private static final String DEFAULT_RIGHT_TITLE = "今日资金净流入(元)";
 
     private Paint areaPaint;
     private Path financeInFlowPath;
@@ -52,14 +51,9 @@ public class CapitalView extends GridView {
 
     /**
      * inFlowUnit: 净流入单位
-     * priceDigits: 价格保留的位数
-     * inFlowDigits: 净流入保留的位数
      * leftTitle: 左上角标题(用于标注左边价格坐标)
      * rightTitle: 右上角标题(用于标注右边inFlow坐标)
      */
-    private int inFlowUnit;
-    private int priceDigits;
-    private int inFlowDigits;
     private String leftTitle;
     private String rightTitle;
 
@@ -87,6 +81,7 @@ public class CapitalView extends GridView {
     private boolean isDrawRetailInFlow;
 
     private CapitalDataManager dataManager = new CapitalDataManager();
+    private CapitalUnitInterceptor interceptor;
 
     public CapitalView(Context context) {
         super(context);
@@ -110,9 +105,6 @@ public class CapitalView extends GridView {
         super.initAttr(attrs);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CapitalView);
 
-        inFlowUnit = typedArray.getInteger(R.styleable.CapitalView_cv_in_flow_unit, DEFAULT_IN_FLOW_UNIT);
-        priceDigits = typedArray.getInteger(R.styleable.CapitalView_cv_price_digits, DEFAULT_PRICE_DIGITS);
-        inFlowDigits = typedArray.getInteger(R.styleable.CapitalView_cv_in_flow_digits, DEFAULT_IN_FLOW_DIGITS);
         leftTitle = typedArray.getString(R.styleable.CapitalView_cv_left_title);
         rightTitle = typedArray.getString(R.styleable.CapitalView_cv_right_title);
 
@@ -262,12 +254,12 @@ public class CapitalView extends GridView {
         for (int i = 0; i < (topRowCount + 1); i++) {
             float defaultY = getTopRowY(rowSpacing, topRowCount - i);
             int position = i;
-            lazyPaint.measure(NumberUtils.numberFormat(getPriceCoordinate(((float) i / topRowCount)), priceDigits), lazyTextPaint -> {
+            lazyPaint.measure(getLeftCoordinateText(i), lazyTextPaint -> {
                 // 价格坐标
                 float x = getTableMargin() + xYTextMargin;
                 float y = getCoordinateY(position, topRowCount, defaultY, lazyTextPaint);
                 lazyTextPaint.drawText(canvas, x, y);
-            }).measure(NumberUtils.numberFormat(getInfoFlowCoordinate(((float) i / topRowCount)), inFlowDigits), lazyTextPaint -> {
+            }).measure(getRightCoordinateText(i), lazyTextPaint -> {
                 // inFlow坐标
                 float x = getTopTableMaxX() - lazyTextPaint.width() - xYTextMargin;
                 float y = getCoordinateY(position, topRowCount, defaultY, lazyTextPaint);
@@ -276,16 +268,27 @@ public class CapitalView extends GridView {
         }
     }
 
-    private Float getPriceCoordinate(float ratio) {
-        return getCoordinateValue(dataManager.getPriceMaximum(), dataManager.getPriceMinimum(), ratio);
+    /**
+     * 根据 position 获取对应的左坐标文本
+     */
+    private String getLeftCoordinateText(float position) {
+        Float value = getCoordinateValue(dataManager.getPriceExtremum(), position);
+        return interceptor == null ? String.valueOf(value) : interceptor.leftCoordinate(value);
     }
 
-    private Float getInfoFlowCoordinate(float ratio) {
-        return getCoordinateValue(dataManager.getInFlowMaximum(), dataManager.getInFlowMinimum(), ratio) / inFlowUnit;
+    /**
+     * 根据 position 获取对应的右坐标文本
+     */
+    private String getRightCoordinateText(float position) {
+        Float value = getCoordinateValue(dataManager.getInFlowExtremum(), position);
+        return interceptor == null ? String.valueOf(value) : interceptor.rightCoordinate(value);
     }
 
-    private Float getCoordinateValue(float maxValue, float mixValue, float ratio) {
-        return mixValue + (maxValue - mixValue) * ratio;
+    /**
+     * 根据极值和序号获取对应的坐标值
+     */
+    private Float getCoordinateValue(IExtremum iExtremum, float position) {
+        return iExtremum.getMinimum() + iExtremum.getPeek() * position / getPartTopHorizontal();
     }
 
     private float getCoordinateY(int position, int topRowCount, float defaultY, LazyTextPaint lazyTextPaint) {
@@ -408,7 +411,8 @@ public class CapitalView extends GridView {
      * @return y轴坐标
      */
     private float getInFlowY(float inFlowValue) {
-        return getY(inFlowValue, dataManager.getInFlowMinimum(), dataManager.getInFlowMaximum());
+        Extremum inFlowExtremum = dataManager.getInFlowExtremum();
+        return getY(inFlowValue, inFlowExtremum.getMinimum(), inFlowExtremum.getMaximum());
     }
 
     /**
@@ -418,7 +422,16 @@ public class CapitalView extends GridView {
      * @return 价格的y轴坐标
      */
     private float getPriceY(float price) {
-        return getY(price, dataManager.getPriceMinimum(), dataManager.getPriceMaximum());
+        Extremum priceExtremum = dataManager.getPriceExtremum();
+        return getY(price, priceExtremum.getMinimum(), priceExtremum.getMaximum());
+    }
+
+    /**
+     * 设置拦截器
+     */
+    public CapitalView setInterceptor(CapitalUnitInterceptor interceptor) {
+        this.interceptor = interceptor;
+        return this;
     }
 
     /**

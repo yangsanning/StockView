@@ -25,63 +25,35 @@ public class CapitalDataManager {
      * 获取最大值
      */
     public float getMaximum() {
-        return extremum.maximum;
+        return extremum.getMaximum();
     }
 
     /**
      * 获取最小值
      */
     public float getMinimum() {
-        return extremum.minimum;
+        return extremum.getMinimum();
     }
 
     /**
      * 获取极差
      */
     public float getPeek() {
-        return extremum.peek;
+        return extremum.getPeek();
     }
 
     /**
-     * 获取价格最大值
+     * 获取价格极值实体
      */
-    public float getPriceMaximum() {
-        return priceExtremum.maximum;
+    public Extremum getPriceExtremum() {
+        return priceExtremum;
     }
 
     /**
-     * 获取价格最小值
+     * 获取 InFlow 极值实体
      */
-    public float getPriceMinimum() {
-        return priceExtremum.minimum;
-    }
-
-    /**
-     * 获取价格极差
-     */
-    public float getPricePeek() {
-        return priceExtremum.peek;
-    }
-
-    /**
-     * 获取InFlow最大值
-     */
-    public float getInFlowMaximum() {
-        return inFlowExtremum.maximum;
-    }
-
-    /**
-     * 获取InFlow最小值
-     */
-    public float getInFlowMinimum() {
-        return inFlowExtremum.minimum;
-    }
-
-    /**
-     * 获取InFlow极差
-     */
-    public float getInFlowPeek() {
-        return inFlowExtremum.peek;
+    public Extremum getInFlowExtremum() {
+        return inFlowExtremum;
     }
 
     /**

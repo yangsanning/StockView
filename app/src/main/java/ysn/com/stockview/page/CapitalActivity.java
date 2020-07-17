@@ -9,6 +9,7 @@ import ysn.com.stock.view.CapitalView;
 import ysn.com.stockview.R;
 import ysn.com.stockview.bean.CapitalTime;
 import ysn.com.stockview.utils.JsonUtils;
+import ysn.com.stockview.widget.interceptor.CapitalInterceptor;
 
 /**
  * @Author yangsanning
@@ -36,7 +37,8 @@ public class CapitalActivity extends AppCompatActivity implements CompoundButton
                 .setNewData(newData.getData());
 
         capitalView2 = findViewById(R.id.capital_activity_view2);
-        capitalView2.setNewData(newData.getData());
+        capitalView2.setInterceptor(new CapitalInterceptor())
+                .setNewData(newData.getData());
 
         CheckBox checkBox1 = findViewById(R.id.capital_activity_check_box1);
         checkBox1.setOnCheckedChangeListener(this);
