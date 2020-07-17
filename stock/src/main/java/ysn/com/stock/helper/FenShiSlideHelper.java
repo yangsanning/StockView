@@ -31,7 +31,7 @@ public class FenShiSlideHelper {
      */
     private StockView stockView;
     private float viewWidth, viewHeight;
-    private float timeTableHeight;
+    private float timeTableHeight, timeTableMinY, timeTableMaxY;
     private float textMargin, tableMargin;
     private float topTableHeight, topTableMaxY;
     private float bottomTableHeight, bottomTableMaxY, bottomTableMinY;
@@ -152,6 +152,8 @@ public class FenShiSlideHelper {
         topTableHeight = stockView.getTopTableHeight();
         topTableMaxY = stockView.getTopTableMinY();
         timeTableHeight = stockView.getTimeTableHeight();
+        timeTableMinY = stockView.getTimeTableMinY();
+        timeTableMaxY = stockView.getTimeTableMaxY();
         tableMargin = stockView.getTableMargin();
         textMargin = stockView.getXYTextMargin();
 
@@ -240,20 +242,20 @@ public class FenShiSlideHelper {
             slideRectLeft = viewWidth - tableMargin - rectWidth;
         }
 
-        float slipPriceTop = 0;
-        float slideRectBottom = timeTableHeight;
+        float slipRectTop = timeTableMinY;
+        float slideRectBottom = timeTableMaxY;
         float slideRectRight = slideRectLeft + rectWidth;
 
-        canvas.drawRect(slideRectLeft, slipPriceTop, slideRectRight, slideRectBottom, slideAreaPaint);
+        canvas.drawRect(slideRectLeft, slipRectTop, slideRectRight, slideRectBottom, slideAreaPaint);
         path.reset();
-        path.moveTo(slideRectLeft, slipPriceTop);
-        path.lineTo(slideRectRight, slipPriceTop);
+        path.moveTo(slideRectLeft, slipRectTop);
+        path.lineTo(slideRectRight, slipRectTop);
         path.lineTo(slideRectRight, slideRectBottom);
         path.lineTo(slideRectLeft, slideRectBottom);
-        path.lineTo(slideRectLeft, slipPriceTop);
+        path.lineTo(slideRectLeft, slipRectTop);
         canvas.drawPath(path, slidePaint);
 
-        canvas.drawText(timeText, (slideRectLeft + textMargin * 2), ((slideRectBottom + textRect.height()) / 2f), textPaint);
+        canvas.drawText(timeText, (slideRectLeft + textMargin * 2),  (slipRectTop + ((timeTableHeight + textRect.height()) / 2f)), textPaint);
     }
 
     /**

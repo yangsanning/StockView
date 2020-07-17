@@ -165,8 +165,13 @@ public class CapitalView extends GridView {
     }
 
     @Override
-    public boolean hasTitleTable() {
+    public boolean isEnabledTitleTable() {
         return true;
+    }
+
+    @Override
+    public boolean isEnabledMiddleTable() {
+        return false;
     }
 
     @Override

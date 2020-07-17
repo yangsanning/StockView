@@ -34,7 +34,7 @@ public class FiveDayFenShiSlideHelper {
      */
     private FiveDayFenShiView fiveDayFenShiView;
     private float viewWidth, viewHeight;
-    private float timeTableHeight;
+    private float timeTableHeight, timeTableMinY, timeTableMaxY;
     private float textMargin, tableMargin;
     private float topTableHeight, topTableMaxY;
     private float bottomTableHeight, bottomTableMaxY, bottomTableMinY;
@@ -164,6 +164,8 @@ public class FiveDayFenShiSlideHelper {
         topTableHeight = fiveDayFenShiView.getTopTableHeight();
         topTableMaxY = fiveDayFenShiView.getTopTableMinY();
         timeTableHeight = fiveDayFenShiView.getTimeTableHeight();
+        timeTableMinY = fiveDayFenShiView.getTimeTableMinY();
+        timeTableMaxY = fiveDayFenShiView.getTimeTableMaxY();
         tableMargin = fiveDayFenShiView.getTableMargin();
         textMargin = fiveDayFenShiView.getXYTextMargin();
 
@@ -247,7 +249,7 @@ public class FiveDayFenShiSlideHelper {
     private void drawSlideLine(Canvas canvas) {
         float lineX = Math.min(getX(slideNum), viewWidth - tableMargin);
         //和绘制竖线
-        canvas.drawLine(lineX, -topTableHeight, lineX, viewHeight, slidePaint);
+        canvas.drawLine(lineX, -topTableHeight, lineX, bottomTableMaxY, slidePaint);
         // 绘制横线
         canvas.drawLine(tableMargin, slideLineY, (viewWidth - tableMargin), slideLineY, slidePaint);
     }
@@ -270,20 +272,20 @@ public class FiveDayFenShiSlideHelper {
             slideRectLeft = viewWidth - tableMargin - rectWidth;
         }
 
-        float slipPriceTop = 0;
-        float slideRectBottom = timeTableHeight;
+        float slipRectTop = timeTableMinY;
+        float slideRectBottom = timeTableMaxY;
         float slideRectRight = slideRectLeft + rectWidth;
 
-        canvas.drawRect(slideRectLeft, slipPriceTop, slideRectRight, slideRectBottom, slideAreaPaint);
+        canvas.drawRect(slideRectLeft, slipRectTop, slideRectRight, slideRectBottom, slideAreaPaint);
         path.reset();
-        path.moveTo(slideRectLeft, slipPriceTop);
-        path.lineTo(slideRectRight, slipPriceTop);
+        path.moveTo(slideRectLeft, slipRectTop);
+        path.lineTo(slideRectRight, slipRectTop);
         path.lineTo(slideRectRight, slideRectBottom);
         path.lineTo(slideRectLeft, slideRectBottom);
-        path.lineTo(slideRectLeft, slipPriceTop);
+        path.lineTo(slideRectLeft, slipRectTop);
         canvas.drawPath(path, slidePaint);
 
-        canvas.drawText(timeText, (slideRectLeft + textMargin * 2), ((slideRectBottom + textRect.height()) / 2f), textPaint);
+        canvas.drawText(timeText, (slideRectLeft + textMargin * 2), (slipRectTop + ((timeTableHeight + textRect.height()) / 2f)), textPaint);
     }
 
     /**

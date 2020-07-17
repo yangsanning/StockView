@@ -15,7 +15,7 @@ import java.util.Locale;
 public class TimeUtils {
 
     private static final String FORMAT_YYYY_MM_DD = "yyyy-MM-dd";
-    public static final String FORMAT_DAY = "MMdd";
+    public static final String FORMAT_DAY = "MM/dd";
 
     public static long formatYyyyMmDd(String date) {
         try {

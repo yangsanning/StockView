@@ -51,9 +51,10 @@ public class StockView extends View {
     protected int viewWidth, viewHeight;
 
     protected float titleTableHeight;
-    protected float timeTableHeight;
+    protected float middleTableHeight;
     protected float topTableHeight;
     protected float bottomTableHeight;
+    protected float timeTableHeight;
 
     protected float xYTextSize, xYTextMargin, titleTextSize;
     protected Paint textPaint;
@@ -122,28 +123,35 @@ public class StockView extends View {
         timeTableHeight = viewHeight * 0.06f;
         xYTextSize = timeTableHeight * 0.8f;
 
-        if (hasTitleTable()) {
+        if (isEnabledTitleTable()) {
             titleTableHeight = getTitleTableHeight();
             titleTextSize = getTitleTextSize();
         }
 
         if (isEnabledBottomTable()) {
+            if (isEnabledMiddleTable()) {
+                middleTableHeight = timeTableHeight;
+            }
             topTableHeight = viewHeight * 0.7f - titleTableHeight - tableMargin;
-            bottomTableHeight = viewHeight - titleTableHeight - topTableHeight - timeTableHeight - tableMargin * 2;
+            bottomTableHeight = viewHeight - titleTableHeight - topTableHeight - timeTableHeight - middleTableHeight - tableMargin * 2;
         } else {
-            topTableHeight = viewHeight - titleTableHeight - timeTableHeight - tableMargin * 2;
+            topTableHeight = viewHeight - titleTableHeight - middleTableHeight - timeTableHeight - tableMargin * 2;
         }
 
         xYTextMargin = xYTextSize / 5;
         textPaint.setTextSize(xYTextSize);
     }
 
-    public boolean hasTitleTable() {
+    public boolean isEnabledTitleTable() {
         return false;
     }
 
+    public boolean isEnabledMiddleTable() {
+        return true;
+    }
+
     public float getTitleTableHeight() {
-        return timeTableHeight;
+        return middleTableHeight;
     }
 
     public float getTitleTextSize() {
@@ -254,31 +262,31 @@ public class StockView extends View {
     }
 
     /**
-     * 获取上表格最小Y
+     * 获取下表格最小Y
      */
     public float getBottomTableMinY() {
-        return timeTableHeight;
+        return middleTableHeight;
     }
 
     /**
-     * 获取上表格最大Y
+     * 获取下表格最大Y
      */
     public float getBottomTableMaxY() {
-        return bottomTableHeight + timeTableHeight;
+        return bottomTableHeight + middleTableHeight;
     }
 
     /**
      * 获取时间表格最小Y
      */
     public float getTimeTableMinY() {
-        return 0;
+        return middleTableHeight + bottomTableHeight;
     }
 
     /**
      * 获取时间表格最大Y
      */
     public float getTimeTableMaxY() {
-        return timeTableHeight;
+        return middleTableHeight + bottomTableHeight + timeTableHeight;
     }
 
     /**
@@ -318,7 +326,7 @@ public class StockView extends View {
      * @return 横线y轴坐标
      */
     protected float getBottomRowY(float ySpace, int position) {
-        return timeTableHeight + ySpace * position;
+        return middleTableHeight + ySpace * position;
     }
 
     /**
@@ -365,7 +373,7 @@ public class StockView extends View {
      * 获取表格最大Y
      */
     protected float getTableMaxY() {
-        return timeTableHeight + bottomTableHeight;
+        return middleTableHeight + bottomTableHeight;
     }
 
     /**
@@ -412,12 +420,16 @@ public class StockView extends View {
         return topTableHeight;
     }
 
-    public float getTimeTableHeight() {
-        return timeTableHeight;
+    public float getMiddleTableHeight() {
+        return middleTableHeight;
     }
 
     public float getBottomTableHeight() {
         return bottomTableHeight;
+    }
+
+    public float getTimeTableHeight() {
+        return timeTableHeight;
     }
 
     public float getTableMargin() {

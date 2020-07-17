@@ -196,15 +196,18 @@ public class FenShiView extends GridView {
 
         // 绘制开始区域时间值
         textPaint.getTextBounds(TIME_TEXT[0], (0), TIME_TEXT[0].length(), textRect);
-        canvas.drawText(TIME_TEXT[0], tableMargin, getTimeTextY(), textPaint);
+        float timeTextY = getTimeTableMinY() + getTimeTextY();
+        canvas.drawText(TIME_TEXT[0], tableMargin, timeTextY, textPaint);
 
         // 绘制中间区域时间值
         textPaint.getTextBounds(TIME_TEXT[1], (0), TIME_TEXT[1].length(), textRect);
-        canvas.drawText(TIME_TEXT[1], (((viewWidth - textRect.right) >> 1) - tableMargin), getTimeTextY(), textPaint);
+        timeTextY = getTimeTableMinY() + getTimeTextY();
+        canvas.drawText(TIME_TEXT[1], (((viewWidth - textRect.right) >> 1) - tableMargin), timeTextY, textPaint);
 
         // 绘制结束区域时间值
         textPaint.getTextBounds(TIME_TEXT[2], (0), TIME_TEXT[2].length(), textRect);
-        canvas.drawText(TIME_TEXT[2], (viewWidth - textRect.right - tableMargin), getTimeTextY(), textPaint);
+        timeTextY = getTimeTableMinY() + getTimeTextY();
+        canvas.drawText(TIME_TEXT[2], (viewWidth - textRect.right - tableMargin), timeTextY, textPaint);
     }
 
     @Override

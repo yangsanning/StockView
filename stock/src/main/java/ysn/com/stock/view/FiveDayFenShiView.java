@@ -214,7 +214,8 @@ public class FiveDayFenShiView extends GridView {
             }
             String text = TimeUtils.formatDay(time);
             textPaint.getTextBounds(text, (0), text.length(), textRect);
-            canvas.drawText(text, (dataWidth * i + (dataWidth - textRect.width()) / 2f), getTimeTextY(), textPaint);
+            float timeTextY = getTimeTableMinY() + getTimeTextY();
+            canvas.drawText(text, (dataWidth * i + (dataWidth - textRect.width()) / 2f), timeTextY, textPaint);
         }
     }
 
