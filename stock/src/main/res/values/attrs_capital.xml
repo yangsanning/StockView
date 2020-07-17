@@ -2,22 +2,22 @@
 <resources>
     <declare-styleable name="CapitalView">
         <!--左上角标题(用于标注左边价格坐标)-->
-        <attr name="cv_left_title" format="string" />
+        <attr name="leftTitle" format="string" />
         <!--右上角标题(用于标注右边inFlow坐标)-->
-        <attr name="cv_right_title" format="string" />
+        <attr name="rightTitle" format="string" />
 
         <!--价格曲线颜色-->
-        <attr name="cv_price_color" format="color" />
+        <attr name="priceColor" format="color" />
         <!--总资金净流入曲线颜色-->
-        <attr name="cv_finance_in_flow_color" format="color" />
+        <attr name="financeInFlowColor" format="color" />
         <!--主力净流入曲线颜色-->
-        <attr name="cv_main_in_flow_color" format="color" />
+        <attr name="mainInFlowColor" format="color" />
         <!--散户净流入曲线颜色-->
-        <attr name="cv_retail_in_flow_color" format="color" />
+        <attr name="retailInFlowColor" format="color" />
 
         <!--文本颜色-->
-        <attr name="cv_text_color" format="color" />
+        <attr name="textColor" format="color" />
         <!--背景颜色-->
-        <attr name="cv_bg_color" format="color" />
+        <attr name="bgColor" format="color" />
     </declare-styleable>
 </resources>

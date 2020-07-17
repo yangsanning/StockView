@@ -105,16 +105,16 @@ public class CapitalView extends GridView {
         super.initAttr(attrs);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CapitalView);
 
-        leftTitle = typedArray.getString(R.styleable.CapitalView_cv_left_title);
-        rightTitle = typedArray.getString(R.styleable.CapitalView_cv_right_title);
+        leftTitle = typedArray.getString(R.styleable.CapitalView_leftTitle);
+        rightTitle = typedArray.getString(R.styleable.CapitalView_rightTitle);
 
-        priceColor = typedArray.getColor(R.styleable.CapitalView_cv_price_color, getColor(R.color.capital_price));
-        financeInFlowColor = typedArray.getColor(R.styleable.CapitalView_cv_finance_in_flow_color, getColor(R.color.capital_finance_in_flow));
-        mainInFlowColor = typedArray.getColor(R.styleable.CapitalView_cv_main_in_flow_color, getColor(R.color.capital_main_in_flow));
-        retailInFlowColor = typedArray.getColor(R.styleable.CapitalView_cv_retail_in_flow_color, getColor(R.color.capital_retail_in_flow));
+        priceColor = typedArray.getColor(R.styleable.CapitalView_priceColor, getColor(R.color.capital_price));
+        financeInFlowColor = typedArray.getColor(R.styleable.CapitalView_financeInFlowColor, getColor(R.color.capital_finance_in_flow));
+        mainInFlowColor = typedArray.getColor(R.styleable.CapitalView_mainInFlowColor, getColor(R.color.capital_main_in_flow));
+        retailInFlowColor = typedArray.getColor(R.styleable.CapitalView_retailInFlowColor, getColor(R.color.capital_retail_in_flow));
 
-        textColor = typedArray.getColor(R.styleable.CapitalView_cv_text_color, getColor(R.color.capital_text));
-        bgColor = typedArray.getColor(R.styleable.CapitalView_cv_bg_color, getColor(R.color.capital_bg));
+        textColor = typedArray.getColor(R.styleable.CapitalView_textColor, getColor(R.color.capital_text));
+        bgColor = typedArray.getColor(R.styleable.CapitalView_bgColor, getColor(R.color.capital_bg));
 
         typedArray.recycle();
 
