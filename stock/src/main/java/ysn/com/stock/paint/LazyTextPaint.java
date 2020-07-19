@@ -68,6 +68,24 @@ public class LazyTextPaint {
     }
 
     /**
+     * 获取文字在指定容器水平居中的X坐标
+     *
+     * @param containerWidth 容器宽
+     */
+    public float centerX(float containerWidth) {
+        return (containerWidth - textRect.width()) / 2f;
+    }
+
+    /**
+     * 获取文字在指定容器垂直居中的Y坐标
+     *
+     * @param containerHeight 容器高
+     */
+    public float centerY(float containerHeight) {
+        return (containerHeight + textRect.height()) / 2f;
+    }
+
+    /**
      * 绘制文本
      */
     public void drawText(Canvas canvas, float x, float y) {

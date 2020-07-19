@@ -220,17 +220,17 @@ public class CapitalView extends GridView {
         super.onTimeTextDraw(canvas);
         lazyPaint.measure(TIME_TEXT[0], lazyTextPaint -> {
             // 绘制开始区域时间值
-            float y = getTimeTableMinY() + (lazyTextPaint.height() + getTimeTableHeight()) / 2f;
+            float y = getTimeTableMinY() + lazyTextPaint.centerY(getTimeTableHeight());
             lazyTextPaint.drawText(canvas, getTableMargin(), y);
         }).measure(TIME_TEXT[1], lazyTextPaint -> {
             // 绘制中间区域时间值
-            float x = getTimeTableMinX() + ((getTopTableWidth() - lazyTextPaint.width()) / 2f);
-            float y = getTimeTableMinY() + (lazyTextPaint.height() + getTimeTableHeight()) / 2f;
+            float x = getTimeTableMinX() + lazyTextPaint.centerX(getTopTableWidth());
+            float y = getTimeTableMinY() + lazyTextPaint.centerY(getTimeTableHeight());
             lazyTextPaint.drawText(canvas, x, y);
         }).measure(TIME_TEXT[2], lazyTextPaint -> {
             // 绘制结束区域时间值
             float x = getTopTableMaxX() - lazyTextPaint.width();
-            float y = getTimeTableMinY() + (lazyTextPaint.height() + getTimeTableHeight()) / 2f;
+            float y = getTimeTableMinY() + lazyTextPaint.centerY(getTimeTableHeight());
             lazyTextPaint.drawText(canvas, x, y);
         });
     }
@@ -254,20 +254,20 @@ public class CapitalView extends GridView {
      * 绘制坐标值
      */
     private void drawCoordinate(Canvas canvas) {
-        float rowSpacing = getTopRowSpacing();
-        int topRowCount = getPartTopHorizontal();
-        for (int i = 0; i < (topRowCount + 1); i++) {
-            float defaultY = getTopRowY(rowSpacing, topRowCount - i);
+        float topRowSpacing = getTopRowSpacing();
+        int partTopHorizontal = getPartTopHorizontal();
+        for (int i = 0; i < (partTopHorizontal + 1); i++) {
+            float defaultY = getTopRowY(topRowSpacing, partTopHorizontal - i);
             int position = i;
             lazyPaint.measure(getLeftCoordinateText(i), lazyTextPaint -> {
                 // 价格坐标
                 float x = getTableMargin() + xYTextMargin;
-                float y = getCoordinateY(position, topRowCount, defaultY, lazyTextPaint);
+                float y = getCoordinateY(position, partTopHorizontal, defaultY, lazyTextPaint);
                 lazyTextPaint.drawText(canvas, x, y);
             }).measure(getRightCoordinateText(i), lazyTextPaint -> {
                 // inFlow坐标
                 float x = getTopTableMaxX() - lazyTextPaint.width() - xYTextMargin;
-                float y = getCoordinateY(position, topRowCount, defaultY, lazyTextPaint);
+                float y = getCoordinateY(position, partTopHorizontal, defaultY, lazyTextPaint);
                 lazyTextPaint.drawText(canvas, x, y);
             });
         }
