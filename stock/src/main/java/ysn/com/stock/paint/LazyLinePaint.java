@@ -174,6 +174,13 @@ public class LazyLinePaint {
     }
 
     /**
+     * 绘制横线
+     */
+    public void drawLines(Canvas canvas, float[] pts) {
+        canvas.drawLines(pts, linePaint);
+    }
+
+    /**
      * 画圆
      */
     public void drawCircle(Canvas canvas, float cx, float cy, float radius, @ColorInt int color) {

@@ -38,6 +38,8 @@ public class GridView extends StockView {
      */
     protected DashPathEffect dottedPathEffect = new DashPathEffect(new float[]{2, 2, 2, 2}, 1);
 
+    private float[] topTablePts, bottomTablePts;
+
     public GridView(Context context) {
         super(context);
     }
@@ -72,6 +74,28 @@ public class GridView extends StockView {
     }
 
     @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        float topTableMaxX = getTopTableMaxX();
+        float topTableMinX = getTopTableMinX();
+        float topTableMaxY = getTopTableMaxY();
+        float topTableMinY = getTopTableMinY();
+        topTablePts = new float[]{topTableMinX, topTableMinY, topTableMinX, topTableMaxY,
+                topTableMinX, topTableMaxY, topTableMaxX, topTableMaxY,
+                topTableMaxX, topTableMaxY, topTableMaxX, topTableMinY,
+                topTableMaxX, topTableMinY, topTableMinX, topTableMinY};
+
+        float bottomTableMaxX = getBottomTableMaxX();
+        float bottomTableMinX = getBottomTableMinX();
+        float bottomTableMaxY = getBottomTableMaxY();
+        float bottomTableMinY = getBottomTableMinY();
+        bottomTablePts = new float[]{bottomTableMinX, bottomTableMinY, bottomTableMinX, bottomTableMaxY,
+                bottomTableMinX, bottomTableMaxY, bottomTableMaxX, bottomTableMaxY,
+                bottomTableMaxX, bottomTableMaxY, bottomTableMaxX, bottomTableMinY,
+                bottomTableMaxX, bottomTableMinY, bottomTableMinX, bottomTableMinY};
+    }
+
+    @Override
     protected void onChildDraw(Canvas canvas) {
         super.onChildDraw(canvas);
         // 绘制边框
@@ -96,19 +120,11 @@ public class GridView extends StockView {
         // 上表边框
         lazyPaint.setLineColor(getColor(R.color.stock_line))
                 .setLineStrokeWidth(1f)
-                .moveTo(getTopTableMinX(), getTopTableMaxY())
-                .lineTo(getTopTableMinX(), getTopTableMinY())
-                .lineTo(getTableMaxX(), getTopTableMinY())
-                .lineTo(getTableMaxX(), getTopTableMaxY())
-                .finishLinePath(canvas);
+                .drawLines(canvas, topTablePts);
 
         // 下表边框
         if (isEnabledBottomTable()) {
-            lazyPaint.moveTo(getBottomTableMinX(), getBottomTableMinY())
-                    .lineTo(getBottomTableMinX(), getBottomTableMaxY())
-                    .lineTo(getBottomTableMaxX(), getBottomTableMaxY())
-                    .lineTo(getBottomTableMaxX(), getBottomTableMinY())
-                    .finishLinePath(canvas);
+            lazyPaint.drawLines(canvas, bottomTablePts);
         }
     }
 
@@ -121,14 +137,14 @@ public class GridView extends StockView {
         float xSpace = (viewWidth - 2 * tableMargin) / getPartVertical();
         for (int i = 1; i < getPartVertical(); i++) {
             float x = getColumnX(xSpace, i);
-            lazyPaint.drawPath(canvas, x, getTopTableMaxY(), x, getTopTableMinY());
+            lazyPaint.drawLine(canvas, x, getTopTableMaxY(), x, getTopTableMinY());
         }
 
         // 绘制下表竖线
         if (isEnabledBottomTable()) {
             for (int i = 1; i < getPartVertical(); i++) {
                 float x = getColumnX(xSpace, i);
-                lazyPaint.drawPath(canvas, x, getBottomTableMinY(), x, getBottomTableMaxY());
+                lazyPaint.drawLine(canvas, x, getBottomTableMinY(), x, getBottomTableMaxY());
             }
         }
     }
@@ -142,7 +158,7 @@ public class GridView extends StockView {
         for (int i = 1; i < getPartTopHorizontal(); i++) {
             float y = getTopRowY(rowSpacing, i);
             int color = i == getPartTopHorizontal() / 2 ? colorHorizontalDottedDeepen : colorHorizontalDotted;
-            lazyPaint.setLineColor(color).drawPath(canvas, tableMargin, y, (viewWidth - tableMargin), y);
+            lazyPaint.setLineColor(color).drawLine(canvas, tableMargin, y, (viewWidth - tableMargin), y);
         }
 
         // 绘制下表横线
@@ -151,7 +167,7 @@ public class GridView extends StockView {
             lazyPaint.setLineColor(getColor(R.color.stock_dotted_column_line));
             for (int i = 1; i < getPartBottomHorizontal(); i++) {
                 float y = getBottomRowY(rowSpacing, i);
-                lazyPaint.drawPath(canvas, tableMargin, y, (viewWidth - tableMargin), y);
+                lazyPaint.drawLine(canvas, tableMargin, y, (viewWidth - tableMargin), y);
             }
         }
     }
