@@ -1,28 +1,27 @@
 package ysn.com.stock.view;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Path;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 
 import java.util.List;
 
-import ysn.com.stock.R;
 import ysn.com.stock.adapter.BaseCurveAdapter;
 import ysn.com.stock.bean.Extremum;
 import ysn.com.stock.bean.ICapitalData;
 import ysn.com.stock.bean.IExtremum;
+import ysn.com.stock.config.CapitalConfig;
 import ysn.com.stock.interceptor.CapitalUnitInterceptor;
 import ysn.com.stock.manager.CapitalDataManager;
 import ysn.com.stock.paint.LazyLinePaint;
 import ysn.com.stock.paint.LazyTextPaint;
 import ysn.com.stock.view.base.GridView;
+
+import static ysn.com.stock.config.CapitalConfig.DEFAULT_PRICE_STROKE_WIDTH;
+import static ysn.com.stock.config.CapitalConfig.TIME_TEXT;
 
 /**
  * @Author yangsanning
@@ -33,44 +32,12 @@ import ysn.com.stock.view.base.GridView;
  */
 public class CapitalView extends GridView {
 
-    private static final String[] TIME_TEXT = new String[]{"09:30", "11:30/13:00", "15:00"};
-    private static final float DEFAULT_PRICE_STROKE_WIDTH = 2.5f;
-    private static final String DEFAULT_LEFT_TITLE = "股价(元)";
-    private static final String DEFAULT_RIGHT_TITLE = "今日资金净流入(元)";
-
-    /**
-     * inFlowUnit: 净流入单位
-     * leftTitle: 左上角标题(用于标注左边价格坐标)
-     * rightTitle: 右上角标题(用于标注右边inFlow坐标)
-     */
-    private String leftTitle;
-    private String rightTitle;
-
-    /**
-     * priceColor: 价格曲线颜色
-     * financeInFlowColor: 总资金净流入曲线颜色
-     * mainInFlowColor: 主力净流入曲线颜色
-     * retailInFlowColor: 散户净流入曲线颜色
-     */
-    private int priceColor;
-    private int financeInFlowColor;
-    private int mainInFlowColor;
-    private int retailInFlowColor;
-
-    /**
-     * textColor: 文本颜色
-     * bgColor: 背景颜色
-     * columnLineColor: 竖线颜色
-     * rowLineColor: 横线颜色
-     */
-    private int textColor;
-    private int bgColor;
+    private CapitalConfig config;
+    private CapitalDataManager dataManager = new CapitalDataManager();
+    private CapitalUnitInterceptor interceptor;
 
     private boolean isDrawMainInFlow;
     private boolean isDrawRetailInFlow;
-
-    private CapitalDataManager dataManager = new CapitalDataManager();
-    private CapitalUnitInterceptor interceptor;
 
     private PriceCurveAdapter priceCurveAdapter = new PriceCurveAdapter();
     private InFlowCurveAdapter financeInFlowCurveAdapter = new InFlowCurveAdapter() {
@@ -112,27 +79,7 @@ public class CapitalView extends GridView {
     @Override
     protected void initAttr(AttributeSet attrs) {
         super.initAttr(attrs);
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CapitalView);
-
-        leftTitle = typedArray.getString(R.styleable.CapitalView_leftTitle);
-        rightTitle = typedArray.getString(R.styleable.CapitalView_rightTitle);
-
-        priceColor = typedArray.getColor(R.styleable.CapitalView_priceColor, getColor(R.color.capital_price));
-        financeInFlowColor = typedArray.getColor(R.styleable.CapitalView_financeInFlowColor, getColor(R.color.capital_finance_in_flow));
-        mainInFlowColor = typedArray.getColor(R.styleable.CapitalView_mainInFlowColor, getColor(R.color.capital_main_in_flow));
-        retailInFlowColor = typedArray.getColor(R.styleable.CapitalView_retailInFlowColor, getColor(R.color.capital_retail_in_flow));
-
-        textColor = typedArray.getColor(R.styleable.CapitalView_textColor, getColor(R.color.capital_text));
-        bgColor = typedArray.getColor(R.styleable.CapitalView_bgColor, getColor(R.color.capital_bg));
-
-        typedArray.recycle();
-
-        if (TextUtils.isEmpty(leftTitle)) {
-            leftTitle = DEFAULT_LEFT_TITLE;
-        }
-        if (TextUtils.isEmpty(rightTitle)) {
-            rightTitle = DEFAULT_RIGHT_TITLE;
-        }
+        config = new CapitalConfig(context, attrs);
     }
 
     @Override
@@ -158,21 +105,21 @@ public class CapitalView extends GridView {
     @Override
     protected void onBaseDraw(Canvas canvas) {
         // 绘制背景
-        lazyPaint.drawRect(canvas, 0, getTopTableMaxY(), viewWidth, getTopTableMinY(), bgColor)
+        lazyPaint.drawRect(canvas, 0, getTopTableMaxY(), viewWidth, getTopTableMinY(), config.bgColor)
                 // 为后续操作统一设置字体大小以及文字颜色
                 .setTextSize(xYTextSize)
-                .setTextColor(textColor);
+                .setTextColor(config.textColor);
         super.onBaseDraw(canvas);
     }
 
     @Override
     protected void onTitleTextDraw(Canvas canvas) {
         super.onTitleTextDraw(canvas);
-        lazyPaint.measure(leftTitle, lazyTextPaint -> {
+        lazyPaint.measure(config.leftTitle, lazyTextPaint -> {
             // 绘制左上角标题
             float y = getTopTableMinY() - lazyTextPaint.height();
             lazyTextPaint.drawText(canvas, getTopTableMinX(), y);
-        }).measure(rightTitle, lazyTextPaint -> {
+        }).measure(config.rightTitle, lazyTextPaint -> {
             // 绘制右上角标题
             float x = getTopTableMaxX() - lazyTextPaint.width();
             float y = getTopTableMinY() - lazyTextPaint.height();
@@ -299,10 +246,10 @@ public class CapitalView extends GridView {
      */
     private void drawAllLine(Canvas canvas, LazyLinePaint lazyLinePaint) {
         for (int position = 0; position < dataManager.size() - 1; position++) {
-            priceCurveAdapter.draw(canvas, lazyLinePaint.setColor(priceColor).linePaint, position);
-            financeInFlowCurveAdapter.draw(canvas, lazyLinePaint.setColor(financeInFlowColor).linePaint, position);
-            mainInFlowCurveAdapter.draw(canvas, lazyLinePaint.setColor(mainInFlowColor).linePaint, position);
-            retailInFlowCurveAdapter.draw(canvas, lazyLinePaint.setColor(retailInFlowColor).linePaint, position);
+            priceCurveAdapter.draw(canvas, lazyLinePaint.setColor(config.priceColor).linePaint, position);
+            financeInFlowCurveAdapter.draw(canvas, lazyLinePaint.setColor(config.financeInFlowColor).linePaint, position);
+            mainInFlowCurveAdapter.draw(canvas, lazyLinePaint.setColor(config.mainInFlowColor).linePaint, position);
+            retailInFlowCurveAdapter.draw(canvas, lazyLinePaint.setColor(config.retailInFlowColor).linePaint, position);
         }
     }
 
@@ -311,9 +258,9 @@ public class CapitalView extends GridView {
      */
     private void drawMainInflowLine(Canvas canvas, LazyLinePaint lazyLinePaint) {
         for (int position = 0; position < dataManager.size() - 1; position++) {
-            priceCurveAdapter.draw(canvas, lazyLinePaint.setColor(priceColor).linePaint, position);
-            financeInFlowCurveAdapter.draw(canvas, lazyLinePaint.setColor(financeInFlowColor).linePaint, position);
-            mainInFlowCurveAdapter.draw(canvas, lazyLinePaint.setColor(mainInFlowColor).linePaint, position);
+            priceCurveAdapter.draw(canvas, lazyLinePaint.setColor(config.priceColor).linePaint, position);
+            financeInFlowCurveAdapter.draw(canvas, lazyLinePaint.setColor(config.financeInFlowColor).linePaint, position);
+            mainInFlowCurveAdapter.draw(canvas, lazyLinePaint.setColor(config.mainInFlowColor).linePaint, position);
         }
     }
 
@@ -322,9 +269,9 @@ public class CapitalView extends GridView {
      */
     private void drawRetailInFlowLine(Canvas canvas, LazyLinePaint lazyLinePaint) {
         for (int position = 0; position < dataManager.size() - 1; position++) {
-            priceCurveAdapter.draw(canvas, lazyLinePaint.setColor(priceColor).linePaint, position);
-            financeInFlowCurveAdapter.draw(canvas, lazyLinePaint.setColor(financeInFlowColor).linePaint, position);
-            retailInFlowCurveAdapter.draw(canvas, lazyLinePaint.setColor(retailInFlowColor).linePaint, position);
+            priceCurveAdapter.draw(canvas, lazyLinePaint.setColor(config.priceColor).linePaint, position);
+            financeInFlowCurveAdapter.draw(canvas, lazyLinePaint.setColor(config.financeInFlowColor).linePaint, position);
+            retailInFlowCurveAdapter.draw(canvas, lazyLinePaint.setColor(config.retailInFlowColor).linePaint, position);
         }
     }
 
@@ -333,8 +280,8 @@ public class CapitalView extends GridView {
      */
     private void drawBaseLine(Canvas canvas, LazyLinePaint lazyLinePaint) {
         for (int position = 0; position < dataManager.size() - 1; position++) {
-            priceCurveAdapter.draw(canvas, lazyLinePaint.setColor(priceColor).linePaint, position);
-            financeInFlowCurveAdapter.draw(canvas, lazyLinePaint.setColor(financeInFlowColor).linePaint, position);
+            priceCurveAdapter.draw(canvas, lazyLinePaint.setColor(config.priceColor).linePaint, position);
+            financeInFlowCurveAdapter.draw(canvas, lazyLinePaint.setColor(config.financeInFlowColor).linePaint, position);
         }
     }
 
