@@ -131,8 +131,7 @@ public class ProfitLossSlideHelper {
      * 绘制点
      */
     private void drawPoint(Canvas canvas) {
-        config.lazyPaint.setLineStyle(Paint.Style.FILL)
-                .drawCircle(canvas, point.x, point.y, (config.pointRadius + 3), Color.WHITE)
+        config.lazyPaint.drawCircle(canvas, point.x, point.y, (config.pointRadius + 3), Color.WHITE)
                 .drawCircle(canvas, point.x, point.y, (config.pointRadius), config.valueLineColor);
     }
 

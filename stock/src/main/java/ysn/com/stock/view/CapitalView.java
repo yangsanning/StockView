@@ -14,11 +14,13 @@ import android.util.AttributeSet;
 import java.util.List;
 
 import ysn.com.stock.R;
+import ysn.com.stock.adapter.BaseCurveAdapter;
 import ysn.com.stock.bean.Extremum;
 import ysn.com.stock.bean.ICapitalData;
 import ysn.com.stock.bean.IExtremum;
 import ysn.com.stock.interceptor.CapitalUnitInterceptor;
 import ysn.com.stock.manager.CapitalDataManager;
+import ysn.com.stock.paint.LazyLinePaint;
 import ysn.com.stock.paint.LazyTextPaint;
 import ysn.com.stock.view.base.GridView;
 
@@ -35,19 +37,6 @@ public class CapitalView extends GridView {
     private static final float DEFAULT_PRICE_STROKE_WIDTH = 2.5f;
     private static final String DEFAULT_LEFT_TITLE = "股价(元)";
     private static final String DEFAULT_RIGHT_TITLE = "今日资金净流入(元)";
-
-    private Paint areaPaint;
-    private Path financeInFlowPath;
-    private Paint financeInFlowPaint;
-
-    private Path mainInFlowPath;
-    private Paint mainInFlowPaint;
-
-    private Path retailInFlowPath;
-    private Paint retailInFlowPaint;
-
-    private Path pricePath;
-    private Paint pricePaint;
 
     /**
      * inFlowUnit: 净流入单位
@@ -82,6 +71,26 @@ public class CapitalView extends GridView {
 
     private CapitalDataManager dataManager = new CapitalDataManager();
     private CapitalUnitInterceptor interceptor;
+
+    private PriceCurveAdapter priceCurveAdapter = new PriceCurveAdapter();
+    private InFlowCurveAdapter financeInFlowCurveAdapter = new InFlowCurveAdapter() {
+        @Override
+        protected float getValue(int position) {
+            return dataManager.getFinanceInFlow(position);
+        }
+    };
+    private InFlowCurveAdapter mainInFlowCurveAdapter = new InFlowCurveAdapter() {
+        @Override
+        protected float getValue(int position) {
+            return dataManager.getMainInFlow(position);
+        }
+    };
+    private InFlowCurveAdapter retailInFlowCurveAdapter = new InFlowCurveAdapter() {
+        @Override
+        protected float getValue(int position) {
+            return dataManager.getRetailInFlow(position);
+        }
+    };
 
     public CapitalView(Context context) {
         super(context);
@@ -127,44 +136,6 @@ public class CapitalView extends GridView {
     }
 
     @Override
-    protected void initPaint() {
-        super.initPaint();
-
-        areaPaint = new Paint();
-        areaPaint.setAntiAlias(true);
-        areaPaint.setColor(bgColor);
-        areaPaint.setStyle(Paint.Style.FILL);
-
-        financeInFlowPath = new Path();
-        financeInFlowPaint = new Paint();
-        financeInFlowPaint.setColor(financeInFlowColor);
-        financeInFlowPaint.setAntiAlias(true);
-        financeInFlowPaint.setStyle(Paint.Style.STROKE);
-        financeInFlowPaint.setStrokeWidth(DEFAULT_PRICE_STROKE_WIDTH);
-
-        mainInFlowPath = new Path();
-        mainInFlowPaint = new Paint();
-        mainInFlowPaint.setColor(mainInFlowColor);
-        mainInFlowPaint.setAntiAlias(true);
-        mainInFlowPaint.setStyle(Paint.Style.STROKE);
-        mainInFlowPaint.setStrokeWidth(DEFAULT_PRICE_STROKE_WIDTH);
-
-        retailInFlowPath = new Path();
-        retailInFlowPaint = new Paint();
-        retailInFlowPaint.setColor(retailInFlowColor);
-        retailInFlowPaint.setAntiAlias(true);
-        retailInFlowPaint.setStyle(Paint.Style.STROKE);
-        retailInFlowPaint.setStrokeWidth(DEFAULT_PRICE_STROKE_WIDTH);
-
-        pricePath = new Path();
-        pricePaint = new Paint();
-        pricePaint.setColor(priceColor);
-        pricePaint.setAntiAlias(true);
-        pricePaint.setStyle(Paint.Style.STROKE);
-        pricePaint.setStrokeWidth(DEFAULT_PRICE_STROKE_WIDTH);
-    }
-
-    @Override
     public boolean isEnabledTitleTable() {
         return true;
     }
@@ -187,10 +158,7 @@ public class CapitalView extends GridView {
     @Override
     protected void onBaseDraw(Canvas canvas) {
         // 绘制背景
-        lazyPaint.moveTo((0), getTopTableMaxY())
-                .lineTo((0), getTopTableMinY())
-                .lineTo(viewWidth, getTopTableMinY())
-                .lineToClose(canvas, viewWidth, getTopTableMaxY(), areaPaint)
+        lazyPaint.drawRect(canvas, 0, getTopTableMaxY(), viewWidth, getTopTableMinY(), bgColor)
                 // 为后续操作统一设置字体大小以及文字颜色
                 .setTextSize(xYTextSize)
                 .setTextColor(textColor);
@@ -312,101 +280,62 @@ public class CapitalView extends GridView {
      * 绘制趋势线
      */
     private void drawLine(Canvas canvas) {
+        LazyLinePaint lazyLinePaint = lazyPaint.getLazyLinePaint().setStrokeWidth(DEFAULT_PRICE_STROKE_WIDTH);
         if (isDrawMainInFlow) {
             if (isDrawRetailInFlow) {
-                drawAllLine(canvas);
+                drawAllLine(canvas, lazyLinePaint);
             } else {
-                drawMainInflowLine(canvas);
+                drawMainInflowLine(canvas, lazyLinePaint);
             }
         } else if (isDrawRetailInFlow) {
-            drawRetailInFlowLine(canvas);
+            drawRetailInFlowLine(canvas, lazyLinePaint);
         } else {
-            drawBaseLine(canvas);
+            drawBaseLine(canvas, lazyLinePaint);
         }
     }
 
     /**
      * 绘制趋势线
      */
-    private void drawAllLine(Canvas canvas) {
-        financeInFlowPath.moveTo(tableMargin, getInFlowY(dataManager.getFinanceInFlow(0)));
-        mainInFlowPath.moveTo(tableMargin, getInFlowY(dataManager.getMainInFlow(0)));
-        retailInFlowPath.moveTo(tableMargin, getInFlowY(dataManager.getRetailInFlow(0)));
-        pricePath.moveTo(tableMargin, getPriceY(dataManager.getPrice(0)));
-        for (int i = 1; i < dataManager.size(); i++) {
-            financeInFlowPath.lineTo(getX(i), getInFlowY(dataManager.getFinanceInFlow(i)));
-            mainInFlowPath.lineTo(getX(i), getInFlowY(dataManager.getMainInFlow(i)));
-            retailInFlowPath.lineTo(getX(i), getInFlowY(dataManager.getRetailInFlow(i)));
-            pricePath.lineTo(getX(i), getPriceY(dataManager.getPrice(i)));
+    private void drawAllLine(Canvas canvas, LazyLinePaint lazyLinePaint) {
+        for (int position = 0; position < dataManager.size() - 1; position++) {
+            priceCurveAdapter.draw(canvas, lazyLinePaint.setColor(priceColor).linePaint, position);
+            financeInFlowCurveAdapter.draw(canvas, lazyLinePaint.setColor(financeInFlowColor).linePaint, position);
+            mainInFlowCurveAdapter.draw(canvas, lazyLinePaint.setColor(mainInFlowColor).linePaint, position);
+            retailInFlowCurveAdapter.draw(canvas, lazyLinePaint.setColor(retailInFlowColor).linePaint, position);
         }
-        canvas.drawPath(financeInFlowPath, financeInFlowPaint);
-        canvas.drawPath(mainInFlowPath, mainInFlowPaint);
-        canvas.drawPath(retailInFlowPath, retailInFlowPaint);
-        canvas.drawPath(pricePath, pricePaint);
-
-        financeInFlowPath.reset();
-        mainInFlowPath.reset();
-        retailInFlowPath.reset();
-        pricePath.reset();
     }
 
     /**
      * 不绘制 RetailInFlow
      */
-    private void drawMainInflowLine(Canvas canvas) {
-        financeInFlowPath.moveTo(tableMargin, getInFlowY(dataManager.getFinanceInFlow(0)));
-        mainInFlowPath.moveTo(tableMargin, getInFlowY(dataManager.getMainInFlow(0)));
-        pricePath.moveTo(tableMargin, getPriceY(dataManager.getPrice(0)));
-        for (int i = 1; i < dataManager.size(); i++) {
-            financeInFlowPath.lineTo(getX(i), getInFlowY(dataManager.getFinanceInFlow(i)));
-            mainInFlowPath.lineTo(getX(i), getInFlowY(dataManager.getMainInFlow(i)));
-            pricePath.lineTo(getX(i), getPriceY(dataManager.getPrice(i)));
+    private void drawMainInflowLine(Canvas canvas, LazyLinePaint lazyLinePaint) {
+        for (int position = 0; position < dataManager.size() - 1; position++) {
+            priceCurveAdapter.draw(canvas, lazyLinePaint.setColor(priceColor).linePaint, position);
+            financeInFlowCurveAdapter.draw(canvas, lazyLinePaint.setColor(financeInFlowColor).linePaint, position);
+            mainInFlowCurveAdapter.draw(canvas, lazyLinePaint.setColor(mainInFlowColor).linePaint, position);
         }
-        canvas.drawPath(financeInFlowPath, financeInFlowPaint);
-        canvas.drawPath(mainInFlowPath, mainInFlowPaint);
-        canvas.drawPath(pricePath, pricePaint);
-
-        financeInFlowPath.reset();
-        mainInFlowPath.reset();
-        pricePath.reset();
     }
 
     /**
      * 不绘制 MainInFlow
      */
-    private void drawRetailInFlowLine(Canvas canvas) {
-        financeInFlowPath.moveTo(tableMargin, getInFlowY(dataManager.getFinanceInFlow(0)));
-        retailInFlowPath.moveTo(tableMargin, getInFlowY(dataManager.getRetailInFlow(0)));
-        pricePath.moveTo(tableMargin, getPriceY(dataManager.getPrice(0)));
-        for (int i = 1; i < dataManager.size(); i++) {
-            financeInFlowPath.lineTo(getX(i), getInFlowY(dataManager.getFinanceInFlow(i)));
-            retailInFlowPath.lineTo(getX(i), getInFlowY(dataManager.getRetailInFlow(i)));
-            pricePath.lineTo(getX(i), getPriceY(dataManager.getPrice(i)));
+    private void drawRetailInFlowLine(Canvas canvas, LazyLinePaint lazyLinePaint) {
+        for (int position = 0; position < dataManager.size() - 1; position++) {
+            priceCurveAdapter.draw(canvas, lazyLinePaint.setColor(priceColor).linePaint, position);
+            financeInFlowCurveAdapter.draw(canvas, lazyLinePaint.setColor(financeInFlowColor).linePaint, position);
+            retailInFlowCurveAdapter.draw(canvas, lazyLinePaint.setColor(retailInFlowColor).linePaint, position);
         }
-        canvas.drawPath(financeInFlowPath, financeInFlowPaint);
-        canvas.drawPath(retailInFlowPath, retailInFlowPaint);
-        canvas.drawPath(pricePath, pricePaint);
-
-        financeInFlowPath.reset();
-        retailInFlowPath.reset();
-        pricePath.reset();
     }
 
     /**
      * 绘制基础趋势线
      */
-    private void drawBaseLine(Canvas canvas) {
-        financeInFlowPath.moveTo(tableMargin, getInFlowY(dataManager.getFinanceInFlow(0)));
-        pricePath.moveTo(tableMargin, getPriceY(dataManager.getPrice(0)));
-        for (int i = 1; i < dataManager.size(); i++) {
-            financeInFlowPath.lineTo(getX(i), getInFlowY(dataManager.getFinanceInFlow(i)));
-            pricePath.lineTo(getX(i), getPriceY(dataManager.getPrice(i)));
+    private void drawBaseLine(Canvas canvas, LazyLinePaint lazyLinePaint) {
+        for (int position = 0; position < dataManager.size() - 1; position++) {
+            priceCurveAdapter.draw(canvas, lazyLinePaint.setColor(priceColor).linePaint, position);
+            financeInFlowCurveAdapter.draw(canvas, lazyLinePaint.setColor(financeInFlowColor).linePaint, position);
         }
-        canvas.drawPath(financeInFlowPath, financeInFlowPaint);
-        canvas.drawPath(pricePath, pricePaint);
-
-        financeInFlowPath.reset();
-        pricePath.reset();
     }
 
     /**
@@ -477,5 +406,44 @@ public class CapitalView extends GridView {
      */
     public boolean isDrawRetailInFlow() {
         return isDrawRetailInFlow;
+    }
+
+    private abstract class InFlowCurveAdapter extends CapitalTopCurveAdapter {
+
+        @Override
+        protected float getDrawY(float value) {
+            return getInFlowY(value);
+        }
+    }
+
+    private class PriceCurveAdapter extends CapitalTopCurveAdapter {
+
+        @Override
+        protected float getValue(int position) {
+            return dataManager.getPrice(position);
+        }
+
+        @Override
+        protected float getDrawY(float value) {
+            return getPriceY(value);
+        }
+    }
+
+    private abstract class CapitalTopCurveAdapter extends BaseCurveAdapter {
+
+        @Override
+        protected float getMaxY() {
+            return getTopTableMaxY();
+        }
+
+        @Override
+        protected float getMinY() {
+            return getTableMinY();
+        }
+
+        @Override
+        protected float getDrawX(int position) {
+            return getX(position);
+        }
     }
 }

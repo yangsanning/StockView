@@ -215,6 +215,14 @@ public class LazyPaint {
         return this;
     }
 
+    /**
+     * 绘制矩形
+     */
+    public LazyPaint drawRect(Canvas canvas, float left, float top, float right, float bottom, @ColorInt int color) {
+        lazyLinePaint.drawRect(canvas, left, top, right, bottom, color);
+        return this;
+    }
+
     public Paint getTextPaint() {
         return lazyTextPaint.textPaint;
     }
