@@ -47,7 +47,6 @@ public class MiniFenShiView extends StockView {
     protected void init(AttributeSet attrs) {
         super.init(attrs);
         config = new MiniFenShiConfig(context, attrs);
-        config.dottedLinePaint.setPathEffect(config.pathEffect);
         dataManager = new MiniFenShiDataManager(config);
     }
 
@@ -85,7 +84,6 @@ public class MiniFenShiView extends StockView {
         }
 
         config.pricePaint.setColor(config.currentColor);
-        config.dottedLinePaint.setColor(config.currentColor);
 
         // 绘制昨日收盘价线
         drawLastClose(canvas, getY(dataManager.lastClose));
@@ -98,10 +96,8 @@ public class MiniFenShiView extends StockView {
      * 绘制昨日收盘价线
      */
     private void drawLastClose(Canvas canvas, float y) {
-        config.pricePath.moveTo(getTableMinX(), y);
-        config.pricePath.lineTo(getTableMaxX(), y);
-        canvas.drawPath(config.pricePath, config.dottedLinePaint);
-        config.pricePath.reset();
+        lazyPaint.setLineColor(config.currentColor)
+                .drawDotted(canvas, getTableMinX(), y, getTableMaxX(), y, config.pathEffect);
     }
 
     /**

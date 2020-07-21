@@ -220,4 +220,15 @@ public class LazyLinePaint {
         resetStyle();
         return this;
     }
+
+    /**
+     * 绘制虚线
+     * 注意：绘制完后会重置 PathEffect 和 路径
+     */
+    public LazyLinePaint drawDotted(Canvas canvas, float startX, float startY, float stopX, float stopY, PathEffect pathEffect) {
+        return setPathEffect(pathEffect)
+                .moveTo(startX, startY)
+                .lineToEnd(canvas, stopX, stopY)
+                .setPathEffect(null);
+    }
 }

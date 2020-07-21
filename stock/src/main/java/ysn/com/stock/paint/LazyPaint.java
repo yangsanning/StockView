@@ -223,6 +223,15 @@ public class LazyPaint {
         return this;
     }
 
+    /**
+     * 绘制虚线
+     * 注意：绘制完后会重置 PathEffect
+     */
+    public LazyPaint drawDotted(Canvas canvas, float startX, float startY, float stopX, float stopY, PathEffect pathEffect) {
+        lazyLinePaint.drawDotted(canvas, startX, startY, stopX, stopY, pathEffect);
+        return this;
+    }
+
     public Paint getTextPaint() {
         return lazyTextPaint.textPaint;
     }
