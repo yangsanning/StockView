@@ -2,7 +2,6 @@ package ysn.com.stock.view;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -15,6 +14,7 @@ import android.view.MotionEvent;
 
 import ysn.com.stock.R;
 import ysn.com.stock.bean.IFenShi;
+import ysn.com.stock.config.FenShiConfig;
 import ysn.com.stock.helper.FenShiSlideHelper;
 import ysn.com.stock.interceptor.FenShiUnitInterceptor;
 import ysn.com.stock.manager.FenShiDataManager;
@@ -29,25 +29,7 @@ import ysn.com.stock.view.base.GridView;
  */
 public class FenShiView extends GridView {
 
-    private static final String[] TIME_TEXT = new String[]{"09:30", "11:30/13:00", "15:00"};
-
-    /**
-     * 价格线宽度
-     */
-    private int priceStrokeWidth;
-
-    /**
-     * heartRadius: 心脏半径
-     * heartDiameter: 心脏直径
-     * HEART_INIT_ALPHA: 初始透明度
-     * HEART_BEAT_RATE: 心率
-     * HEART_BEAT_FRACTION_RATE: 心跳动画时间
-     */
-    private int heartRadius;
-    private int heartDiameter;
-    private int heartInitAlpha;
-    private long heartBeatRate;
-    private long heartBeatFractionRate;
+    private FenShiConfig config;
 
     private Path pricePath;
     private Paint pricePaint;
@@ -79,11 +61,9 @@ public class FenShiView extends GridView {
         public void run() {
             beatAnimator.start();
             invalidate();
-            beatHandler.postDelayed(this, heartBeatRate);
+            beatHandler.postDelayed(this, config.heartBeatRate);
         }
     };
-
-    private boolean isEnabledSlide;
 
     private FenShiDataManager fenShiDataManager;
     private FenShiSlideHelper fenShiSlideHelper;
@@ -109,7 +89,7 @@ public class FenShiView extends GridView {
     protected void init(AttributeSet attrs) {
         super.init(attrs);
         fenShiDataManager = new FenShiDataManager(decimalFormat);
-        if (isEnabledSlide) {
+        if (config.isEnabledSlide) {
             fenShiSlideHelper = new FenShiSlideHelper(this, fenShiDataManager);
         }
     }
@@ -117,19 +97,7 @@ public class FenShiView extends GridView {
     @Override
     protected void initAttr(AttributeSet attrs) {
         super.initAttr(attrs);
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.FenShiView);
-
-        priceStrokeWidth = typedArray.getDimensionPixelSize(R.styleable.FenShiView_fsv_price_stroke_width, 2);
-
-        heartRadius = typedArray.getDimensionPixelSize(R.styleable.FenShiView_fsv_heart_radius, 5);
-        heartDiameter = typedArray.getDimensionPixelSize(R.styleable.FenShiView_fsv_heart_diameter, 40);
-        heartInitAlpha = typedArray.getInteger(R.styleable.FenShiView_fsv_heart_init_alpha, 255);
-        heartBeatRate = typedArray.getInteger(R.styleable.FenShiView_fsv_heart_beat_rate, 2000);
-        heartBeatFractionRate = typedArray.getInteger(R.styleable.FenShiView_fsv_heart_beat_fraction_rate, 2000);
-
-        isEnabledSlide = typedArray.getBoolean(R.styleable.FenShiView_fsv_is_enabled_slide, Boolean.FALSE);
-
-        typedArray.recycle();
+        config = new FenShiConfig(context, attrs);
     }
 
     @Override
@@ -141,7 +109,7 @@ public class FenShiView extends GridView {
         pricePaint.setColor(getColor(R.color.stock_price_line));
         pricePaint.setAntiAlias(true);
         pricePaint.setStyle(Paint.Style.STROKE);
-        pricePaint.setStrokeWidth(priceStrokeWidth);
+        pricePaint.setStrokeWidth(config.priceStrokeWidth);
 
         // 初始化均价
         avePricePath = new Path();
@@ -149,7 +117,7 @@ public class FenShiView extends GridView {
         avePricePaint.setColor(getColor(R.color.stock_ave_price_line));
         avePricePaint.setAntiAlias(true);
         avePricePaint.setStyle(Paint.Style.STROKE);
-        avePricePaint.setStrokeWidth(priceStrokeWidth);
+        avePricePaint.setStrokeWidth(config.priceStrokeWidth);
 
         // 初始化价格区域
         priceAreaPath = new Path();
@@ -162,7 +130,7 @@ public class FenShiView extends GridView {
         // 初始化扩散圆
         heartPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         heartPaint.setAntiAlias(true);
-        beatAnimator = ValueAnimator.ofFloat(0, 1f).setDuration(heartBeatFractionRate);
+        beatAnimator = ValueAnimator.ofFloat(0, 1f).setDuration(config.heartBeatFractionRate);
         beatAnimator.addUpdateListener(animation -> {
             beatFraction = (float) animation.getAnimatedValue();
             invalidate();
@@ -195,19 +163,19 @@ public class FenShiView extends GridView {
         textPaint.setColor(getColor(R.color.stock_text_title));
 
         // 绘制开始区域时间值
-        textPaint.getTextBounds(TIME_TEXT[0], (0), TIME_TEXT[0].length(), textRect);
+        textPaint.getTextBounds(FenShiConfig.TIME_TEXT[0], (0), FenShiConfig.TIME_TEXT[0].length(), textRect);
         float timeTextY = getTimeTableMinY() + getTimeTextY();
-        canvas.drawText(TIME_TEXT[0], tableMargin, timeTextY, textPaint);
+        canvas.drawText(FenShiConfig.TIME_TEXT[0], tableMargin, timeTextY, textPaint);
 
         // 绘制中间区域时间值
-        textPaint.getTextBounds(TIME_TEXT[1], (0), TIME_TEXT[1].length(), textRect);
+        textPaint.getTextBounds(FenShiConfig.TIME_TEXT[1], (0), FenShiConfig.TIME_TEXT[1].length(), textRect);
         timeTextY = getTimeTableMinY() + getTimeTextY();
-        canvas.drawText(TIME_TEXT[1], (((viewWidth - textRect.right) >> 1) - tableMargin), timeTextY, textPaint);
+        canvas.drawText(FenShiConfig.TIME_TEXT[1], (((viewWidth - textRect.right) >> 1) - tableMargin), timeTextY, textPaint);
 
         // 绘制结束区域时间值
-        textPaint.getTextBounds(TIME_TEXT[2], (0), TIME_TEXT[2].length(), textRect);
+        textPaint.getTextBounds(FenShiConfig.TIME_TEXT[2], (0), FenShiConfig.TIME_TEXT[2].length(), textRect);
         timeTextY = getTimeTableMinY() + getTimeTextY();
-        canvas.drawText(TIME_TEXT[2], (viewWidth - textRect.right - tableMargin), timeTextY, textPaint);
+        canvas.drawText(FenShiConfig.TIME_TEXT[2], (viewWidth - textRect.right - tableMargin), timeTextY, textPaint);
     }
 
     @Override
@@ -362,13 +330,13 @@ public class FenShiView extends GridView {
         if (isBeat && fenShiDataManager.isLastPrice(i)) {
             // 绘制扩散圆
             heartPaint.setColor(getColor(R.color.stock_price_line));
-            heartPaint.setAlpha((int) (heartInitAlpha - heartInitAlpha * beatFraction));
-            canvas.drawCircle(priceX, priceY, (heartRadius + heartDiameter * beatFraction), heartPaint);
+            heartPaint.setAlpha((int) (config.heartInitAlpha - config.heartInitAlpha * beatFraction));
+            canvas.drawCircle(priceX, priceY, (config.heartRadius + config.heartDiameter * beatFraction), heartPaint);
 
             // 绘制中心圆
             heartPaint.setAlpha(255);
             heartPaint.setColor(getColor(R.color.stock_price_line));
-            canvas.drawCircle(priceX, priceY, heartRadius, heartPaint);
+            canvas.drawCircle(priceX, priceY, config.heartRadius, heartPaint);
         }
     }
 
