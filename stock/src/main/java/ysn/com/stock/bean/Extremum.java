@@ -59,6 +59,18 @@ public class Extremum implements IExtremum{
         }
     }
 
+    public void setMaximum(float maximum) {
+        this.maximum = maximum;
+    }
+
+    public void setMinimum(float minimum) {
+        this.minimum = minimum;
+    }
+
+    public void setPeek(float peek) {
+        this.peek = peek;
+    }
+
     @Override
     public float getMaximum() {
         return maximum;

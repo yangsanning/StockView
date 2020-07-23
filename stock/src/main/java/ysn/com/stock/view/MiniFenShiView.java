@@ -83,8 +83,6 @@ public class MiniFenShiView extends StockView {
             config.priceAreaPaint.setShader(gradient);
         }
 
-        config.pricePaint.setColor(config.currentColor);
-
         // 绘制昨日收盘价线
         drawLastClose(canvas, getY(dataManager.lastClose));
 
@@ -97,6 +95,7 @@ public class MiniFenShiView extends StockView {
      */
     private void drawLastClose(Canvas canvas, float y) {
         lazyPaint.setLineColor(config.currentColor)
+                .setLineStrokeWidth(config.strokeWidth)
                 .drawDotted(canvas, getTableMinX(), y, getTableMaxX(), y, config.pathEffect);
     }
 
@@ -105,26 +104,16 @@ public class MiniFenShiView extends StockView {
      */
     private void drawPriceLine(Canvas canvas) {
         float topTableMaxY = getTopTableMaxY();
-        float price = dataManager.getPrice(0);
-        float y = getY(price);
-        config.pricePath.moveTo(getCircleX(), y);
-        for (int i = 1; i < dataManager.priceSize(); i++) {
-            price = dataManager.getPrice(i);
-            y = getY(price);
-            float x = getX(i);
-            config.pricePath.lineTo(x, y);
+        lazyPaint.moveTo(getCircleX(), getY(dataManager.getPrice(0)));
+        for (int position = 1; position < dataManager.priceSize(); position++) {
+            lazyPaint.lineTo(getX(position), getY(dataManager.getPrice(position)));
         }
-        canvas.drawPath(config.pricePath, config.pricePaint);
-
-        config.pricePath.lineTo(getX(dataManager.getLastPricePosition()), topTableMaxY);
-        config.pricePath.lineTo(getCircleX(), topTableMaxY);
-        config.pricePath.close();
+        lazyPaint.drawPath(canvas);
 
         if (config.enableGradientBottom) {
-            canvas.drawPath(config.pricePath, config.priceAreaPaint);
+            lazyPaint.lineTo(getX(dataManager.getLastPricePosition()), topTableMaxY)
+                    .lineToClose(canvas, getCircleX(), topTableMaxY, config.priceAreaPaint);
         }
-
-        config.pricePath.reset();
     }
 
     /**
@@ -134,7 +123,7 @@ public class MiniFenShiView extends StockView {
      * @return 价格线的y轴坐标
      */
     private float getY(float price) {
-        return getY(price, dataManager.minStockPrice, dataManager.maxStockPrice);
+        return getTopTableY(price, dataManager.extremum);
     }
 
     /**
@@ -146,19 +135,5 @@ public class MiniFenShiView extends StockView {
         }
         dataManager.setNewData(fenShi);
         invalidate();
-    }
-
-    /**
-     * 获取迷你分时参数配置
-     */
-    public MiniFenShiConfig getConfig() {
-        return config;
-    }
-
-    /**
-     * 获取迷你分时数据管理
-     */
-    public MiniFenShiDataManager getDataManager() {
-        return dataManager;
     }
 }

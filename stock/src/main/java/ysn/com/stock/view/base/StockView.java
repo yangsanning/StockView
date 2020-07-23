@@ -16,6 +16,7 @@ import android.view.View;
 import java.text.DecimalFormat;
 
 import ysn.com.stock.R;
+import ysn.com.stock.bean.Extremum;
 import ysn.com.stock.paint.LazyPaint;
 
 /**
@@ -245,6 +246,17 @@ public class StockView extends View {
      */
     public float getTopTableMaxY() {
         return 0;
+    }
+
+    /**
+     * 根据值进行上表格 y 坐标转换
+     *
+     * @param value    当前值
+     * @param extremum 极值
+     * @return 相应值 y 轴坐标
+     */
+    protected float getTopTableY(float value, Extremum extremum) {
+        return ((getTopTableMinY()) * (value - extremum.getMinimum())) / extremum.getPeek();
     }
 
     /**

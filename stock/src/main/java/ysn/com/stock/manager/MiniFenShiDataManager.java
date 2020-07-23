@@ -2,10 +2,10 @@ package ysn.com.stock.manager;
 
 import android.support.annotation.IntRange;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import ysn.com.stock.bean.Extremum;
 import ysn.com.stock.bean.IFenShi;
 import ysn.com.stock.bean.IFenShiData;
 import ysn.com.stock.config.MiniFenShiConfig;
@@ -29,10 +29,9 @@ public class MiniFenShiDataManager {
      * maxStockPrice: 最大价格
      * minStockPrice: 最小价格
      */
-    public List<Float> priceList = new ArrayList<>();
+    private List<? extends IFenShiData> fenShiDataList;
     public float lastClose = 0.0f;
-    public float maxStockPrice = Float.MIN_VALUE;
-    public float minStockPrice = Float.MAX_VALUE;
+    public Extremum extremum = new Extremum();
 
     /**
      * 数据总数(即表格需要绘制的点总数)
@@ -47,21 +46,28 @@ public class MiniFenShiDataManager {
      * 价格是否为空
      */
     public boolean isPriceEmpty() {
-        return priceList.isEmpty();
+        return fenShiDataList.isEmpty();
     }
 
     /**
      * 根据position获取价格
      */
     public float getPrice(@IntRange(from = 0) int position) {
-        return position < priceSize() ? priceList.get(position) : 0;
+        return position < priceSize() ? fenShiDataList.get(position).getFenShiPrice() : 0;
+    }
+
+    /**
+     * 获取最后一个价格
+     */
+    public float getLastPrice() {
+        return getPrice(getLastPricePosition());
     }
 
     /**
      * 价格集合大小
      */
     public int priceSize() {
-        return priceList.size();
+        return fenShiDataList.size();
     }
 
     /**
@@ -76,26 +82,15 @@ public class MiniFenShiDataManager {
      */
     public <T extends IFenShi> void setNewData(T fenShi) {
         // 重置数据
-        resetData();
+        lastClose = 0.0f;
+        fenShiDataList = fenShi.getFenShiData();
+        extremum.init(fenShiDataList.get(0).getFenShiPrice());
 
-        // 处理相应数据
-        List<? extends IFenShiData> fenShiDataList = fenShi.getFenShiData();
         for (IFenShiData fenShiData : fenShiDataList) {
-            float trade = fenShiData.getFenShiPrice();
-            priceList.add(trade);
-            maxStockPrice = Math.max(trade, maxStockPrice);
-            minStockPrice = Math.min(trade, minStockPrice);
+            extremum.convert(fenShiData.getFenShiPrice());
         }
         lastClose = fenShi.getFenShiLastClose();
         totalCount = fenShi.getTotalCount();
-
-        if (config.alwaysShowDottedLine) {
-            if (lastClose > maxStockPrice) {
-                maxStockPrice = lastClose;
-            } else if (lastClose < minStockPrice) {
-                minStockPrice = lastClose;
-            }
-        }
 
         // 重置最值
         resetPeakPrice();
@@ -105,33 +100,32 @@ public class MiniFenShiDataManager {
     }
 
     /**
-     * 重置数据
-     */
-    private void resetData() {
-        priceList.clear();
-        lastClose = 0.0f;
-        maxStockPrice = Float.MIN_VALUE;
-        minStockPrice = Float.MAX_VALUE;
-    }
-
-    /**
      * 重置最值
      */
     private void resetPeakPrice() {
-        if (Objects.equals(maxStockPrice, minStockPrice)) {
-            minStockPrice = maxStockPrice / 2f;
-            maxStockPrice = maxStockPrice * 3f / 2f;
+        if (Objects.equals(extremum.getMaximum(), extremum.getMinimum())) {
+            extremum.setMinimum(extremum.getMaximum() / 2f);
+            extremum.setMaximum(extremum.getMaximum() * 3f / 2f);
         }
+
+        if (config.alwaysShowDottedLine) {
+            if (lastClose > extremum.getMaximum()) {
+                extremum.setMaximum(lastClose);
+            } else if (lastClose < extremum.getMinimum()) {
+                extremum.setMinimum(lastClose);
+            }
+        }
+        extremum.calculatePeek();
     }
 
     /**
      * 重置当前颜色
      */
     private void resetCurrentColor() {
-        if (priceList.isEmpty()) {
+        if (fenShiDataList.isEmpty()) {
             return;
         }
-        Float lastPrice = priceList.get(priceList.size() - 1);
+        float lastPrice = getLastPrice();
         if (lastPrice > lastClose) {
             config.currentColor = config.upColor;
         } else if (lastPrice < lastClose) {

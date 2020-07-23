@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.PathEffect;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -44,8 +43,7 @@ public class MiniFenShiConfig {
      */
     public int currentColor;
 
-    public Path pricePath;
-    public Paint pricePaint, priceAreaPaint;
+    public Paint priceAreaPaint;
 
     public MiniFenShiConfig(Context context, @Nullable AttributeSet attrs) {
         initAttr(context, attrs);
@@ -75,14 +73,6 @@ public class MiniFenShiConfig {
     }
 
     public void initPaint() {
-        pricePath = new Path();
-        pricePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        pricePaint.setAntiAlias(true);
-        pricePaint.setStyle(Paint.Style.STROKE);
-        pricePaint.setStrokeWidth(strokeWidth);
-        pricePaint.setStrokeJoin(Paint.Join.ROUND);
-        pricePaint.setStrokeCap(Paint.Cap.ROUND);
-
         priceAreaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         priceAreaPaint.setStyle(Paint.Style.FILL);
         priceAreaPaint.setAlpha(areaAlpha);
