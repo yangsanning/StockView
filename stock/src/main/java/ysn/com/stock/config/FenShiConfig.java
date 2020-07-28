@@ -15,8 +15,6 @@ import ysn.com.stock.R;
  */
 public class FenShiConfig {
 
-    public static final String[] TIME_TEXT = new String[]{"09:30", "11:30/13:00", "15:00"};
-
     /**
      * 价格线宽度
      */

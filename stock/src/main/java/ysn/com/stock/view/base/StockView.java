@@ -141,6 +141,7 @@ public class StockView extends View {
 
         xYTextMargin = xYTextSize / 5;
         textPaint.setTextSize(xYTextSize);
+        lazyPaint.setTextSize(xYTextSize);
     }
 
     public boolean isEnabledTitleTable() {

@@ -21,7 +21,6 @@ import ysn.com.stock.paint.LazyTextPaint;
 import ysn.com.stock.view.base.GridView;
 
 import static ysn.com.stock.config.CapitalConfig.DEFAULT_PRICE_STROKE_WIDTH;
-import static ysn.com.stock.config.CapitalConfig.TIME_TEXT;
 
 /**
  * @Author yangsanning
@@ -107,7 +106,6 @@ public class CapitalView extends GridView {
         // 绘制背景
         lazyPaint.drawRect(canvas, 0, getTopTableMaxY(), viewWidth, getTopTableMinY(), config.bgColor)
                 // 为后续操作统一设置字体大小以及文字颜色
-                .setTextSize(xYTextSize)
                 .setTextColor(config.textColor);
         super.onBaseDraw(canvas);
     }
@@ -123,29 +121,6 @@ public class CapitalView extends GridView {
             // 绘制右上角标题
             float x = getTopTableMaxX() - lazyTextPaint.width();
             float y = getTopTableMinY() - lazyTextPaint.height();
-            lazyTextPaint.drawText(canvas, x, y);
-        });
-    }
-
-    /**
-     * 绘制时间坐标
-     */
-    @Override
-    protected void onTimeTextDraw(Canvas canvas) {
-        super.onTimeTextDraw(canvas);
-        lazyPaint.measure(TIME_TEXT[0], lazyTextPaint -> {
-            // 绘制开始区域时间值
-            float y = getTimeTableMinY() + lazyTextPaint.centerY(getTimeTableHeight());
-            lazyTextPaint.drawText(canvas, getTableMargin(), y);
-        }).measure(TIME_TEXT[1], lazyTextPaint -> {
-            // 绘制中间区域时间值
-            float x = getTimeTableMinX() + lazyTextPaint.centerX(getTopTableWidth());
-            float y = getTimeTableMinY() + lazyTextPaint.centerY(getTimeTableHeight());
-            lazyTextPaint.drawText(canvas, x, y);
-        }).measure(TIME_TEXT[2], lazyTextPaint -> {
-            // 绘制结束区域时间值
-            float x = getTopTableMaxX() - lazyTextPaint.width();
-            float y = getTimeTableMinY() + lazyTextPaint.centerY(getTimeTableHeight());
             lazyTextPaint.drawText(canvas, x, y);
         });
     }

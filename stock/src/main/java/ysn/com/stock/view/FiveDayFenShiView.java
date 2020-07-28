@@ -203,7 +203,6 @@ public class FiveDayFenShiView extends GridView {
 
     @Override
     protected void onTimeTextDraw(Canvas canvas) {
-        super.onTimeTextDraw(canvas);
         textPaint.setColor(getColor(R.color.stock_text_title));
 
         // 绘制时间坐标

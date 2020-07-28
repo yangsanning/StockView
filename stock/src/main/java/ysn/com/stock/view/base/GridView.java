@@ -19,6 +19,8 @@ import ysn.com.stock.R;
  */
 public class GridView extends StockView {
 
+    public static final String[] TIME_TEXT = new String[]{"09:30", "11:30/13:00", "15:00"};
+
     /**
      * verticalPart: 垂直方向分成几部分（竖虚线+1）
      * topHorizontalPart: 上表格水平方向分成几部分（上表格横虚线+1）
@@ -93,6 +95,31 @@ public class GridView extends StockView {
                 bottomTableMinX, bottomTableMaxY, bottomTableMaxX, bottomTableMaxY,
                 bottomTableMaxX, bottomTableMaxY, bottomTableMaxX, bottomTableMinY,
                 bottomTableMaxX, bottomTableMinY, bottomTableMinX, bottomTableMinY};
+    }
+
+    /**
+     * 绘制默认时间坐标
+     */
+    @Override
+    protected void onTimeTextDraw(Canvas canvas) {
+        lazyPaint.setTextColor(getColor(R.color.stock_text_title))
+                .measure(TIME_TEXT[0], lazyTextPaint -> {
+                    // 绘制开始区域时间值
+                    float y = getTimeTableMinY() + lazyTextPaint.centerY(getTimeTableHeight());
+                    lazyTextPaint.drawText(canvas, getTableMargin(), y);
+                })
+                .measure(TIME_TEXT[1], lazyTextPaint -> {
+                    // 绘制中间区域时间值
+                    float x = getTimeTableMinX() + lazyTextPaint.centerX(getTopTableWidth());
+                    float y = getTimeTableMinY() + lazyTextPaint.centerY(getTimeTableHeight());
+                    lazyTextPaint.drawText(canvas, x, y);
+                })
+                .measure(TIME_TEXT[2], lazyTextPaint -> {
+                    // 绘制结束区域时间值
+                    float x = getTopTableMaxX() - lazyTextPaint.width() - getTableMargin();
+                    float y = getTimeTableMinY() + lazyTextPaint.centerY(getTimeTableHeight());
+                    lazyTextPaint.drawText(canvas, x, y);
+                });
     }
 
     @Override

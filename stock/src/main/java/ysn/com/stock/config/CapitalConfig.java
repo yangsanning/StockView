@@ -17,7 +17,6 @@ import ysn.com.stock.utils.ResUtils;
  */
 public class CapitalConfig {
 
-    public static final String[] TIME_TEXT = new String[]{"09:30", "11:30/13:00", "15:00"};
     public static final float DEFAULT_PRICE_STROKE_WIDTH = 2.5f;
     public static final String DEFAULT_LEFT_TITLE = "股价(元)";
     public static final String DEFAULT_RIGHT_TITLE = "今日资金净流入(元)";

@@ -154,30 +154,6 @@ public class FenShiView extends GridView {
         bottomTableMaxY = getBottomTableMaxY();
     }
 
-    /**
-     * 绘制时间坐标
-     */
-    @Override
-    protected void onTimeTextDraw(Canvas canvas) {
-        super.onTimeTextDraw(canvas);
-        textPaint.setColor(getColor(R.color.stock_text_title));
-
-        // 绘制开始区域时间值
-        textPaint.getTextBounds(FenShiConfig.TIME_TEXT[0], (0), FenShiConfig.TIME_TEXT[0].length(), textRect);
-        float timeTextY = getTimeTableMinY() + getTimeTextY();
-        canvas.drawText(FenShiConfig.TIME_TEXT[0], tableMargin, timeTextY, textPaint);
-
-        // 绘制中间区域时间值
-        textPaint.getTextBounds(FenShiConfig.TIME_TEXT[1], (0), FenShiConfig.TIME_TEXT[1].length(), textRect);
-        timeTextY = getTimeTableMinY() + getTimeTextY();
-        canvas.drawText(FenShiConfig.TIME_TEXT[1], (((viewWidth - textRect.right) >> 1) - tableMargin), timeTextY, textPaint);
-
-        // 绘制结束区域时间值
-        textPaint.getTextBounds(FenShiConfig.TIME_TEXT[2], (0), FenShiConfig.TIME_TEXT[2].length(), textRect);
-        timeTextY = getTimeTableMinY() + getTimeTextY();
-        canvas.drawText(FenShiConfig.TIME_TEXT[2], (viewWidth - textRect.right - tableMargin), timeTextY, textPaint);
-    }
-
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (fenShiSlideHelper != null) {
