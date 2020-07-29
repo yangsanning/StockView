@@ -107,19 +107,17 @@ public class GridView extends StockView {
                 .measure(TIME_TEXT[0], lazyTextPaint -> {
                     // 绘制开始区域时间值
                     float y = getTimeTableMinY() + lazyTextPaint.centerY(getTimeTableHeight());
-                    lazyTextPaint.drawText(canvas, getTableMargin(), y);
+                    lazyTextPaint.drawTableStartText(canvas, getTableMinX(), getTableMargin(), y);
                 })
                 .measure(TIME_TEXT[1], lazyTextPaint -> {
                     // 绘制中间区域时间值
-                    float x = getTimeTableMinX() + lazyTextPaint.centerX(getTopTableWidth());
                     float y = getTimeTableMinY() + lazyTextPaint.centerY(getTimeTableHeight());
-                    lazyTextPaint.drawText(canvas, x, y);
+                    lazyTextPaint.drawTableCenterText(canvas, getTableMinX(), getTopTableWidth(), y);
                 })
                 .measure(TIME_TEXT[2], lazyTextPaint -> {
                     // 绘制结束区域时间值
-                    float x = getTopTableMaxX() - lazyTextPaint.width() - getTableMargin();
                     float y = getTimeTableMinY() + lazyTextPaint.centerY(getTimeTableHeight());
-                    lazyTextPaint.drawText(canvas, x, y);
+                    lazyTextPaint.drawTableEndText(canvas, getTopTableMaxX(), getTableMargin(), y);
                 });
     }
 

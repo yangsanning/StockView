@@ -150,14 +150,12 @@ public class CapitalView extends GridView {
             int position = i;
             lazyPaint.measure(getLeftCoordinateText(i), lazyTextPaint -> {
                 // 价格坐标
-                float x = getTableMargin() + xYTextMargin;
                 float y = getTopCoordinateY(position, defaultY, lazyTextPaint);
-                lazyTextPaint.drawText(canvas, x, y);
+                lazyTextPaint.drawTableStartText(canvas, getTopTableMinX(), xYTextMargin, y);
             }).measure(getRightCoordinateText(i), lazyTextPaint -> {
                 // inFlow坐标
-                float x = getTopTableMaxX() - lazyTextPaint.width() - xYTextMargin;
                 float y = getTopCoordinateY(position, defaultY, lazyTextPaint);
-                lazyTextPaint.drawText(canvas, x, y);
+                lazyTextPaint.drawTableEndText(canvas, getTopTableMaxX(), xYTextMargin, y);
             });
         }
     }

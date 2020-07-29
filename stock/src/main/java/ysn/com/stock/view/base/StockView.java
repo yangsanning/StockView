@@ -225,7 +225,7 @@ public class StockView extends View {
      * 获取上表格最小X
      */
     public float getTopTableMinX() {
-        return 0;
+        return getTableMinX();
     }
 
     /**
@@ -400,14 +400,14 @@ public class StockView extends View {
      * 获取表格最大X
      */
     protected float getTableMaxX() {
-        return viewWidth - tableMargin;
+        return viewWidth - tableMargin - getTableMinX();
     }
 
     /**
      * 获取表格最小X
      */
     protected float getTableMinX() {
-        return tableMargin;
+        return tableMargin - getCircleX();
     }
 
     /**

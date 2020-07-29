@@ -31,9 +31,12 @@ public class LazyTextPaint {
 
     /**
      * 设置字体颜色
+     *
+     * @return
      */
-    public void setColor(@ColorInt int color) {
+    public LazyTextPaint setColor(@ColorInt int color) {
         textPaint.setColor(color);
+        return this;
     }
 
     /**
@@ -83,6 +86,39 @@ public class LazyTextPaint {
      */
     public float centerY(float containerHeight) {
         return (containerHeight + textRect.height()) / 2f;
+    }
+
+    /**
+     * 绘制表格横向起始文本
+     *
+     * @param tableMinX 表格最小 X 坐标
+     * @param xMargin   x 坐标间距
+     * @param y         y 坐标
+     */
+    public void drawTableStartText(Canvas canvas, float tableMinX, float xMargin, float y) {
+        drawText(canvas, (tableMinX + xMargin), y);
+    }
+
+    /**
+     * 绘制表格横向居中文本
+     *
+     * @param tableMinX      表格最小 X 坐标
+     * @param containerWidth 容器宽
+     * @param y              y 坐标
+     */
+    public void drawTableCenterText(Canvas canvas, float tableMinX, float containerWidth, float y) {
+        drawText(canvas, (tableMinX + centerX(containerWidth)), y);
+    }
+
+    /**
+     * 绘制表格横向末端文本
+     *
+     * @param tableMaxX 表格最大 X 坐标
+     * @param xMargin   x 坐标间距
+     * @param y         y 坐标
+     */
+    public void drawTableEndText(Canvas canvas, float tableMaxX, float xMargin, float y) {
+        drawText(canvas, (tableMaxX - width() - xMargin), y);
     }
 
     /**
