@@ -204,34 +204,37 @@ public class FenShiView extends GridView {
      * 绘制上表格坐标
      */
     private void drawTopTableCoordinate(Canvas canvas) {
-        // 价格最大值
-        String text = decimalFormat.format(fenShiDataManager.maxPrice);
-        textPaint.setColor(getColor(R.color.stock_red));
-        textPaint.getTextBounds(text, (0), text.length(), textRect);
-        float textMargin = getTextMargin();
-        float y = (getTopTableMinY() + textRect.height() + textMargin);
-        canvas.drawText(text, textMargin, y, textPaint);
-
-        // 增幅
-        text = "+" + fenShiDataManager.percent;
-        textPaint.getTextBounds(text, 0, text.length(), textRect);
-        canvas.drawText(text, (viewWidth - textRect.width() - textMargin), y, textPaint);
-
-        // 价格最小值
-        textPaint.setColor(getColor(R.color.stock_green));
-        y = getTopTableMaxY() - textMargin;
-        canvas.drawText(decimalFormat.format(fenShiDataManager.minPrice), textMargin, y, textPaint);
-
-        // 减幅
-        text = "-" + fenShiDataManager.percent;
-        textPaint.setColor(getColor(R.color.stock_green));
-        textPaint.getTextBounds(text, 0, text.length(), textRect);
-        canvas.drawText(text, (viewWidth - textRect.width() - textMargin), y, textPaint);
-
-        // 中间坐标
-        textPaint.setColor(getColor(R.color.stock_text_title));
-        text = decimalFormat.format(fenShiDataManager.lastClose);
-        canvas.drawText(text, textMargin, (-(topTableHeight - textRect.height()) / 2f), textPaint);
+        float topRowSpacing = getTopRowSpacing();
+        int partTopHorizontal = getPartTopHorizontal();
+        lazyPaint.setTextColor(getColor(R.color.stock_red))
+                .measure(decimalFormat.format(fenShiDataManager.maxPrice), lazyTextPaint -> {
+                    // 价格最大值
+                    float y2 = getTopCoordinateY(partTopHorizontal, getTopRowY(topRowSpacing, partTopHorizontal), lazyTextPaint);
+                    lazyTextPaint.drawTableStartText(canvas, getTopTableMinX(), xYTextMargin, y2);
+                })
+                .measure(("+" + fenShiDataManager.percent), lazyTextPaint -> {
+                    // 增幅
+                    float y2 = getTopCoordinateY(partTopHorizontal, getTopRowY(topRowSpacing, partTopHorizontal), lazyTextPaint);
+                    lazyTextPaint.drawTableEndText(canvas, getTopTableMaxX(), xYTextMargin, y2);
+                })
+                .setTextColor(getColor(R.color.stock_text_title))
+                .measure(decimalFormat.format(fenShiDataManager.lastClose), lazyTextPaint -> {
+                    // 中间坐标
+                    int position = partTopHorizontal / 2;
+                    float y2 = getTopCoordinateY(position, getTopRowY(topRowSpacing, position), lazyTextPaint);
+                    lazyTextPaint.drawTableStartText(canvas, getTopTableMinX(), xYTextMargin, y2);
+                })
+                .setTextColor(getColor(R.color.stock_green))
+                .measure(decimalFormat.format(fenShiDataManager.minPrice), lazyTextPaint -> {
+                    // 价格最小值
+                    float y2 = getTopCoordinateY(0, getTopRowY(topRowSpacing, 0), lazyTextPaint);
+                    lazyTextPaint.drawTableStartText(canvas, getTopTableMinX(), xYTextMargin, y2);
+                })
+                .measure(("-" + fenShiDataManager.percent), lazyTextPaint -> {
+                    // 减幅
+                    float y2 = getTopCoordinateY(0, getTopRowY(topRowSpacing, 0), lazyTextPaint);
+                    lazyTextPaint.drawTableEndText(canvas, getTopTableMaxX(), xYTextMargin, y2);
+                });
     }
 
     /**
