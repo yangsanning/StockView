@@ -17,7 +17,6 @@ import ysn.com.stock.config.CapitalConfig;
 import ysn.com.stock.interceptor.CapitalUnitInterceptor;
 import ysn.com.stock.manager.CapitalDataManager;
 import ysn.com.stock.paint.LazyLinePaint;
-import ysn.com.stock.paint.LazyTextPaint;
 import ysn.com.stock.view.base.GridView;
 
 import static ysn.com.stock.config.CapitalConfig.DEFAULT_PRICE_STROKE_WIDTH;
@@ -146,18 +145,18 @@ public class CapitalView extends GridView {
     private void drawCoordinate(Canvas canvas) {
         float topRowSpacing = getTopRowSpacing();
         int partTopHorizontal = getPartTopHorizontal();
-        for (int i = 0; i < (partTopHorizontal + 1); i++) {
-            float defaultY = getTopRowY(topRowSpacing, partTopHorizontal - i);
+        for (int i = 0; i <= partTopHorizontal; i++) {
+            float defaultY = getTopRowY(topRowSpacing, i);
             int position = i;
             lazyPaint.measure(getLeftCoordinateText(i), lazyTextPaint -> {
                 // 价格坐标
                 float x = getTableMargin() + xYTextMargin;
-                float y = getCoordinateY(position, partTopHorizontal, defaultY, lazyTextPaint);
+                float y = getTopCoordinateY(position, defaultY, lazyTextPaint);
                 lazyTextPaint.drawText(canvas, x, y);
             }).measure(getRightCoordinateText(i), lazyTextPaint -> {
                 // inFlow坐标
                 float x = getTopTableMaxX() - lazyTextPaint.width() - xYTextMargin;
-                float y = getCoordinateY(position, partTopHorizontal, defaultY, lazyTextPaint);
+                float y = getTopCoordinateY(position, defaultY, lazyTextPaint);
                 lazyTextPaint.drawText(canvas, x, y);
             });
         }
@@ -184,18 +183,6 @@ public class CapitalView extends GridView {
      */
     private Float getCoordinateValue(IExtremum iExtremum, float position) {
         return iExtremum.getMinimum() + iExtremum.getPeek() * position / getPartTopHorizontal();
-    }
-
-    private float getCoordinateY(int position, int topRowCount, float defaultY, LazyTextPaint lazyTextPaint) {
-        float coordinateY;
-        if (position == 0) {
-            coordinateY = -xYTextMargin;
-        } else if (position == topRowCount) {
-            coordinateY = defaultY + lazyTextPaint.height() + xYTextMargin;
-        } else {
-            coordinateY = defaultY + lazyTextPaint.height() / 2f;
-        }
-        return coordinateY;
     }
 
     /**

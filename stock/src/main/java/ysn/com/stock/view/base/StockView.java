@@ -328,7 +328,7 @@ public class StockView extends View {
      * @return 横线y轴坐标
      */
     protected float getTopRowY(float ySpace, int position) {
-        return getTopTableMinY() + ySpace * position;
+        return getTopTableMaxY() - ySpace * position;
     }
 
     /**

@@ -10,6 +10,7 @@ import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 
 import ysn.com.stock.R;
+import ysn.com.stock.paint.LazyTextPaint;
 
 /**
  * @Author yangsanning
@@ -197,6 +198,41 @@ public class GridView extends StockView {
                 lazyPaint.drawPath(canvas, tableMargin, y, (viewWidth - tableMargin), y);
             }
         }
+    }
+
+    /**
+     * 根据当前 position 以及当前文本绘制的默认上表格 y 坐标，获取相应横线对应的坐标上表格 y 坐标
+     * 首行文字绘制在横线上方，末行绘制在横线下方，其余居中横线
+     *
+     * @param position      当前 position
+     * @param defaultY      计算出来的 Y 值
+     * @param lazyTextPaint
+     * @return 换算后的文本绘制上表格 y 坐标
+     */
+    protected float getTopCoordinateY(int position, float defaultY, LazyTextPaint lazyTextPaint) {
+        return getCoordinateY(position, getPartTopHorizontal(), defaultY, lazyTextPaint);
+    }
+
+    /**
+     * 根据当前 position 以及当前文本绘制的默认 y 坐标，获取相应横线对应的坐标 y 坐标
+     * 首行文字绘制在横线上方，末行绘制在横线下方，其余居中横线
+     *
+     * @param position      当前 position
+     * @param lastPosition  最后一条横线的 position
+     * @param defaultY      计算出来的 Y 值
+     * @param lazyTextPaint
+     * @return 换算后的文本绘制 y 坐标
+     */
+    protected float getCoordinateY(int position, int lastPosition, float defaultY, LazyTextPaint lazyTextPaint) {
+        float coordinateY;
+        if (position == 0) {
+            coordinateY = -xYTextMargin;
+        } else if (position == lastPosition) {
+            coordinateY = defaultY + lazyTextPaint.height() + xYTextMargin;
+        } else {
+            coordinateY = defaultY + lazyTextPaint.height() / 2f;
+        }
+        return coordinateY;
     }
 
     protected int getPartVertical() {
