@@ -217,13 +217,6 @@ public class FenShiView extends GridView {
                     float y2 = getTopCoordinateY(partTopHorizontal, getTopRowY(topRowSpacing, partTopHorizontal), lazyTextPaint);
                     lazyTextPaint.drawTableEndText(canvas, getTopTableMaxX(), xYTextMargin, y2);
                 })
-                .setTextColor(getColor(R.color.stock_text_title))
-                .measure(decimalFormat.format(fenShiDataManager.lastClose), lazyTextPaint -> {
-                    // 中间坐标
-                    int position = partTopHorizontal / 2;
-                    float y2 = getTopCoordinateY(position, getTopRowY(topRowSpacing, position), lazyTextPaint);
-                    lazyTextPaint.drawTableStartText(canvas, getTopTableMinX(), xYTextMargin, y2);
-                })
                 .setTextColor(getColor(R.color.stock_green))
                 .measure(decimalFormat.format(fenShiDataManager.minPrice), lazyTextPaint -> {
                     // 价格最小值
@@ -234,6 +227,13 @@ public class FenShiView extends GridView {
                     // 减幅
                     float y2 = getTopCoordinateY(0, getTopRowY(topRowSpacing, 0), lazyTextPaint);
                     lazyTextPaint.drawTableEndText(canvas, getTopTableMaxX(), xYTextMargin, y2);
+                })
+                .setTextColor(getColor(R.color.stock_text_title))
+                .measure(decimalFormat.format(fenShiDataManager.lastClose), lazyTextPaint -> {
+                    // 中间坐标
+                    int position = partTopHorizontal / 2;
+                    float y2 = getTopCoordinateY(position, getTopRowY(topRowSpacing, position), lazyTextPaint);
+                    lazyTextPaint.drawTableStartText(canvas, getTopTableMinX(), xYTextMargin, y2);
                 });
     }
 
@@ -374,20 +374,19 @@ public class FenShiView extends GridView {
      * 绘制下表格坐标
      */
     private void drawBottomTableCoordinate(Canvas canvas) {
-        // 下表格当前成交量
-        textPaint.getTextBounds(fenShiDataManager.currentVolumeString, 0, fenShiDataManager.currentVolumeString.length(), textRect);
-        canvas.drawText(fenShiDataManager.currentVolumeString, tableMargin + xYTextMargin,
-                (getBottomTableMinY() + textRect.height() + xYTextMargin), textPaint);
-
-        // 下表格最大成交量
-        textPaint.getTextBounds(fenShiDataManager.maxVolumeString, 0, fenShiDataManager.maxVolumeString.length(), textRect);
-        canvas.drawText(fenShiDataManager.maxVolumeString, (viewWidth - tableMargin - xYTextMargin - textRect.width()),
-                (getBottomTableMinY() + textRect.height() + xYTextMargin), textPaint);
-
-        // 下表格中间值
-        textPaint.getTextBounds(fenShiDataManager.centreVolumeString, 0, fenShiDataManager.centreVolumeString.length(), textRect);
-        canvas.drawText(fenShiDataManager.centreVolumeString, (viewWidth - tableMargin - xYTextMargin - textRect.width()),
-                (getBottomTableMinY() + (bottomTableHeight + textRect.height()) / 2), textPaint);
+        lazyPaint.measure(fenShiDataManager.currentVolumeString, lazyTextPaint -> {
+            // 下表格当前成交量
+            float y = getBottomTableMinY() + lazyTextPaint.height() + xYTextMargin;
+            lazyTextPaint.drawTableStartText(canvas, getBottomTableMinX(), xYTextMargin, y);
+        }).measure(fenShiDataManager.maxVolumeString, lazyTextPaint -> {
+            // 下表格最大成交量
+            float y = getBottomTableMinY() + lazyTextPaint.height() + xYTextMargin;
+            lazyTextPaint.drawTableEndText(canvas, getBottomTableMaxX(), xYTextMargin, y);
+        }).measure(fenShiDataManager.centreVolumeString, lazyTextPaint -> {
+            // 下表格中间值
+            float y = (getBottomTableMinY() + (getBottomTableHeight() + lazyTextPaint.height()) / 2);
+            lazyTextPaint.drawTableEndText(canvas, getBottomTableMaxX(), xYTextMargin, y);
+        });
     }
 
     /**
