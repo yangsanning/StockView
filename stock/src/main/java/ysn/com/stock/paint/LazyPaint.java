@@ -97,14 +97,15 @@ public class LazyPaint {
     }
 
     /**
-     * 设置圆点为起点
+     * 设置原点为曲线起点
      */
-    public LazyPaint moreToCircle() {
-        return moveTo(0, 0);
+    public LazyPaint moreToOrigin() {
+        lazyLinePaint.moreToOrigin();
+        return this;
     }
 
     /**
-     * 设置起点
+     * 设置曲线起点
      */
     public LazyPaint moveTo(float x, float y) {
         lazyLinePaint.moveTo(x, y);
@@ -112,7 +113,7 @@ public class LazyPaint {
     }
 
     /**
-     * 设置下一个点
+     * 设置曲线的下一个点
      */
     public LazyPaint lineTo(float x, float y) {
         lazyLinePaint.lineTo(x, y);
@@ -128,42 +129,18 @@ public class LazyPaint {
     }
 
     /**
-     * 设置最后一个点并闭合曲线，设置完毕后进行绘制，绘制完成后进行路径重置
+     * 设置最后一个点，并在设置完毕后进行曲线绘制，且绘制完成后进行路径重置
      */
-    public LazyPaint lineToClose(Canvas canvas, float x, float y) {
-        lazyLinePaint.lineToClose(canvas, x, y);
+    public LazyPaint lineToFinish(Canvas canvas, float x, float y) {
+        lazyLinePaint.lineToFinish(canvas, x, y);
         return this;
     }
 
     /**
-     * 设置最后一个点并闭合曲线，设置完毕后进行绘制，绘制完成后进行路径重置
+     * 绘制路径，并在绘制完成后进行路径重置
      */
-    public LazyPaint lineToClose(Canvas canvas, float x, float y, Paint linePaint) {
-        lazyLinePaint.lineToClose(canvas, x, y, linePaint);
-        return this;
-    }
-
-    /**
-     * 设置最后一个点，设置完毕后进行绘制，绘制完成后进行路径重置
-     */
-    public LazyPaint lineToEnd(Canvas canvas, float x, float y) {
-        lazyLinePaint.lineToEnd(canvas, x, y);
-        return this;
-    }
-
-    /**
-     * 闭合并绘制路径，绘制完毕重置路径
-     */
-    public LazyPaint finishLinePath(Canvas canvas) {
-        lazyLinePaint.finishLinePath(canvas);
-        return this;
-    }
-
-    /**
-     * 绘制路径，绘制完毕重置路径
-     */
-    public LazyPaint drawAndRestPath(Canvas canvas) {
-        lazyLinePaint.drawPathAndReset(canvas);
+    public LazyPaint finishPath(Canvas canvas) {
+        lazyLinePaint.finishPath(canvas);
         return this;
     }
 
@@ -192,10 +169,18 @@ public class LazyPaint {
     }
 
     /**
-     * 绘制横线
+     * 设置最后一个点，并在设置完毕后闭合曲线以及曲线绘制，且绘制完成后进行路径重置
      */
-    public LazyPaint drawLine(Canvas canvas, float startX, float startY, float stopX, float stopY) {
-        lazyLinePaint.drawLine(canvas, startX, startY, stopX, stopY);
+    public LazyPaint lineToClose(Canvas canvas, float x, float y) {
+        lazyLinePaint.lineToClose(canvas, x, y);
+        return this;
+    }
+
+    /**
+     * 设置最后一个点，并在设置完毕后闭合曲线以及曲线绘制，且绘制完成后进行路径重置
+     */
+    public LazyPaint lineToClose(Canvas canvas, float x, float y, Paint linePaint) {
+        lazyLinePaint.lineToClose(canvas, x, y, linePaint);
         return this;
     }
 
@@ -204,6 +189,14 @@ public class LazyPaint {
      */
     public LazyPaint drawLines(Canvas canvas, float[] pts) {
         lazyLinePaint.drawLines(canvas, pts);
+        return this;
+    }
+
+    /**
+     * 绘制横线
+     */
+    public LazyPaint drawLine(Canvas canvas, float startX, float startY, float stopX, float stopY) {
+        lazyLinePaint.drawLine(canvas, startX, startY, stopX, stopY);
         return this;
     }
 
