@@ -31,12 +31,8 @@ public class FenShiView extends GridView {
 
     private FenShiConfig config;
 
-    private Path pricePath;
-    private Paint pricePaint;
     private Path avePricePath;
-    private Paint avePricePaint;
-    private Path priceAreaPath;
-    private Paint priceAreaPaint;
+    private Paint avePricePaint, priceAreaPaint;
 
     /**
      * bottomTableMaxY: 下表格最大宽度
@@ -103,14 +99,6 @@ public class FenShiView extends GridView {
     @Override
     protected void initPaint() {
         super.initPaint();
-        // 初始化价格
-        pricePath = new Path();
-        pricePaint = new Paint();
-        pricePaint.setColor(getColor(R.color.stock_price_line));
-        pricePaint.setAntiAlias(true);
-        pricePaint.setStyle(Paint.Style.STROKE);
-        pricePaint.setStrokeWidth(config.priceStrokeWidth);
-
         // 初始化均价
         avePricePath = new Path();
         avePricePaint = new Paint();
@@ -120,7 +108,6 @@ public class FenShiView extends GridView {
         avePricePaint.setStrokeWidth(config.priceStrokeWidth);
 
         // 初始化价格区域
-        priceAreaPath = new Path();
         priceAreaPaint = new Paint();
         priceAreaPaint.setColor(getColor(R.color.stock_price_line));
         priceAreaPaint.setStyle(Paint.Style.FILL);
@@ -262,28 +249,12 @@ public class FenShiView extends GridView {
     }
 
     /**
-     * 绘制价格、价格区域、均线、闪烁点
-     */
-    private void drawPriceLine(Canvas canvas) {
-        // 抽取第一个点确定Path的圆点
-        moveToPrice();
-
-        // 对后续点做处理
-        for (int i = 1; i < fenShiDataManager.priceSize(); i++) {
-            lineToPrice(canvas, i);
-        }
-    }
-
-    /**
      * 设置价格圆点（第一个点）
      */
     private void moveToPrice() {
-        float priceX = getX(0);
-        float priceY = getPriceY(fenShiDataManager.getPrice(0));
-        pricePath.moveTo(priceX, priceY);
-        priceAreaPath.moveTo(priceX, getTopTableMaxY());
-        priceAreaPath.lineTo(priceX, priceY);
-        avePricePath.moveTo(priceX, getPriceY(fenShiDataManager.getAvePrice(0)));
+        float x = getX(0);
+        lazyPaint.moveTo(x, getPriceY(fenShiDataManager.getPrice(0)));
+        avePricePath.moveTo(x, getPriceY(fenShiDataManager.getAvePrice(0)));
     }
 
     /**
@@ -297,25 +268,39 @@ public class FenShiView extends GridView {
     }
 
     /**
+     * 绘制价格、价格区域、均线、闪烁点
+     */
+    private void drawPriceLine(Canvas canvas) {
+        // 抽取第一个点确定Path的圆点
+        moveToPrice();
+
+        // 对后续点做处理
+        for (int i = 1; i < fenShiDataManager.priceSize(); i++) {
+            lineToPrice(canvas, i);
+        }
+    }
+
+    /**
      * 记录后续价格点
      */
     private void lineToPrice(Canvas canvas, int i) {
-        float priceX = getX(i);
-        float priceY = getPriceY(fenShiDataManager.getPrice(i));
-        pricePath.lineTo(priceX, priceY);
-        priceAreaPath.lineTo(priceX, priceY);
-        avePricePath.lineTo(priceX, getPriceY(fenShiDataManager.getAvePrice(i)));
+        float x = getX(i);
+        float y = getPriceY(fenShiDataManager.getPrice(i));
+        lazyPaint.setLineColor(getColor(R.color.stock_price_line))
+                .setLineStrokeWidth(config.priceStrokeWidth)
+                .lineTo(x, y);
+        avePricePath.lineTo(x, getPriceY(fenShiDataManager.getAvePrice(i)));
 
         if (isBeat && fenShiDataManager.isLastPrice(i)) {
             // 绘制扩散圆
             heartPaint.setColor(getColor(R.color.stock_price_line));
             heartPaint.setAlpha((int) (config.heartInitAlpha - config.heartInitAlpha * beatFraction));
-            canvas.drawCircle(priceX, priceY, (config.heartRadius + config.heartDiameter * beatFraction), heartPaint);
+            canvas.drawCircle(x, y, (config.heartRadius + config.heartDiameter * beatFraction), heartPaint);
 
             // 绘制中心圆
             heartPaint.setAlpha(255);
             heartPaint.setColor(getColor(R.color.stock_price_line));
-            canvas.drawCircle(priceX, priceY, config.heartRadius, heartPaint);
+            canvas.drawCircle(x, y, config.heartRadius, heartPaint);
         }
     }
 
@@ -335,18 +320,15 @@ public class FenShiView extends GridView {
      * 绘制价格曲线
      */
     private void drawPricePath(Canvas canvas) {
-        // 价格颜色区域需要进行闭合处理
-        priceAreaPath.lineTo(getX(fenShiDataManager.getLastPricePosition()), getTopTableMaxY());
-        priceAreaPath.close();
 
         // 绘制曲线以及区域
-        canvas.drawPath(pricePath, pricePaint);
-        canvas.drawPath(priceAreaPath, priceAreaPaint);
+        lazyPaint.drawPath(canvas)
+                .lineTo(getX(fenShiDataManager.getLastPricePosition()), getTopTableMaxY())
+                // 价格颜色区域需要进行闭合处理
+                .lineToClose(canvas, getTopTableMinX(), getTopTableMaxY(), priceAreaPaint);
         canvas.drawPath(avePricePath, avePricePaint);
 
         // 使用完后，重置画笔
-        pricePath.reset();
-        priceAreaPath.reset();
         avePricePath.reset();
     }
 
