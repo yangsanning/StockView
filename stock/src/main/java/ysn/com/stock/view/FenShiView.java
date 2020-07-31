@@ -237,13 +237,17 @@ public class FenShiView extends GridView {
         moveToPrice();
 
         // 绘制第一个点柱状图（第一个点要跟昨收做对比）
-        drawFirstPillar(canvas, pillarSpace);
+        pillarPaint.setColor(getColor(fenShiDataManager.getPrice(0) >= fenShiDataManager.lastClose ?
+                R.color.stock_red : R.color.stock_green));
+        drawPillar(canvas, 0, pillarSpace);
 
         for (int i = 1; i < fenShiDataManager.priceSize(); i++) {
             // 记录后续价格点
             lineToPrice(canvas, i);
 
             // 绘制后续柱形图
+            pillarPaint.setColor(getColor(fenShiDataManager.getPrice(i) >= fenShiDataManager.getPrice(i - 1) ?
+                    R.color.stock_red : R.color.stock_green));
             drawPillar(canvas, i, pillarSpace);
         }
     }
@@ -253,31 +257,47 @@ public class FenShiView extends GridView {
      */
     private void moveToPrice() {
         float x = getX(0);
-        lazyPaint.moveTo(x, getPriceY(fenShiDataManager.getPrice(0)));
-        avePricePath.moveTo(x, getPriceY(fenShiDataManager.getAvePrice(0)));
+        lazyPaint.moveTo(x, getTopTableY(fenShiDataManager.getPrice(0)));
+        avePricePath.moveTo(x, getTopTableY(fenShiDataManager.getAvePrice(0)));
     }
 
     /**
-     * 绘制第一个点柱状图（第一个点要跟昨收做对比）
+     * 根据当前价格值获取相应y轴坐标
+     *
+     * @param price 当前价格
+     * @return 当前价格的相应y轴坐标
      */
-    private void drawFirstPillar(Canvas canvas, float pillarSpace) {
-        float pillarX = getPillarX(0, pillarSpace);
-        float pillarStopY = getPillarHeight(0);
-        pillarPaint.setColor(getColor(fenShiDataManager.getPrice(0) >= fenShiDataManager.lastClose ? R.color.stock_red : R.color.stock_green));
+    private float getTopTableY(float price) {
+        return getY(price, fenShiDataManager.minPrice, fenShiDataManager.maxPrice);
+    }
+
+    /**
+     * 绘制后续柱形图
+     */
+    private void drawPillar(Canvas canvas, int position, float pillarSpace) {
+        float pillarX = getPillarX(position, pillarSpace);
+        float pillarStopY = getPillarHeight(position);
         canvas.drawLine(pillarX, bottomTableMaxY, pillarX, pillarStopY, pillarPaint);
     }
 
     /**
-     * 绘制价格、价格区域、均线、闪烁点
+     * 获取第i个柱状图的绘制位置（x坐标）
+     *
+     * @param position 第几个
+     * @return 第i个柱状图的绘制位置（x坐标）
      */
-    private void drawPriceLine(Canvas canvas) {
-        // 抽取第一个点确定Path的圆点
-        moveToPrice();
+    private float getPillarX(int position, float pillarSpace) {
+        return getTableMargin() + (pillarSpace * position) + (position * 1f) + 1;
+    }
 
-        // 对后续点做处理
-        for (int i = 1; i < fenShiDataManager.priceSize(); i++) {
-            lineToPrice(canvas, i);
-        }
+    /**
+     * 获取第i个柱状图的高度（stop y坐标）
+     *
+     * @param position 第几个
+     * @return 第i个柱状图的高度（stop y坐标）
+     */
+    private float getPillarHeight(int position) {
+        return getBottomTableMaxY() - (fenShiDataManager.getVolume(position) * maxPillarHeight) / fenShiDataManager.maxVolume;
     }
 
     /**
@@ -285,11 +305,11 @@ public class FenShiView extends GridView {
      */
     private void lineToPrice(Canvas canvas, int i) {
         float x = getX(i);
-        float y = getPriceY(fenShiDataManager.getPrice(i));
+        float y = getTopTableY(fenShiDataManager.getPrice(i));
         lazyPaint.setLineColor(getColor(R.color.stock_price_line))
                 .setLineStrokeWidth(config.priceStrokeWidth)
                 .lineTo(x, y);
-        avePricePath.lineTo(x, getPriceY(fenShiDataManager.getAvePrice(i)));
+        avePricePath.lineTo(x, getTopTableY(fenShiDataManager.getAvePrice(i)));
 
         if (isBeat && fenShiDataManager.isLastPrice(i)) {
             // 绘制扩散圆
@@ -302,54 +322,6 @@ public class FenShiView extends GridView {
             heartPaint.setColor(getColor(R.color.stock_price_line));
             canvas.drawCircle(x, y, config.heartRadius, heartPaint);
         }
-    }
-
-    /**
-     * 绘制后续柱形图
-     */
-    private void drawPillar(Canvas canvas, int i, float pillarSpace) {
-        float pillarX;
-        float pillarStopY;
-        pillarPaint.setColor(getColor(fenShiDataManager.getPrice(i) >= fenShiDataManager.getPrice(i - 1) ? R.color.stock_red : R.color.stock_green));
-        pillarX = getPillarX(i, pillarSpace);
-        pillarStopY = getPillarHeight(i);
-        canvas.drawLine(pillarX, bottomTableMaxY, pillarX, pillarStopY, pillarPaint);
-    }
-
-    /**
-     * 绘制价格曲线
-     */
-    private void drawPricePath(Canvas canvas) {
-
-        // 绘制曲线以及区域
-        lazyPaint.drawPath(canvas)
-                .lineTo(getX(fenShiDataManager.getLastPricePosition()), getTopTableMaxY())
-                // 价格颜色区域需要进行闭合处理
-                .lineToClose(canvas, getTopTableMinX(), getTopTableMaxY(), priceAreaPaint);
-        canvas.drawPath(avePricePath, avePricePaint);
-
-        // 使用完后，重置画笔
-        avePricePath.reset();
-    }
-
-    /**
-     * 获取第i个柱状图的绘制位置（x坐标）
-     *
-     * @param i 第几个
-     * @return 第i个柱状图的绘制位置（x坐标）
-     */
-    private float getPillarX(int i, float pillarSpace) {
-        return tableMargin + (pillarSpace * i) + (i * 1f) + 1;
-    }
-
-    /**
-     * 获取第i个柱状图的高度（stop y坐标）
-     *
-     * @param i 第几个
-     * @return 第i个柱状图的高度（stop y坐标）
-     */
-    private float getPillarHeight(int i) {
-        return bottomTableMaxY - (fenShiDataManager.getVolume(i) * maxPillarHeight) / fenShiDataManager.maxVolume;
     }
 
     /**
@@ -372,13 +344,31 @@ public class FenShiView extends GridView {
     }
 
     /**
-     * 根据当前价格值获取相应y轴坐标
-     *
-     * @param price 当前价格
-     * @return 当前价格的相应y轴坐标
+     * 绘制价格、价格区域、均线、闪烁点
      */
-    private float getPriceY(float price) {
-        return getY(price, fenShiDataManager.minPrice, fenShiDataManager.maxPrice);
+    private void drawPriceLine(Canvas canvas) {
+        // 抽取第一个点确定Path的圆点
+        moveToPrice();
+
+        // 对后续点做处理
+        for (int i = 1; i < fenShiDataManager.priceSize(); i++) {
+            lineToPrice(canvas, i);
+        }
+    }
+
+    /**
+     * 绘制价格曲线
+     */
+    private void drawPricePath(Canvas canvas) {
+        // 绘制曲线以及区域
+        lazyPaint.drawPath(canvas)
+                .lineTo(getX(fenShiDataManager.getLastPricePosition()), getTopTableMaxY())
+                // 价格颜色区域需要进行闭合处理
+                .lineToClose(canvas, getTopTableMinX(), getTopTableMaxY(), priceAreaPaint);
+        canvas.drawPath(avePricePath, avePricePaint);
+
+        // 使用完后，重置画笔
+        avePricePath.reset();
     }
 
     public <T extends IFenShi> void setData(T fenShi) {
