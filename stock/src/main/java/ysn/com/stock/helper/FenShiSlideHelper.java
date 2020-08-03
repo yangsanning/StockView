@@ -10,6 +10,8 @@ import android.view.MotionEvent;
 import ysn.com.stock.R;
 import ysn.com.stock.interceptor.FenShiUnitInterceptor;
 import ysn.com.stock.manager.FenShiDataManager;
+import ysn.com.stock.paint.LazyPaint;
+import ysn.com.stock.paint.LazyTextPaint;
 import ysn.com.stock.utils.NumberUtils;
 import ysn.com.stock.view.base.StockView;
 
@@ -37,17 +39,13 @@ public class FenShiSlideHelper {
     private float bottomTableHeight, bottomTableMaxY, bottomTableMinY;
     private boolean hasBottomTable;
     private int totalCount;
-    private Paint textPaint;
-    private Rect textRect;
 
     /**
      * 数据管理
      */
     private FenShiDataManager dataManager;
 
-    private Paint slidePaint;
-    private Paint slideAreaPaint;
-    private Path path;
+    private LazyPaint lazyPaint;
 
     private float slideX, slideY;
     private float textRectHalfHeight;
@@ -69,20 +67,7 @@ public class FenShiSlideHelper {
     public FenShiSlideHelper(StockView stockView, FenShiDataManager dataManager) {
         this.stockView = stockView;
         this.dataManager = dataManager;
-        initPaint();
-    }
-
-    private void initPaint() {
-        slidePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        slidePaint.setColor(getColor(R.color.stock_slide_line));
-        slidePaint.setStrokeWidth(2.0f);
-        slidePaint.setStyle(Paint.Style.STROKE);
-
-        slideAreaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        slideAreaPaint.setColor(getColor(R.color.stock_area_fq));
-        slideAreaPaint.setStyle(Paint.Style.FILL);
-
-        path = new Path();
+        this.lazyPaint = stockView.lazyPaint;
     }
 
     public void dispatchTouchEvent(MotionEvent ev) {
@@ -165,8 +150,6 @@ public class FenShiSlideHelper {
         }
 
         totalCount = stockView.getTotalCount();
-        textPaint = stockView.getTextPaint();
-        textRect = stockView.getTextRect();
     }
 
     /**
@@ -218,21 +201,19 @@ public class FenShiSlideHelper {
      */
     private void drawSlideLine(Canvas canvas) {
         float lineX = Math.min(getX(slideNum), viewWidth - tableMargin);
-        //和绘制竖线
-        canvas.drawLine(lineX, -topTableHeight, lineX, viewHeight, slidePaint);
-        // 绘制横线
-        canvas.drawLine(tableMargin, slideLineY, (viewWidth - tableMargin), slideLineY, slidePaint);
+        lazyPaint.setLineColor(getColor(R.color.stock_slide_line))
+                // 绘制竖线
+                .drawLine(canvas, lineX, -topTableHeight, lineX, viewHeight)
+                // 绘制横线
+                .drawLine(canvas, tableMargin, slideLineY, (viewWidth - tableMargin), slideLineY);
     }
 
     /**
      * 绘制滑动时间
      */
     private void drawSlideTime(Canvas canvas) {
-        textPaint.setColor(getColor(R.color.stock_text_title));
-        String timeText = dataManager.getTime(slideNum);
-        textPaint.getTextBounds(timeText, 0, timeText.length(), textRect);
-
-        float rectWidth = textRect.width() + textMargin * 4;
+        LazyTextPaint lazyTextPaint = lazyPaint.measure(dataManager.getTime(slideNum));
+        float rectWidth = lazyTextPaint.width() + textMargin * 4;
         float rectHalfWidth = rectWidth / 2;
 
         float slideRectLeft = getX(slideNum) - rectHalfWidth;
@@ -242,53 +223,54 @@ public class FenShiSlideHelper {
             slideRectLeft = viewWidth - tableMargin - rectWidth;
         }
 
-        float slipRectTop = timeTableMinY;
+        float slideRectTop = timeTableMinY;
         float slideRectBottom = timeTableMaxY;
         float slideRectRight = slideRectLeft + rectWidth;
 
-        canvas.drawRect(slideRectLeft, slipRectTop, slideRectRight, slideRectBottom, slideAreaPaint);
-        path.reset();
-        path.moveTo(slideRectLeft, slipRectTop);
-        path.lineTo(slideRectRight, slipRectTop);
-        path.lineTo(slideRectRight, slideRectBottom);
-        path.lineTo(slideRectLeft, slideRectBottom);
-        path.lineTo(slideRectLeft, slipRectTop);
-        canvas.drawPath(path, slidePaint);
+        // 绘制背景以及边框
+        lazyPaint.drawRect(canvas, slideRectLeft, slideRectTop, slideRectRight, slideRectBottom, getColor(R.color.stock_area_fq))
+                .setLineColor(getColor(R.color.stock_slide_line))
+                .moveTo(slideRectLeft, slideRectTop)
+                .lineTo(slideRectRight, slideRectTop)
+                .lineTo(slideRectRight, slideRectBottom)
+                .lineTo(slideRectLeft, slideRectBottom)
+                .lineToClose(canvas, slideRectLeft, slideRectTop);
 
-        canvas.drawText(timeText, (slideRectLeft + textMargin * 2),  (slipRectTop + ((timeTableHeight + textRect.height()) / 2f)), textPaint);
+        // 绘制相应值
+        lazyTextPaint.setColor(getColor(R.color.stock_text_title))
+                .drawText(canvas, (slideRectLeft + textMargin * 2), (slideRectTop + ((timeTableHeight + lazyTextPaint.height()) / 2f)));
     }
 
     /**
      * 绘制成滑动值
      */
     private void drawSlideValue(Canvas canvas) {
-        textPaint.getTextBounds(slideValue, 0, slideValue.length(), textRect);
+        LazyTextPaint lazyTextPaint = lazyPaint.measure(slideValue);
+
         float slideRectTop = slideLineY - textRectHalfHeight;
         float slideRectBottom = slideLineY + textRectHalfHeight;
         float slideRectLeft;
         float slideRectRight;
         if (slideX < viewWidth / 3f) {
-            slideRectLeft = viewWidth - textRect.width() - (tableMargin + 1) * 11;
+            slideRectLeft = viewWidth - lazyTextPaint.width() - (tableMargin + 1) * 11;
             slideRectRight = viewWidth - tableMargin - 1f;
         } else {
             slideRectLeft = tableMargin + 1;
-            slideRectRight = slideRectLeft + textRect.width() + (tableMargin + 1f) * 11;
+            slideRectRight = slideRectLeft + lazyTextPaint.width() + (tableMargin + 1f) * 11;
         }
 
-        // 绘制背景
-        canvas.drawRect(slideRectLeft, slideRectTop, slideRectRight, slideRectBottom, slideAreaPaint);
+        // 绘制背景以及边框
+        lazyPaint.drawRect(canvas, slideRectLeft, slideRectTop, slideRectRight, slideRectBottom, getColor(R.color.stock_area_fq))
+                .setLineColor(getColor(R.color.stock_slide_line))
+                .moveTo(slideRectLeft, slideRectTop)
+                .lineTo(slideRectRight, slideRectTop)
+                .lineTo(slideRectRight, slideRectBottom)
+                .lineTo(slideRectLeft, slideRectBottom)
+                .lineToClose(canvas, slideRectLeft, slideRectTop);
 
-        // 绘制边框
-        path.reset();
-        path.moveTo(slideRectLeft, slideRectTop);
-        path.lineTo(slideRectRight, slideRectTop);
-        path.lineTo(slideRectRight, slideRectBottom);
-        path.lineTo(slideRectLeft, slideRectBottom);
-        path.lineTo(slideRectLeft, slideRectTop);
-        canvas.drawPath(path, slidePaint);
-
-        // 绘制文本
-        canvas.drawText(slideValue, (slideRectLeft + (tableMargin + 1) * 4), (slideLineY + textRect.height() / 2f), textPaint);
+        // 绘制相应值
+        lazyTextPaint.setColor(getColor(R.color.stock_text_title))
+                .drawText(canvas, (slideRectLeft + (tableMargin + 1) * 4), (slideLineY + lazyTextPaint.height() / 2f));
     }
 
     /**

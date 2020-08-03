@@ -35,6 +35,13 @@ public class LazyPaint {
     /**
      * 测量文本
      */
+    public LazyTextPaint measure(String text) {
+        return lazyTextPaint.measure(text);
+    }
+
+    /**
+     * 测量文本
+     */
     public LazyPaint measure(String text, OnSomeOneCallBack<LazyTextPaint> callBack) {
         callBack.onCallBack(lazyTextPaint.measure(text));
         return this;

@@ -32,7 +32,7 @@ public class StockView extends View {
 
     protected Context context;
 
-    protected LazyPaint lazyPaint = new LazyPaint();
+    public LazyPaint lazyPaint = new LazyPaint();
 
     /**
      * 是否启用下表格
