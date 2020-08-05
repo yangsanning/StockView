@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.RectF;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -15,9 +16,11 @@ import android.view.MotionEvent;
 import ysn.com.stock.R;
 import ysn.com.stock.bean.IFenShi;
 import ysn.com.stock.config.FenShiConfig;
-import ysn.com.stock.helper.FenShiSlideHelper;
+import ysn.com.stock.bridge.CommonSlideBridge;
 import ysn.com.stock.interceptor.FenShiUnitInterceptor;
 import ysn.com.stock.manager.FenShiDataManager;
+import ysn.com.stock.paint.LazyTextPaint;
+import ysn.com.stock.utils.NumberUtils;
 import ysn.com.stock.view.base.GridView;
 
 /**
@@ -27,7 +30,7 @@ import ysn.com.stock.view.base.GridView;
  * @Date 2019/5/4
  * @History 2019/5/4 author: description:
  */
-public class FenShiView extends GridView {
+public class FenShiView extends GridView implements CommonSlideBridge.OnSlideBridgeListener {
 
     private FenShiConfig config;
 
@@ -61,8 +64,9 @@ public class FenShiView extends GridView {
         }
     };
 
-    private FenShiDataManager fenShiDataManager;
-    private FenShiSlideHelper fenShiSlideHelper;
+    private FenShiDataManager dataManager;
+    private CommonSlideBridge slideBridge;
+    private FenShiUnitInterceptor fenShiUnitInterceptor;
 
     public FenShiView(Context context) {
         super(context);
@@ -84,9 +88,9 @@ public class FenShiView extends GridView {
     @Override
     protected void init(AttributeSet attrs) {
         super.init(attrs);
-        fenShiDataManager = new FenShiDataManager(decimalFormat);
+        dataManager = new FenShiDataManager(decimalFormat);
         if (config.isEnabledSlide) {
-            fenShiSlideHelper = new FenShiSlideHelper(this, fenShiDataManager);
+            slideBridge = new CommonSlideBridge(this);
         }
     }
 
@@ -129,7 +133,7 @@ public class FenShiView extends GridView {
 
     @Override
     public int getTotalCount() {
-        return fenShiDataManager.totalCount == 0 ? super.getTotalCount() : fenShiDataManager.totalCount;
+        return dataManager.totalCount == 0 ? super.getTotalCount() : dataManager.totalCount;
     }
 
     @Override
@@ -139,29 +143,38 @@ public class FenShiView extends GridView {
         // 这里对柱形图最大高度进行限制, 避免顶到时间表格难看
         maxPillarHeight = (bottomTableHeight - 1) * 0.95f;
         bottomTableMaxY = getBottomTableMaxY();
+
+        if (slideBridge != null) {
+            slideBridge.bindView(this);
+        }
     }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        if (fenShiSlideHelper != null) {
-            fenShiSlideHelper.dispatchTouchEvent(event);
+        if (slideBridge != null) {
+            slideBridge.dispatchTouchEvent(this, event);
         }
         return super.dispatchTouchEvent(event);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (fenShiSlideHelper != null) {
-            return fenShiSlideHelper.onTouchEvent(event);
+        if (slideBridge != null) {
+            return slideBridge.onTouchEvent(event);
         }
         return super.onTouchEvent(event);
+    }
+
+    @Override
+    public void onRePaint() {
+        postInvalidate();
     }
 
     @Override
     protected void onChildDraw(Canvas canvas) {
         super.onChildDraw(canvas);
 
-        if (fenShiDataManager.isPriceEmpty()) {
+        if (dataManager.isPriceEmpty()) {
             return;
         }
 
@@ -182,9 +195,8 @@ public class FenShiView extends GridView {
         // 绘制价格曲线
         drawPricePath(canvas);
 
-        if (fenShiSlideHelper != null) {
-            fenShiSlideHelper.draw(canvas);
-        }
+        // 绘制滑动相关
+        drawSlide(canvas);
     }
 
     /**
@@ -194,29 +206,29 @@ public class FenShiView extends GridView {
         float topRowSpacing = getTopRowSpacing();
         int partTopHorizontal = getPartTopHorizontal();
         lazyPaint.setTextColor(getColor(R.color.stock_red))
-                .measure(decimalFormat.format(fenShiDataManager.maxPrice), lazyTextPaint -> {
+                .measure(decimalFormat.format(dataManager.maxPrice), lazyTextPaint -> {
                     // 价格最大值
                     float y2 = getTopCoordinateY(partTopHorizontal, getTopRowY(topRowSpacing, partTopHorizontal), lazyTextPaint);
                     lazyTextPaint.drawTableStartText(canvas, getTopTableMinX(), xYTextMargin, y2);
                 })
-                .measure(("+" + fenShiDataManager.percent), lazyTextPaint -> {
+                .measure(("+" + dataManager.percent), lazyTextPaint -> {
                     // 增幅
                     float y2 = getTopCoordinateY(partTopHorizontal, getTopRowY(topRowSpacing, partTopHorizontal), lazyTextPaint);
                     lazyTextPaint.drawTableEndText(canvas, getTopTableMaxX(), xYTextMargin, y2);
                 })
                 .setTextColor(getColor(R.color.stock_green))
-                .measure(decimalFormat.format(fenShiDataManager.minPrice), lazyTextPaint -> {
+                .measure(decimalFormat.format(dataManager.minPrice), lazyTextPaint -> {
                     // 价格最小值
                     float y2 = getTopCoordinateY(0, getTopRowY(topRowSpacing, 0), lazyTextPaint);
                     lazyTextPaint.drawTableStartText(canvas, getTopTableMinX(), xYTextMargin, y2);
                 })
-                .measure(("-" + fenShiDataManager.percent), lazyTextPaint -> {
+                .measure(("-" + dataManager.percent), lazyTextPaint -> {
                     // 减幅
                     float y2 = getTopCoordinateY(0, getTopRowY(topRowSpacing, 0), lazyTextPaint);
                     lazyTextPaint.drawTableEndText(canvas, getTopTableMaxX(), xYTextMargin, y2);
                 })
                 .setTextColor(getColor(R.color.stock_text_title))
-                .measure(decimalFormat.format(fenShiDataManager.lastClose), lazyTextPaint -> {
+                .measure(decimalFormat.format(dataManager.lastClose), lazyTextPaint -> {
                     // 中间坐标
                     int position = partTopHorizontal / 2;
                     float y2 = getTopCoordinateY(position, getTopRowY(topRowSpacing, position), lazyTextPaint);
@@ -237,16 +249,16 @@ public class FenShiView extends GridView {
         moveToPrice();
 
         // 绘制第一个点柱状图（第一个点要跟昨收做对比）
-        pillarPaint.setColor(getColor(fenShiDataManager.getPrice(0) >= fenShiDataManager.lastClose ?
+        pillarPaint.setColor(getColor(dataManager.getPrice(0) >= dataManager.lastClose ?
                 R.color.stock_red : R.color.stock_green));
         drawPillar(canvas, 0, pillarSpace);
 
-        for (int i = 1; i < fenShiDataManager.priceSize(); i++) {
+        for (int i = 1; i < dataManager.priceSize(); i++) {
             // 记录后续价格点
             lineToPrice(canvas, i);
 
             // 绘制后续柱形图
-            pillarPaint.setColor(getColor(fenShiDataManager.getPrice(i) >= fenShiDataManager.getPrice(i - 1) ?
+            pillarPaint.setColor(getColor(dataManager.getPrice(i) >= dataManager.getPrice(i - 1) ?
                     R.color.stock_red : R.color.stock_green));
             drawPillar(canvas, i, pillarSpace);
         }
@@ -257,8 +269,8 @@ public class FenShiView extends GridView {
      */
     private void moveToPrice() {
         float x = getX(0);
-        lazyPaint.moveTo(x, getTopTableY(fenShiDataManager.getPrice(0)));
-        avePricePath.moveTo(x, getTopTableY(fenShiDataManager.getAvePrice(0)));
+        lazyPaint.moveTo(x, getTopTableY(dataManager.getPrice(0)));
+        avePricePath.moveTo(x, getTopTableY(dataManager.getAvePrice(0)));
     }
 
     /**
@@ -268,7 +280,7 @@ public class FenShiView extends GridView {
      * @return 当前价格的相应y轴坐标
      */
     private float getTopTableY(float price) {
-        return getY(price, fenShiDataManager.minPrice, fenShiDataManager.maxPrice);
+        return getY(price, dataManager.minPrice, dataManager.maxPrice);
     }
 
     /**
@@ -297,7 +309,7 @@ public class FenShiView extends GridView {
      * @return 第i个柱状图的高度（stop y坐标）
      */
     private float getPillarHeight(int position) {
-        return getBottomTableMaxY() - (fenShiDataManager.getVolume(position) * maxPillarHeight) / fenShiDataManager.maxVolume;
+        return getBottomTableMaxY() - (dataManager.getVolume(position) * maxPillarHeight) / dataManager.maxVolume;
     }
 
     /**
@@ -305,13 +317,13 @@ public class FenShiView extends GridView {
      */
     private void lineToPrice(Canvas canvas, int i) {
         float x = getX(i);
-        float y = getTopTableY(fenShiDataManager.getPrice(i));
+        float y = getTopTableY(dataManager.getPrice(i));
         lazyPaint.setLineColor(getColor(R.color.stock_price_line))
                 .setLineStrokeWidth(config.priceStrokeWidth)
                 .lineTo(x, y);
-        avePricePath.lineTo(x, getTopTableY(fenShiDataManager.getAvePrice(i)));
+        avePricePath.lineTo(x, getTopTableY(dataManager.getAvePrice(i)));
 
-        if (isBeat && fenShiDataManager.isLastPrice(i)) {
+        if (isBeat && dataManager.isLastPrice(i)) {
             // 绘制扩散圆
             heartPaint.setColor(getColor(R.color.stock_price_line));
             heartPaint.setAlpha((int) (config.heartInitAlpha - config.heartInitAlpha * beatFraction));
@@ -328,15 +340,15 @@ public class FenShiView extends GridView {
      * 绘制下表格坐标
      */
     private void drawBottomTableCoordinate(Canvas canvas) {
-        lazyPaint.measure(fenShiDataManager.currentVolumeString, lazyTextPaint -> {
+        lazyPaint.measure(dataManager.currentVolumeString, lazyTextPaint -> {
             // 下表格当前成交量
             float y = getBottomTableMinY() + lazyTextPaint.height() + xYTextMargin;
             lazyTextPaint.drawTableStartText(canvas, getBottomTableMinX(), xYTextMargin, y);
-        }).measure(fenShiDataManager.maxVolumeString, lazyTextPaint -> {
+        }).measure(dataManager.maxVolumeString, lazyTextPaint -> {
             // 下表格最大成交量
             float y = getBottomTableMinY() + lazyTextPaint.height() + xYTextMargin;
             lazyTextPaint.drawTableEndText(canvas, getBottomTableMaxX(), xYTextMargin, y);
-        }).measure(fenShiDataManager.centreVolumeString, lazyTextPaint -> {
+        }).measure(dataManager.centreVolumeString, lazyTextPaint -> {
             // 下表格中间值
             float y = (getBottomTableMinY() + (getBottomTableHeight() + lazyTextPaint.height()) / 2);
             lazyTextPaint.drawTableEndText(canvas, getBottomTableMaxX(), xYTextMargin, y);
@@ -351,7 +363,7 @@ public class FenShiView extends GridView {
         moveToPrice();
 
         // 对后续点做处理
-        for (int i = 1; i < fenShiDataManager.priceSize(); i++) {
+        for (int i = 1; i < dataManager.priceSize(); i++) {
             lineToPrice(canvas, i);
         }
     }
@@ -362,7 +374,7 @@ public class FenShiView extends GridView {
     private void drawPricePath(Canvas canvas) {
         // 绘制曲线以及区域
         lazyPaint.drawPath(canvas)
-                .lineTo(getX(fenShiDataManager.getLastPricePosition()), getTopTableMaxY())
+                .lineTo(getX(dataManager.getLastPricePosition()), getTopTableMaxY())
                 // 价格颜色区域需要进行闭合处理
                 .lineToClose(canvas, getTopTableMinX(), getTopTableMaxY(), priceAreaPaint);
         canvas.drawPath(avePricePath, avePricePaint);
@@ -371,8 +383,94 @@ public class FenShiView extends GridView {
         avePricePath.reset();
     }
 
+    /**
+     * 绘制滑动相关
+     */
+    private void drawSlide(Canvas canvas) {
+        if (slideBridge != null && slideBridge.isLongPress) {
+            slideBridge.convert(dataManager.priceSize(), getTotalCount(),
+                    dataManager.maxPrice, dataManager.minPrice, dataManager.maxVolume, (0));
+
+            // 绘制滑动线
+            drawSlideLine(canvas, slideBridge.slidePosition, slideBridge.slideLineY);
+            // 绘制滑动值
+            drawSlideValue(canvas, slideBridge.slideValue);
+            // 绘制滑动时间
+            drawSlideTime(canvas, slideBridge.slidePosition);
+        }
+    }
+
+    /**
+     * 绘制滑动线
+     */
+    private void drawSlideLine(Canvas canvas, int slidePosition, float slideLineY) {
+        float lineX = Math.min(getX(slidePosition), getTopTableMaxX());
+        lazyPaint.setLineColor(getColor(R.color.stock_slide_line))
+                // 绘制竖线
+                .drawLine(canvas, lineX, -topTableHeight, lineX, viewHeight)
+                // 绘制横线
+                .drawLine(canvas, tableMargin, slideLineY, (viewWidth - tableMargin), slideLineY);
+    }
+
+    /**
+     * 绘制成滑动值
+     */
+    private void drawSlideValue(Canvas canvas, float slideValue) {
+        String slideText;
+        if (slideBridge.slideY > 0) {
+            slideText = fenShiUnitInterceptor == null ? NumberUtils.decimalFormat(slideValue) :
+                    fenShiUnitInterceptor.slipVolume(slideValue);
+        } else {
+            slideText = fenShiUnitInterceptor == null ? NumberUtils.decimalFormat(slideValue) :
+                    fenShiUnitInterceptor.slipPrice(slideValue);
+        }
+
+        LazyTextPaint lazyTextPaint = lazyPaint.measure(slideText);
+        RectF slideRectF = slideBridge.getSlideRectF(lazyTextPaint.width());
+        // 绘制背景以及边框
+        lazyPaint.drawRect(canvas, slideRectF, getColor(R.color.stock_area_fq), getColor(R.color.stock_slide_line));
+
+        // 绘制相应值
+        lazyTextPaint.setColor(getColor(R.color.stock_text_title))
+                .drawTableCenterText(canvas, slideRectF.left, (slideRectF.right - slideRectF.left),
+                        slideBridge.getSlideValueY(lazyTextPaint.height()));
+    }
+
+    /**
+     * 绘制滑动时间
+     */
+    private void drawSlideTime(Canvas canvas, int slidePosition) {
+        LazyTextPaint lazyTextPaint = lazyPaint.measure(dataManager.getTime(slidePosition));
+        float rectWidth = lazyTextPaint.width() + getTextMargin() * 4;
+        float rectHalfWidth = rectWidth / 2;
+
+        float slideRectLeft = getX(slidePosition) - rectHalfWidth;
+        if (slideBridge.slideX < tableMargin + rectHalfWidth) {
+            slideRectLeft = tableMargin;
+        } else if (slideBridge.slideX > viewWidth - tableMargin - rectHalfWidth) {
+            slideRectLeft = viewWidth - tableMargin - rectWidth;
+        }
+
+        float slideRectTop = getTimeTableMinY();
+        float slideRectBottom = getTimeTableMaxY();
+        float slideRectRight = slideRectLeft + rectWidth;
+
+        // 绘制背景以及边框
+        lazyPaint.drawRect(canvas, slideRectLeft, slideRectTop, slideRectRight, slideRectBottom, getColor(R.color.stock_area_fq))
+                .setLineColor(getColor(R.color.stock_slide_line))
+                .moveTo(slideRectLeft, slideRectTop)
+                .lineTo(slideRectRight, slideRectTop)
+                .lineTo(slideRectRight, slideRectBottom)
+                .lineTo(slideRectLeft, slideRectBottom)
+                .lineToClose(canvas, slideRectLeft, slideRectTop);
+
+        // 绘制相应值
+        lazyTextPaint.setColor(getColor(R.color.stock_text_title))
+                .drawText(canvas, (slideRectLeft + getTextMargin() * 2), (slideRectTop + ((timeTableHeight + lazyTextPaint.height()) / 2f)));
+    }
+
     public <T extends IFenShi> void setData(T fenShi) {
-        fenShiDataManager.setData(fenShi);
+        dataManager.setData(fenShi);
         invalidate();
         startBeat();
     }
@@ -382,7 +480,7 @@ public class FenShiView extends GridView {
      */
     public void startBeat() {
         stopBeat();
-        if (fenShiDataManager.isTimeNotEmpty() && isBeatTime()) {
+        if (dataManager.isTimeNotEmpty() && isBeatTime()) {
             isBeat = true;
             beatHandler.post(beatRunnable);
         }
@@ -392,7 +490,7 @@ public class FenShiView extends GridView {
      * 是否可以开启心跳
      */
     public boolean isBeatTime() {
-        String lastTime = fenShiDataManager.getLastTime();
+        String lastTime = dataManager.getLastTime();
         return !"11:30".equals(lastTime) && !"15:00".equals(lastTime);
     }
 
@@ -408,6 +506,7 @@ public class FenShiView extends GridView {
      * 设置分时单位转换拦截器
      */
     public void setFenShiUnitInterceptor(FenShiUnitInterceptor fenShiUnitInterceptor) {
-        fenShiDataManager.setFenShiUnitInterceptor(fenShiUnitInterceptor);
+        this.fenShiUnitInterceptor = fenShiUnitInterceptor;
+        dataManager.setFenShiUnitInterceptor(fenShiUnitInterceptor);
     }
 }

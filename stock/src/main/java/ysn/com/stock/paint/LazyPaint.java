@@ -3,6 +3,7 @@ package ysn.com.stock.paint;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PathEffect;
+import android.graphics.RectF;
 import android.support.annotation.ColorInt;
 
 import ysn.com.stock.function.OnSomeOneCallBack;
@@ -220,6 +221,15 @@ public class LazyPaint {
      */
     public LazyPaint drawRect(Canvas canvas, float left, float top, float right, float bottom, @ColorInt int color) {
         lazyLinePaint.drawRect(canvas, left, top, right, bottom, color);
+        return this;
+    }
+
+    /**
+     * 绘制矩形
+     * 须知：这里已经设置了 Paint.Style.FILL ，绘制完成后会重置 Style
+     */
+    public LazyPaint drawRect(Canvas canvas, RectF rect, @ColorInt int bgColor, @ColorInt int strokeColor) {
+        lazyLinePaint.drawRect(canvas, rect, bgColor,strokeColor);
         return this;
     }
 

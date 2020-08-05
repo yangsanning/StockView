@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathEffect;
+import android.graphics.RectF;
 import android.support.annotation.ColorInt;
 
 /**
@@ -214,6 +215,18 @@ public class LazyLinePaint {
         setStyle(Paint.Style.FILL).setColor(color);
         canvas.drawRect(left, top, right, bottom, linePaint);
         resetStyle();
+        return this;
+    }
+
+    /**
+     * 绘制矩形
+     * 须知：这里已经设置了 Paint.Style.FILL ，绘制完成后会重置 Style
+     */
+    public LazyLinePaint drawRect(Canvas canvas, RectF rect, @ColorInt int bgColor, @ColorInt int strokeColor) {
+        setStyle(Paint.Style.FILL).setColor(bgColor);
+        canvas.drawRect(rect, linePaint);
+        resetStyle().setColor(strokeColor);
+        canvas.drawRect(rect, linePaint);
         return this;
     }
 

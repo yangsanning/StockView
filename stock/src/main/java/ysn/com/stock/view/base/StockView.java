@@ -239,7 +239,7 @@ public class StockView extends View {
      * 获取上表格最小Y
      */
     public float getTopTableMinY() {
-        return -topTableHeight;
+        return getTableMargin() - topTableHeight;
     }
 
     /**
@@ -285,7 +285,7 @@ public class StockView extends View {
      * 获取下表格最大Y
      */
     public float getBottomTableMaxY() {
-        return bottomTableHeight + middleTableHeight;
+        return getTableMargin() + bottomTableHeight + middleTableHeight;
     }
 
     /**
