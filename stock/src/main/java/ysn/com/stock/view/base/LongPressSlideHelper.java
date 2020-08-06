@@ -1,4 +1,4 @@
-package ysn.com.stock.bridge;
+package ysn.com.stock.view.base;
 
 import android.graphics.Canvas;
 import android.os.Handler;
@@ -6,12 +6,12 @@ import android.view.MotionEvent;
 import android.view.View;
 
 /**
- * @Author yangsanning
- * @ClassName BaseSlideBridge
- * @Description 处理滑动事件
+ * @Author LongPressSlideHelper
+ * @ClassName LongPressHelper
+ * @Description 处理长按滑动事件
  * @Date 2020/8/3
  */
-public abstract class BaseSlideBridge {
+public class LongPressSlideHelper {
 
     /**
      * 滑动的阈值
@@ -23,22 +23,23 @@ public abstract class BaseSlideBridge {
      */
     private static final int LONG_PRESS_DELAY_MILLIS = 800;
 
+    private float circleY;
     public float slideX, slideY;
     public boolean isLongPress;
 
     private Handler handler = new Handler();
     private Runnable longPressRunnable = () -> {
         isLongPress = true;
-        onRePaint();
+        onLongPressSlide();
     };
 
-    private OnSlideBridgeListener onSlideBridgeListener;
+    private OnLongPressSlideListener onLongPressSlideListener;
 
-    public BaseSlideBridge(OnSlideBridgeListener onSlideBridgeListener) {
-        this.onSlideBridgeListener = onSlideBridgeListener;
+    public LongPressSlideHelper(OnLongPressSlideListener onLongPressSlideListener) {
+        this.onLongPressSlideListener = onLongPressSlideListener;
     }
 
-    public void dispatchTouchEvent(View view, MotionEvent ev) {
+    public void dispatchTouchEvent(View view, MotionEvent event) {
         view.getParent().requestDisallowInterceptTouchEvent(isLongPress);
     }
 
@@ -46,9 +47,9 @@ public abstract class BaseSlideBridge {
         float x = event.getX();
         /**
          * 为了方便计算, 这里也以原点为中心
-         * 原点坐标更改: {@link ysn.com.stock.view.base.StockView#onDraw(Canvas)}
+         * {@link ysn.com.stock.view.base.StockView#onDraw(Canvas)} 已经进行了原点坐标修改
          */
-        float y = event.getY() - getOriginAbsoluteY();
+        float y = event.getY() - circleY;
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 slideX = x;
@@ -60,19 +61,19 @@ public abstract class BaseSlideBridge {
                 if (isLongPress) {
                     slideX = x;
                     slideY = y;
-                    onRePaint();
+                    onLongPressSlide();
                 } else {
                     if (Math.abs(slideX - x) > TOUCH_SLOP || Math.abs(slideY - y) > TOUCH_SLOP) {
                         handler.removeCallbacks(longPressRunnable);
                         isLongPress = false;
-                        onRePaint();
+                        onLongPressSlide();
                     }
                 }
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_OUTSIDE:
                 isLongPress = false;
-                onRePaint();
+                onLongPressSlide();
                 break;
             default:
                 break;
@@ -80,17 +81,23 @@ public abstract class BaseSlideBridge {
         return true;
     }
 
-    /**
-     * 坐标原点Y的绝对坐标（下面坐标计算以原点为中心）
-     */
-    public abstract float getOriginAbsoluteY();
-
-    public void onRePaint() {
-        onSlideBridgeListener.onRePaint();
+    public void setCircleY(float circleY) {
+        this.circleY = circleY;
     }
 
-    public interface OnSlideBridgeListener {
+    public void onLongPressSlide() {
+        onLongPressSlideListener.onLongPressSlide(isLongPress, slideX, slideY);
+    }
 
-        void onRePaint();
+    public interface OnLongPressSlideListener {
+
+        /**
+         * 长按滑动回调
+         *
+         * @param isLongPress 是否长按
+         * @param slideX      滑动x坐标
+         * @param slideY      滑动y坐标（经过原点计算）
+         */
+        void onLongPressSlide(boolean isLongPress, float slideX, float slideY);
     }
 }

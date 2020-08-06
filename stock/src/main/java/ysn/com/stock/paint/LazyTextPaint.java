@@ -111,6 +111,17 @@ public class LazyTextPaint {
     }
 
     /**
+     * 绘制表格横向居中文本
+     *
+     * @param tableMinX      表格最小 X 坐标
+     * @param containerWidth 容器宽
+     * @param y              y 坐标
+     */
+    public void drawTableCenterText(Canvas canvas, @ColorInt int color, float tableMinX, float containerWidth, float y) {
+        drawText(canvas, color, (tableMinX + centerX(containerWidth)), y);
+    }
+
+    /**
      * 绘制表格横向末端文本
      *
      * @param tableMaxX 表格最大 X 坐标
@@ -125,6 +136,14 @@ public class LazyTextPaint {
      * 绘制文本
      */
     public void drawText(Canvas canvas, float x, float y) {
+        canvas.drawText(latestMeasureText, x, y, textPaint);
+    }
+
+    /**
+     * 绘制文本
+     */
+    public void drawText(Canvas canvas, @ColorInt int color, float x, float y) {
+        setColor(color);
         canvas.drawText(latestMeasureText, x, y, textPaint);
     }
 }

@@ -5,23 +5,19 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.RectF;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 
 import ysn.com.stock.R;
 import ysn.com.stock.bean.IFenShi;
 import ysn.com.stock.config.FenShiConfig;
-import ysn.com.stock.bridge.CommonSlideBridge;
 import ysn.com.stock.interceptor.FenShiUnitInterceptor;
 import ysn.com.stock.manager.FenShiDataManager;
-import ysn.com.stock.paint.LazyTextPaint;
 import ysn.com.stock.utils.NumberUtils;
-import ysn.com.stock.view.base.GridView;
+import ysn.com.stock.view.base.GridSlideView;
 
 /**
  * @Author yangsanning
@@ -30,7 +26,7 @@ import ysn.com.stock.view.base.GridView;
  * @Date 2019/5/4
  * @History 2019/5/4 author: description:
  */
-public class FenShiView extends GridView implements CommonSlideBridge.OnSlideBridgeListener {
+public class FenShiView extends GridSlideView {
 
     private FenShiConfig config;
 
@@ -38,11 +34,9 @@ public class FenShiView extends GridView implements CommonSlideBridge.OnSlideBri
     private Paint avePricePaint, priceAreaPaint;
 
     /**
-     * bottomTableMaxY: 下表格最大宽度
      * pillarSpace: 柱状图间距
      * maxPillarHeight: 柱状图绘制最大高度
      */
-    private float bottomTableMaxY;
     private Paint pillarPaint;
     private float maxPillarHeight;
 
@@ -65,8 +59,7 @@ public class FenShiView extends GridView implements CommonSlideBridge.OnSlideBri
     };
 
     private FenShiDataManager dataManager;
-    private CommonSlideBridge slideBridge;
-    private FenShiUnitInterceptor fenShiUnitInterceptor;
+    private FenShiUnitInterceptor interceptor;
 
     public FenShiView(Context context) {
         super(context);
@@ -89,9 +82,6 @@ public class FenShiView extends GridView implements CommonSlideBridge.OnSlideBri
     protected void init(AttributeSet attrs) {
         super.init(attrs);
         dataManager = new FenShiDataManager(decimalFormat);
-        if (config.isEnabledSlide) {
-            slideBridge = new CommonSlideBridge(this);
-        }
     }
 
     @Override
@@ -142,32 +132,26 @@ public class FenShiView extends GridView implements CommonSlideBridge.OnSlideBri
 
         // 这里对柱形图最大高度进行限制, 避免顶到时间表格难看
         maxPillarHeight = (bottomTableHeight - 1) * 0.95f;
-        bottomTableMaxY = getBottomTableMaxY();
-
-        if (slideBridge != null) {
-            slideBridge.bindView(this);
-        }
     }
 
     @Override
-    public boolean dispatchTouchEvent(MotionEvent event) {
-        if (slideBridge != null) {
-            slideBridge.dispatchTouchEvent(this, event);
-        }
-        return super.dispatchTouchEvent(event);
+    public boolean isEnabledSlide() {
+        return config.isEnabledSlide;
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (slideBridge != null) {
-            return slideBridge.onTouchEvent(event);
-        }
-        return super.onTouchEvent(event);
+    public String convertTopSlideValue(float slideValue) {
+        return interceptor == null ? NumberUtils.decimalFormat(slideValue) : interceptor.slipPrice(slideValue);
     }
 
     @Override
-    public void onRePaint() {
-        postInvalidate();
+    public String convertBottomSlideValue(float slideValue) {
+        return interceptor == null ? NumberUtils.decimalFormat(slideValue) : interceptor.slipVolume(slideValue);
+    }
+
+    @Override
+    public String getSlideTime(int slidePosition) {
+        return dataManager.getTime(slidePosition);
     }
 
     @Override
@@ -196,7 +180,7 @@ public class FenShiView extends GridView implements CommonSlideBridge.OnSlideBri
         drawPricePath(canvas);
 
         // 绘制滑动相关
-        drawSlide(canvas);
+        drawSlide(canvas, dataManager.priceSize(), dataManager.maxPrice, dataManager.minPrice, dataManager.maxVolume, (0));
     }
 
     /**
@@ -383,92 +367,6 @@ public class FenShiView extends GridView implements CommonSlideBridge.OnSlideBri
         avePricePath.reset();
     }
 
-    /**
-     * 绘制滑动相关
-     */
-    private void drawSlide(Canvas canvas) {
-        if (slideBridge != null && slideBridge.isLongPress) {
-            slideBridge.convert(dataManager.priceSize(), getTotalCount(),
-                    dataManager.maxPrice, dataManager.minPrice, dataManager.maxVolume, (0));
-
-            // 绘制滑动线
-            drawSlideLine(canvas, slideBridge.slidePosition, slideBridge.slideLineY);
-            // 绘制滑动值
-            drawSlideValue(canvas, slideBridge.slideValue);
-            // 绘制滑动时间
-            drawSlideTime(canvas, slideBridge.slidePosition);
-        }
-    }
-
-    /**
-     * 绘制滑动线
-     */
-    private void drawSlideLine(Canvas canvas, int slidePosition, float slideLineY) {
-        float lineX = Math.min(getX(slidePosition), getTopTableMaxX());
-        lazyPaint.setLineColor(getColor(R.color.stock_slide_line))
-                // 绘制竖线
-                .drawLine(canvas, lineX, -topTableHeight, lineX, viewHeight)
-                // 绘制横线
-                .drawLine(canvas, tableMargin, slideLineY, (viewWidth - tableMargin), slideLineY);
-    }
-
-    /**
-     * 绘制成滑动值
-     */
-    private void drawSlideValue(Canvas canvas, float slideValue) {
-        String slideText;
-        if (slideBridge.slideY > 0) {
-            slideText = fenShiUnitInterceptor == null ? NumberUtils.decimalFormat(slideValue) :
-                    fenShiUnitInterceptor.slipVolume(slideValue);
-        } else {
-            slideText = fenShiUnitInterceptor == null ? NumberUtils.decimalFormat(slideValue) :
-                    fenShiUnitInterceptor.slipPrice(slideValue);
-        }
-
-        LazyTextPaint lazyTextPaint = lazyPaint.measure(slideText);
-        RectF slideRectF = slideBridge.getSlideRectF(lazyTextPaint.width());
-        // 绘制背景以及边框
-        lazyPaint.drawRect(canvas, slideRectF, getColor(R.color.stock_area_fq), getColor(R.color.stock_slide_line));
-
-        // 绘制相应值
-        lazyTextPaint.setColor(getColor(R.color.stock_text_title))
-                .drawTableCenterText(canvas, slideRectF.left, (slideRectF.right - slideRectF.left),
-                        slideBridge.getSlideValueY(lazyTextPaint.height()));
-    }
-
-    /**
-     * 绘制滑动时间
-     */
-    private void drawSlideTime(Canvas canvas, int slidePosition) {
-        LazyTextPaint lazyTextPaint = lazyPaint.measure(dataManager.getTime(slidePosition));
-        float rectWidth = lazyTextPaint.width() + getTextMargin() * 4;
-        float rectHalfWidth = rectWidth / 2;
-
-        float slideRectLeft = getX(slidePosition) - rectHalfWidth;
-        if (slideBridge.slideX < tableMargin + rectHalfWidth) {
-            slideRectLeft = tableMargin;
-        } else if (slideBridge.slideX > viewWidth - tableMargin - rectHalfWidth) {
-            slideRectLeft = viewWidth - tableMargin - rectWidth;
-        }
-
-        float slideRectTop = getTimeTableMinY();
-        float slideRectBottom = getTimeTableMaxY();
-        float slideRectRight = slideRectLeft + rectWidth;
-
-        // 绘制背景以及边框
-        lazyPaint.drawRect(canvas, slideRectLeft, slideRectTop, slideRectRight, slideRectBottom, getColor(R.color.stock_area_fq))
-                .setLineColor(getColor(R.color.stock_slide_line))
-                .moveTo(slideRectLeft, slideRectTop)
-                .lineTo(slideRectRight, slideRectTop)
-                .lineTo(slideRectRight, slideRectBottom)
-                .lineTo(slideRectLeft, slideRectBottom)
-                .lineToClose(canvas, slideRectLeft, slideRectTop);
-
-        // 绘制相应值
-        lazyTextPaint.setColor(getColor(R.color.stock_text_title))
-                .drawText(canvas, (slideRectLeft + getTextMargin() * 2), (slideRectTop + ((timeTableHeight + lazyTextPaint.height()) / 2f)));
-    }
-
     public <T extends IFenShi> void setData(T fenShi) {
         dataManager.setData(fenShi);
         invalidate();
@@ -505,8 +403,8 @@ public class FenShiView extends GridView implements CommonSlideBridge.OnSlideBri
     /**
      * 设置分时单位转换拦截器
      */
-    public void setFenShiUnitInterceptor(FenShiUnitInterceptor fenShiUnitInterceptor) {
-        this.fenShiUnitInterceptor = fenShiUnitInterceptor;
-        dataManager.setFenShiUnitInterceptor(fenShiUnitInterceptor);
+    public void setInterceptor(FenShiUnitInterceptor interceptor) {
+        this.interceptor = interceptor;
+        dataManager.setFenShiUnitInterceptor(interceptor);
     }
 }

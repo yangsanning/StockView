@@ -29,7 +29,7 @@ public class FenShiActivity extends AppCompatActivity {
         fenShiView1.setData(JsonUtils.getData((this), ("json/fen_shi1.json"), FenShiTime.class));
 
         FenShiView fenShiView2 = findViewById(R.id.fen_shi_activity_view2);
-        fenShiView2.setFenShiUnitInterceptor(new FenShiInterceptor());
+        fenShiView2.setInterceptor(new FenShiInterceptor());
         fenShiView2.setData(JsonUtils.getData((this), ("json/fen_shi2.json"), FenShiTime.class));
     }
 }
