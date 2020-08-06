@@ -145,8 +145,8 @@ public abstract class GridSlideView extends GridView implements LongPressSlideHe
                 slideValue = bottomTableMinValue;
             } else {
                 slideLineY = longPressHelper.slideY;
-                slideValue = (Math.abs(longPressHelper.slideY) *
-                        (bottomTableMaxValue - bottomTableMinValue)) / bottomTableHeight + bottomTableMinValue;
+                slideValue = (bottomTableMaxValue - bottomTableMinValue) *
+                        (bottomTableMaxY - slideLineY) / bottomTableHeight + bottomTableMinValue;
             }
             slideText = convertBottomSlideValue(slideValue);
         } else {
