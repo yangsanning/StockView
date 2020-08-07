@@ -42,15 +42,15 @@ public class FenShiConfig {
     public void initAttr(Context context, AttributeSet attrs) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.FenShiView);
 
-        priceStrokeWidth = typedArray.getDimensionPixelSize(R.styleable.FenShiView_fsv_price_stroke_width, 2);
+        priceStrokeWidth = typedArray.getDimensionPixelSize(R.styleable.FenShiView_priceStrokeWidth, 2);
 
-        heartRadius = typedArray.getDimensionPixelSize(R.styleable.FenShiView_fsv_heart_radius, 5);
-        heartDiameter = typedArray.getDimensionPixelSize(R.styleable.FenShiView_fsv_heart_diameter, 40);
-        heartInitAlpha = typedArray.getInteger(R.styleable.FenShiView_fsv_heart_init_alpha, 255);
-        heartBeatRate = typedArray.getInteger(R.styleable.FenShiView_fsv_heart_beat_rate, 2000);
-        heartBeatFractionRate = typedArray.getInteger(R.styleable.FenShiView_fsv_heart_beat_fraction_rate, 2000);
+        heartRadius = typedArray.getDimensionPixelSize(R.styleable.FenShiView_heartRadius, 5);
+        heartDiameter = typedArray.getDimensionPixelSize(R.styleable.FenShiView_heartDiameter, 40);
+        heartInitAlpha = typedArray.getInteger(R.styleable.FenShiView_heartInitAlpha, 255);
+        heartBeatRate = typedArray.getInteger(R.styleable.FenShiView_heartBeatRate, 2000);
+        heartBeatFractionRate = typedArray.getInteger(R.styleable.FenShiView_heartBeatFractionRate, 2000);
 
-        isEnabledSlide = typedArray.getBoolean(R.styleable.FenShiView_fsv_is_enabled_slide, Boolean.FALSE);
+        isEnabledSlide = typedArray.getBoolean(R.styleable.FenShiView_enabledSlide, Boolean.FALSE);
 
         typedArray.recycle();
     }
