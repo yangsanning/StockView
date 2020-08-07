@@ -231,6 +231,16 @@ public class LazyLinePaint {
     }
 
     /**
+     * 绘制圆角矩形
+     */
+    public LazyLinePaint drawRoundRect(Canvas canvas, @ColorInt int color, RectF rect, float rx, float ry) {
+        setStyle(Paint.Style.FILL).setColor(color);
+        canvas.drawRoundRect(rect, rx, ry, linePaint);
+        resetStyle();
+        return this;
+    }
+
+    /**
      * 绘制虚线
      * 须知：绘制完后会重置 PathEffect 和 路径
      */

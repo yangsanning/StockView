@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.RectF;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -16,6 +17,7 @@ import ysn.com.stock.bean.IFenShi;
 import ysn.com.stock.config.FenShiConfig;
 import ysn.com.stock.interceptor.FenShiUnitInterceptor;
 import ysn.com.stock.manager.FenShiDataManager;
+import ysn.com.stock.paint.LazyTextPaint;
 import ysn.com.stock.utils.NumberUtils;
 import ysn.com.stock.view.base.GridSlideView;
 
@@ -32,6 +34,7 @@ public class FenShiView extends GridSlideView {
 
     private Path avePricePath;
     private Paint avePricePaint, priceAreaPaint;
+    private RectF middleRoundRectF = new RectF();
 
     /**
      * pillarSpace: 柱状图间距
@@ -165,6 +168,9 @@ public class FenShiView extends GridSlideView {
         // 绘制上表格坐标
         drawTopTableCoordinate(canvas);
 
+        // 绘制中间表格文本
+        drawMiddleTableText(canvas);
+
         if (isEnabledBottomTable()) {
             // 绘制价格、价格区域、均线、闪烁点、柱形图
             drawPriceLineAndPillar(canvas);
@@ -218,6 +224,29 @@ public class FenShiView extends GridSlideView {
                     float y2 = getTopCoordinateY(position, getTopRowY(topRowSpacing, position), lazyTextPaint);
                     lazyTextPaint.drawTableStartText(canvas, getTopTableMinX(), xYTextMargin, y2);
                 });
+    }
+
+    /**
+     * 绘制中间表格文本
+     */
+    private void drawMiddleTableText(Canvas canvas) {
+        if (isEnabledBottomTable()) {
+            LazyTextPaint lazyTextPaint = lazyPaint.measure("成交量");
+            middleRoundRectF.left = tableMargin;
+            middleRoundRectF.top = topTableMaxY + tableMargin * 4;
+            middleRoundRectF.right = tableMargin + lazyTextPaint.width() + xYTextMargin * 8;
+            middleRoundRectF.bottom = bottomTableMinY - tableMargin * 4;
+
+            lazyPaint.drawRoundRect(canvas, getColor(R.color.stock_middle_round_rect), middleRoundRectF, 4, 4);
+            float y = middleRoundRectF.bottom - (middleTableHeight - lazyTextPaint.height()) / 2f;
+            lazyTextPaint.drawText(canvas, (tableMargin + xYTextMargin * 4), y)
+                    .drawText(canvas, getMiddleTableText(), (middleRoundRectF.right + xYTextMargin * 2), y);
+        }
+    }
+
+    public String getMiddleTableText() {
+        return convertBottomSlideValue(longPressHelper.isLongPress ?
+                dataManager.getVolume(slidePosition) : dataManager.getLastVolume());
     }
 
     /**
@@ -324,11 +353,7 @@ public class FenShiView extends GridSlideView {
      * 绘制下表格坐标
      */
     private void drawBottomTableCoordinate(Canvas canvas) {
-        lazyPaint.measure(dataManager.currentVolumeString, lazyTextPaint -> {
-            // 下表格当前成交量
-            float y = getBottomTableMinY() + lazyTextPaint.height() + xYTextMargin;
-            lazyTextPaint.drawTableStartText(canvas, getBottomTableMinX(), xYTextMargin, y);
-        }).measure(dataManager.maxVolumeString, lazyTextPaint -> {
+        lazyPaint.measure(dataManager.maxVolumeString, lazyTextPaint -> {
             // 下表格最大成交量
             float y = getBottomTableMinY() + lazyTextPaint.height() + xYTextMargin;
             lazyTextPaint.drawTableEndText(canvas, getBottomTableMaxX(), xYTextMargin, y);

@@ -130,9 +130,7 @@ public class StockView extends View {
         }
 
         if (isEnabledBottomTable()) {
-            if (isEnabledMiddleTable()) {
-                middleTableHeight = timeTableHeight;
-            }
+            middleTableHeight = timeTableHeight;
             topTableHeight = viewHeight * 0.7f - titleTableHeight - tableMargin;
             bottomTableHeight = viewHeight - titleTableHeight - topTableHeight - timeTableHeight - middleTableHeight - tableMargin * 2;
         } else {
@@ -146,10 +144,6 @@ public class StockView extends View {
 
     public boolean isEnabledTitleTable() {
         return false;
-    }
-
-    public boolean isEnabledMiddleTable() {
-        return true;
     }
 
     public float getTitleTableHeight() {

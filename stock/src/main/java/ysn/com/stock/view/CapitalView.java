@@ -86,11 +86,6 @@ public class CapitalView extends GridView {
     }
 
     @Override
-    public boolean isEnabledMiddleTable() {
-        return false;
-    }
-
-    @Override
     public float getTitleTableHeight() {
         return viewHeight * 0.108f;
     }

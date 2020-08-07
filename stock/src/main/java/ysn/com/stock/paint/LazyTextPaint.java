@@ -135,8 +135,9 @@ public class LazyTextPaint {
     /**
      * 绘制文本
      */
-    public void drawText(Canvas canvas, float x, float y) {
+    public LazyTextPaint drawText(Canvas canvas, float x, float y) {
         canvas.drawText(latestMeasureText, x, y, textPaint);
+        return this;
     }
 
     /**
@@ -145,5 +146,12 @@ public class LazyTextPaint {
     public void drawText(Canvas canvas, @ColorInt int color, float x, float y) {
         setColor(color);
         canvas.drawText(latestMeasureText, x, y, textPaint);
+    }
+
+    /**
+     * 绘制文本
+     */
+    public void drawText(Canvas canvas, String text, float x, float y) {
+        canvas.drawText(text, x, y, textPaint);
     }
 }

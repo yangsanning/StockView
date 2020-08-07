@@ -51,11 +51,6 @@ public class MiniFenShiView extends StockView {
     }
 
     @Override
-    public boolean isEnabledMiddleTable() {
-        return false;
-    }
-
-    @Override
     public int getTotalCount() {
         return dataManager.totalCount == 0 ? super.getTotalCount() : dataManager.totalCount;
     }

@@ -229,7 +229,15 @@ public class LazyPaint {
      * 须知：这里已经设置了 Paint.Style.FILL ，绘制完成后会重置 Style
      */
     public LazyPaint drawRect(Canvas canvas, RectF rect, @ColorInt int bgColor, @ColorInt int strokeColor) {
-        lazyLinePaint.drawRect(canvas, rect, bgColor,strokeColor);
+        lazyLinePaint.drawRect(canvas, rect, bgColor, strokeColor);
+        return this;
+    }
+
+    /**
+     * 绘制圆角矩形
+     */
+    public LazyPaint drawRoundRect(Canvas canvas, @ColorInt int color, RectF rect, float rx, float ry) {
+        lazyLinePaint.drawRoundRect(canvas, color, rect, rx, ry);
         return this;
     }
 

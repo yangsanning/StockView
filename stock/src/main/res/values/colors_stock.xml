@@ -36,4 +36,6 @@
 
     <!--rgb(235,66,66)-->
     <color name="stock_lin30">#EB4242</color>
+
+    <color name="stock_middle_round_rect">#e5e5e5</color>
 </resources>
