@@ -16,8 +16,8 @@ import ysn.com.stock.view.base.StockView;
 
 /**
  * @Author yangsanning
- * @ClassName FenShiView
- * @Description 普通分时图
+ * @ClassName MiniFenShiView
+ * @Description 迷你分时图
  * @Date 2019/5/4
  * @History 2019/5/4 author: description:
  */
@@ -89,9 +89,8 @@ public class MiniFenShiView extends StockView {
      * 绘制昨日收盘价线
      */
     private void drawLastClose(Canvas canvas, float y) {
-        lazyPaint.setLineColor(config.currentColor)
-                .setLineStrokeWidth(config.strokeWidth)
-                .drawDotted(canvas, getTableMinX(), y, getTableMaxX(), y, config.pathEffect);
+        lazyPaint.drawDotted(canvas, config.currentColor, config.strokeWidth, config.pathEffect,
+                getTableMinX(), y, getTableMaxX(), y);
     }
 
     /**

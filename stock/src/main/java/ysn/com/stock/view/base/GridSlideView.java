@@ -184,7 +184,7 @@ public abstract class GridSlideView extends GridView implements LongPressSlideHe
         LazyTextPaint lazyTextPaint = lazyPaint.measure(slideText);
         initSlideRectF(lazyTextPaint.width());
         // 绘制背景以及边框
-        lazyPaint.drawRect(canvas, slideRectF, getColor(R.color.stock_area_fq), getColor(R.color.stock_slide_line));
+        lazyPaint.drawRect(canvas, getColor(R.color.stock_area_fq), getColor(R.color.stock_slide_line), slideRectF);
 
         // 绘制相应值
         float containerWidth = slideRectF.right - slideRectF.left;
@@ -246,7 +246,7 @@ public abstract class GridSlideView extends GridView implements LongPressSlideHe
         timeRectF.right = timeRectF.left + rectWidth;
 
         // 绘制背景以及边框
-        lazyPaint.drawRect(canvas, timeRectF, getColor(R.color.stock_area_fq), getColor(R.color.stock_slide_line));
+        lazyPaint.drawRect(canvas, getColor(R.color.stock_area_fq), getColor(R.color.stock_slide_line), timeRectF);
 
         // 绘制相应值
         float x = timeRectF.left + xYTextMargin * 2;

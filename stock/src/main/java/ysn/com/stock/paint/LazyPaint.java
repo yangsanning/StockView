@@ -211,16 +211,17 @@ public class LazyPaint {
     /**
      * 画圆
      */
-    public LazyPaint drawCircle(Canvas canvas, float cx, float cy, float radius, @ColorInt int color) {
-        lazyLinePaint.drawCircle(canvas, cx, cy, radius, color);
+    public LazyPaint drawCircle(Canvas canvas, @ColorInt int circleColor, @ColorInt int strokeColor, float strokeWidth,
+                                float cx, float cy, float radius) {
+        lazyLinePaint.drawCircle(canvas, circleColor, strokeColor, strokeWidth, cx, cy, radius);
         return this;
     }
 
     /**
      * 绘制矩形
      */
-    public LazyPaint drawRect(Canvas canvas, float left, float top, float right, float bottom, @ColorInt int color) {
-        lazyLinePaint.drawRect(canvas, left, top, right, bottom, color);
+    public LazyPaint drawRect(Canvas canvas, @ColorInt int color, float left, float top, float right, float bottom) {
+        lazyLinePaint.drawRect(canvas, color, left, top, right, bottom);
         return this;
     }
 
@@ -228,8 +229,8 @@ public class LazyPaint {
      * 绘制矩形
      * 须知：这里已经设置了 Paint.Style.FILL ，绘制完成后会重置 Style
      */
-    public LazyPaint drawRect(Canvas canvas, RectF rect, @ColorInt int bgColor, @ColorInt int strokeColor) {
-        lazyLinePaint.drawRect(canvas, rect, bgColor, strokeColor);
+    public LazyPaint drawRect(Canvas canvas, @ColorInt int bgColor, @ColorInt int strokeColor, RectF rect) {
+        lazyLinePaint.drawRect(canvas, bgColor, strokeColor, rect);
         return this;
     }
 
@@ -245,8 +246,9 @@ public class LazyPaint {
      * 绘制虚线
      * 注意：绘制完后会重置 PathEffect
      */
-    public LazyPaint drawDotted(Canvas canvas, float startX, float startY, float stopX, float stopY, PathEffect pathEffect) {
-        lazyLinePaint.drawDotted(canvas, startX, startY, stopX, stopY, pathEffect);
+    public LazyPaint drawDotted(Canvas canvas, @ColorInt int color, float strokeWidth, PathEffect pathEffect,
+                                float startX, float startY, float stopX, float stopY) {
+        lazyLinePaint.drawDotted(canvas, color, strokeWidth, pathEffect, startX, startY, stopX, stopY);
         return this;
     }
 

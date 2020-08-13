@@ -2,7 +2,6 @@ package ysn.com.stock.helper;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.RectF;
 import android.support.annotation.NonNull;
@@ -131,8 +130,8 @@ public class ProfitLossSlideHelper {
      * 绘制点
      */
     private void drawPoint(Canvas canvas) {
-        config.lazyPaint.drawCircle(canvas, point.x, point.y, (config.pointRadius + 3), Color.WHITE)
-                .drawCircle(canvas, point.x, point.y, (config.pointRadius), config.valueLineColor);
+        config.lazyPaint.drawCircle(canvas, config.valueLineColor, Color.WHITE, 3,
+                point.x, point.y, config.pointRadius);
     }
 
     /**

@@ -198,11 +198,14 @@ public class LazyLinePaint {
     }
 
     /**
-     * 画圆
+     * 画带有边框的圆
      * 须知：这里已经设置了 Paint.Style.FILL ，绘制完成后会重置 Style
      */
-    public LazyLinePaint drawCircle(Canvas canvas, float cx, float cy, float radius, @ColorInt int color) {
-        setStyle(Paint.Style.FILL).setColor(color);
+    public LazyLinePaint drawCircle(Canvas canvas, @ColorInt int circleColor, @ColorInt int strokeColor, float strokeWidth,
+                                    float cx, float cy, float radius) {
+        setStyle(Paint.Style.FILL).setColor(strokeColor);
+        canvas.drawCircle(cx, cy, (radius + strokeWidth), linePaint);
+        setColor(circleColor);
         canvas.drawCircle(cx, cy, radius, linePaint);
         return resetStyle();
     }
@@ -211,7 +214,7 @@ public class LazyLinePaint {
      * 绘制矩形
      * 须知：这里已经设置了 Paint.Style.FILL ，绘制完成后会重置 Style
      */
-    public LazyLinePaint drawRect(Canvas canvas, float left, float top, float right, float bottom, @ColorInt int color) {
+    public LazyLinePaint drawRect(Canvas canvas, @ColorInt int color, float left, float top, float right, float bottom) {
         setStyle(Paint.Style.FILL).setColor(color);
         canvas.drawRect(left, top, right, bottom, linePaint);
         resetStyle();
@@ -222,7 +225,7 @@ public class LazyLinePaint {
      * 绘制矩形
      * 须知：这里已经设置了 Paint.Style.FILL ，绘制完成后会重置 Style
      */
-    public LazyLinePaint drawRect(Canvas canvas, RectF rect, @ColorInt int bgColor, @ColorInt int strokeColor) {
+    public LazyLinePaint drawRect(Canvas canvas, @ColorInt int bgColor, @ColorInt int strokeColor, RectF rect) {
         setStyle(Paint.Style.FILL).setColor(bgColor);
         canvas.drawRect(rect, linePaint);
         resetStyle().setColor(strokeColor);
@@ -244,8 +247,11 @@ public class LazyLinePaint {
      * 绘制虚线
      * 须知：绘制完后会重置 PathEffect 和 路径
      */
-    public LazyLinePaint drawDotted(Canvas canvas, float startX, float startY, float stopX, float stopY, PathEffect pathEffect) {
-        return setPathEffect(pathEffect)
+    public LazyLinePaint drawDotted(Canvas canvas, @ColorInt int color, float strokeWidth, PathEffect pathEffect,
+                                    float startX, float startY, float stopX, float stopY) {
+        return setColor(color)
+                .setStrokeWidth(strokeWidth)
+                .setPathEffect(pathEffect)
                 .drawPath(canvas, startX, startY, stopX, stopY)
                 .setPathEffect(null);
     }
