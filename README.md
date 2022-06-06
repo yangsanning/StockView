@@ -23,9 +23,9 @@
 | [ProfitLossView] | 盈亏额/盈亏率  |
 
 
-### 添加方法
+## 添加方法
 
-#### 1. 添加仓库
+### 1. 添加仓库
 
 在项目的 `build.gradle` 文件中配置仓库地址。
 
@@ -38,7 +38,7 @@ allprojects {
 }
 ```
 
-#### 2. 添加项目依赖
+### 2. 添加项目依赖
 
 在需要添加依赖的 Module 下添加以下信息，使用方式和普通的远程仓库一样。
 
@@ -46,8 +46,11 @@ allprojects {
 implementation 'com.github.yangsanning:StockView:1.2.0'
 ```
 
-### 注
-其中走马灯效果，可参考我的 [RecyclerViewFlipper]
+## 版本信息
+[传送门](https://github.com/yangsanning/StockView/releases)
+
+## 注
+### 1. 其中走马灯效果，可参考我的 [RecyclerViewFlipper]
 
 [FenShiView]:https://github.com/yangsanning/StockView/blob/master/readmes/FenShiView.md
 [FiveDayFenShiView]:https://github.com/yangsanning/StockView/blob/master/readmes/FiveDayFenShiView.md
